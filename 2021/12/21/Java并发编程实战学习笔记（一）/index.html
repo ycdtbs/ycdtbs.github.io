@@ -16,13 +16,15 @@
   <meta name="author" content="John Doe">
   <meta name="keywords" content="">
   
-    <meta property="og:type" content="article">
+    <meta name="description" content="Java并发编程-线程的基础知识1、进程和线程 什么是进程 进程是由指令和数据构成的，但是这些命令要执行必须下发到CPU当中去，为数据加载到内存当中去，在指令运行的国中中还需要动用磁盘网络设备，进程就是用来加载指令、管理内存、管理IO的 当一个程序被运行时，从磁盘加载程序的代码到内存中的时候，就开启了一个进程 进程可以视为程序的一个实例，大部分程序可以同时运行多个实例进程  什么是线程 一个进程之">
+<meta property="og:type" content="article">
 <meta property="og:title" content="Java并发编程实战学习笔记（一）">
 <meta property="og:url" content="http://example.com/2021/12/21/Java%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E5%AE%9E%E6%88%98%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%80%EF%BC%89/index.html">
 <meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Java并发编程-线程的基础知识1、进程和线程 什么是进程 进程是由指令和数据构成的，但是这些命令要执行必须下发到CPU当中去，为数据加载到内存当中去，在指令运行的国中中还需要动用磁盘网络设备，进程就是用来加载指令、管理内存、管理IO的 当一个程序被运行时，从磁盘加载程序的代码到内存中的时候，就开启了一个进程 进程可以视为程序的一个实例，大部分程序可以同时运行多个实例进程  什么是线程 一个进程之">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-12-21T14:42:15.000Z">
-<meta property="article:modified_time" content="2022-05-23T16:24:24.955Z">
+<meta property="article:modified_time" content="2022-05-23T17:18:35.239Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="Java并发编程">
 <meta property="article:tag" content="学习笔记">
@@ -218,7 +220,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          0 字
+          1.6k 字
         
       </span>
     
@@ -229,7 +231,7 @@
         
         
         
-          1 分钟
+          13 分钟
         
       </span>
     
@@ -271,7 +273,77 @@
             
             <div class="markdown-body">
               
-              
+              <h3 id="Java并发编程-线程的基础知识"><a href="#Java并发编程-线程的基础知识" class="headerlink" title="Java并发编程-线程的基础知识"></a>Java并发编程-线程的基础知识</h3><h5 id="1、进程和线程"><a href="#1、进程和线程" class="headerlink" title="1、进程和线程"></a>1、进程和线程</h5><ul>
+<li><p>什么是进程</p>
+<p>进程是由指令和数据构成的，但是这些命令要执行必须下发到CPU当中去，为数据加载到内存当中去，在指令运行的国中中还需要动用磁盘网络设备，进程就是用来加载指令、管理内存、管理IO的</p>
+<p>当一个程序被运行时，从磁盘加载程序的代码到内存中的时候，就开启了一个进程</p>
+<p>进程可以视为程序的一个实例，大部分程序可以同时运行多个实例进程</p>
+</li>
+<li><p>什么是线程</p>
+<p>一个进程之间可以有多个线程，线程就是一个指令流</p>
+</li>
+<li><p>二者对比</p>
+<p>进程之间是相互独立的，而线程是存在进程内的，是进程的一个子集</p>
+<p>进程之间拥有共享的资源，例如内存空间，供内部线程共享</p>
+<p>进程之间的通信非常复杂</p>
+<p>线程之间的通信比较简单</p>
+</li>
+</ul>
+<h5 id="2、并行和并发的区别"><a href="#2、并行和并发的区别" class="headerlink" title="2、并行和并发的区别"></a>2、并行和并发的区别</h5><ul>
+<li><p>并行</p>
+<p>并行是同一时间做多个事情的能力</p>
+</li>
+<li><p>并发</p>
+<p>并发同一时间应多多件事情的能力</p>
+</li>
+</ul>
+<h5 id="3、Java创建线程的方式"><a href="#3、Java创建线程的方式" class="headerlink" title="3、Java创建线程的方式"></a>3、Java创建线程的方式</h5><ul>
+<li>使用Thread类，继承Thread类重新Run方法</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">test01</span> &#123;<br>    <span class="hljs-comment">// 创建线程的方式</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> &#123;<br>        <span class="hljs-keyword">new</span> <span class="hljs-title class_">threadClass</span>().start();<br>    &#125;<br>&#125;<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">threadClass</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">Thread</span>&#123;<br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">run</span><span class="hljs-params">()</span> &#123;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>使用Runable接口，利用Thread类实现线程</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">Runnable</span> <span class="hljs-variable">runnable</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Runnable</span>() &#123;<br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">run</span><span class="hljs-params">()</span> &#123;<br>        System.out.println(<span class="hljs-string">&quot;执行了一个线程的代码&quot;</span>);<br>    &#125;<br>&#125;;<br><span class="hljs-type">Thread</span> <span class="hljs-variable">thread</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Thread</span>(runnable);<br>thread.start();<br></code></pre></td></tr></table></figure>
+
+<p>匿名内部类可以使用Lambad表达式优化</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">Thread</span> <span class="hljs-variable">thread1</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Thread</span>(() -&gt; &#123;<br>    System.out.println(<span class="hljs-string">&quot;这是一个线程&quot;</span>);<br>&#125;, <span class="hljs-string">&quot;threaName&quot;</span>);<br>thread1.start();<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>FutureTask配合Thread类</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs java">FutureTask&lt;Integer&gt; integerFutureTask = <span class="hljs-keyword">new</span> <span class="hljs-title class_">FutureTask</span>&lt;&gt;(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Callable</span>&lt;Integer&gt;() &#123;<br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> Integer <span class="hljs-title function_">call</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> Exception &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;<br>    &#125;<br>&#125;);<br><span class="hljs-keyword">new</span> <span class="hljs-title class_">Thread</span>(integerFutureTask);<br>integerFutureTask.get();<br></code></pre></td></tr></table></figure>
+
+<h5 id="4、查看线程的方法"><a href="#4、查看线程的方法" class="headerlink" title="4、查看线程的方法"></a>4、查看线程的方法</h5><ul>
+<li>Windows<ul>
+<li>任务管理器</li>
+<li>TaskList</li>
+<li>taskkill</li>
+</ul>
+</li>
+<li>Linux<ul>
+<li>ps -ef</li>
+<li>kill</li>
+</ul>
+</li>
+</ul>
+<h5 id="5、线程运行的原理"><a href="#5、线程运行的原理" class="headerlink" title="5、线程运行的原理"></a>5、线程运行的原理</h5><p>暂时没总结 还没搞懂</p>
+<h5 id="6、线程上下文切换"><a href="#6、线程上下文切换" class="headerlink" title="6、线程上下文切换"></a>6、线程上下文切换</h5><p>线程上下文切换是因为一些原因导致CPU不在执行当前的线程，转而执行另一个线程的代码，线程上下文切换的原因有很多，包括</p>
+<ul>
+<li>线程的CPU时间片用完</li>
+<li>垃圾回收</li>
+<li>有更高优先级的线程需要运行</li>
+<li>线程自己调用了sleep、yield、wait、join、park、syschronizd、lock等方法</li>
+</ul>
+<p>当context switch发生时候，需要由操作系统保存当前线程的执行状态，并且恢复另一个线程的状态，Java中对应的就是程序计数器，它的作用是保存下一条JVM指令的执行地址，是线程私有的</p>
+<p>要保存的信息有</p>
+<ul>
+<li>程序计数器</li>
+<li>虚拟机栈中每个栈帧的信息，如局部变量、操作数栈、返回地址等</li>
+</ul>
+<p>上下文切换会消耗程序性能，<strong>线程数超过CPU核心的线程数</strong></p>
+
               
             </div>
             <hr/>
