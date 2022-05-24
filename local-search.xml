@@ -68,6 +68,39 @@
   
   
   <entry>
+    <title>Java并发编程实战学习笔记（二）</title>
+    <link href="/2021/12/22/Java%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E5%AE%9E%E6%88%98%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%EF%BC%89/"/>
+    <url>/2021/12/22/Java%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E5%AE%9E%E6%88%98%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%EF%BC%89/</url>
+    
+    <content type="html"><![CDATA[<h3 id="Java并发编程实战-线程的API"><a href="#Java并发编程实战-线程的API" class="headerlink" title="Java并发编程实战-线程的API"></a>Java并发编程实战-线程的API</h3><h5 id="1、star-和-run"><a href="#1、star-和-run" class="headerlink" title="1、star 和 run"></a>1、star 和 run</h5><ul><li>star是开启一个线程的run功能</li><li>run只是执行一个线程的方法，如果直接开启run的话还是单线程运行的</li></ul><h5 id="2、sleep和yield"><a href="#2、sleep和yield" class="headerlink" title="2、sleep和yield"></a>2、sleep和yield</h5><ul><li>sleep方法是让线程休眠，线程从Runable进入Timewating状态</li><li>yield方法是让出当前线程，会让线程从Runing进入Runable状态</li></ul><p>调用其他现成的inerput方法会叫醒正在睡眠的线程</p><p><strong>设置线程优先级</strong>：setPriority</p><p><strong>sleep的应用：防止cpu占用100%</strong></p><h5 id="3、join"><a href="#3、join" class="headerlink" title="3、join"></a>3、join</h5><ul><li>等待线程运行结束</li><li>需要等待解雇后继续运行的就是同步，不需要等待结果后续运行的就是异步</li><li>join(n)设置最大等待时间，单位毫秒</li></ul><h5 id="4、interrput详解"><a href="#4、interrput详解" class="headerlink" title="4、interrput详解"></a>4、interrput详解</h5><ul><li><p>打断sleep、wait、join的线程</p></li><li><p>interrput可以打断处于阻塞状态的线程</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">thread.isInterruput()<br></code></pre></td></tr></table></figure><p><strong>正常的线程被打断时候，会返回true，正在睡眠的线程被打断时会返回false</strong></p></li><li><p>interrput可以优雅的终止线程</p></li></ul><h6 id="多线程设计模式-两阶段终止模式"><a href="#多线程设计模式-两阶段终止模式" class="headerlink" title="多线程设计模式-两阶段终止模式"></a>多线程设计模式-两阶段终止模式</h6><p>两阶段终止模式，如何优雅的在T1线程中终止T2线程</p><p>如果直接使用stop会导致没有释放锁，如果锁住了共享资源，那么再也没有机会去释放锁，其他线程永远无法获取锁</p><p>循环的成立条件是程序没有被打断，如果被打断了，那么打断标记会被设置为true，但是如果在睡眠状态中被打断，不会变为真，但是会抛出异常，我们只需要重新设置打断标记，那么下一次就可以进行料理后事了</p><p><img src="https://wodebokea.oss-cn-beijing.aliyuncs.com/img/%E4%B8%A4%E9%98%B6%E6%AE%B5%E7%BB%88%E6%AD%A2.png"></p><p><strong>代码实现</strong></p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// 两阶段终止模式，在一个线程t1中如何优雅的打断T2</span><br>        <span class="hljs-type">Thread</span> <span class="hljs-variable">t1</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Thread</span>(() -&gt; &#123;<br>            <span class="hljs-keyword">while</span> (<span class="hljs-literal">true</span>)&#123;<br>                <span class="hljs-keyword">if</span>(Thread.currentThread().isInterrupted())&#123;<br>                    System.out.println(<span class="hljs-string">&quot;执行处理后事的代码&quot;</span>);<br>                    <span class="hljs-keyword">break</span>;<br>                &#125;<span class="hljs-keyword">else</span> &#123;<br>                    <span class="hljs-keyword">try</span> &#123;<br>                        TimeUnit.SECONDS.sleep(<span class="hljs-number">3</span>);<br>                        System.out.println(<span class="hljs-string">&quot;执行监控记录&quot;</span>);<br>                    &#125; <span class="hljs-keyword">catch</span> (InterruptedException e) &#123;<br>                        System.out.println(<span class="hljs-string">&quot;在睡眠的时候被打断了&quot;</span>);<br>                        Thread.currentThread().interrupt();<span class="hljs-comment">// 手动打断</span><br>                        e.printStackTrace();<br>                    &#125;<br>                &#125;<br><br>            &#125;<br>        &#125;, <span class="hljs-string">&quot;t1&quot;</span>);<br>        t1.start();<br>        TimeUnit.SECONDS.sleep(<span class="hljs-number">4</span>);<br>        t1.interrupt(); <span class="hljs-comment">// 打断线程</span><br></code></pre></td></tr></table></figure><h5 id="5、park"><a href="#5、park" class="headerlink" title="5、park"></a>5、park</h5><ul><li>park类似于程序的断点，程序会卡住</li><li>调用interput方法后，程序会继续运行，但是在此方法后，park会失效</li><li>这是一个不推荐的方法，会破坏同步代码块，造成死锁</li></ul>]]></content>
+    
+    
+    <categories>
+      
+      <category>学习笔记</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Java并发编程</tag>
+      
+      <tag>学习笔记</tag>
+      
+      <tag>多线程</tag>
+      
+      <tag>并发</tag>
+      
+      <tag>线程的API</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>Java并发编程实战学习笔记（一）</title>
     <link href="/2021/12/21/Java%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E5%AE%9E%E6%88%98%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%80%EF%BC%89/"/>
     <url>/2021/12/21/Java%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E5%AE%9E%E6%88%98%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%80%EF%BC%89/</url>
