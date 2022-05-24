@@ -19,7 +19,7 @@
     <meta name="description" content="Java并发编程实战-锁的原理在并发编程中，问题出现在多个线程访问共享变量的时候 在一段代码的执行块内，如果存在对共享变量的操作，如果当某个计算的正确性取决于多个线程的交替执行时序时，那么就会发生竞态条件，换句话说，就是正确的结果无法预知，为了避免临界区的静态条件发生，有多种办法可以达到目的  阻塞式 Sychronized Lock 非阻塞式 原子变量  1、Sychronized对象锁sych">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java并发编程实战学习笔记（四）">
-<meta property="og:url" content="http://example.com/2021/12/24/Java%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%9B%9B%EF%BC%89/index.html">
+<meta property="og:url" content="http://ycdtbs.cn/2021/12/24/Java%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%9B%9B%EF%BC%89/index.html">
 <meta property="og:site_name" content="唐成博客">
 <meta property="og:description" content="Java并发编程实战-锁的原理在并发编程中，问题出现在多个线程访问共享变量的时候 在一段代码的执行块内，如果存在对共享变量的操作，如果当某个计算的正确性取决于多个线程的交替执行时序时，那么就会发生竞态条件，换句话说，就是正确的结果无法预知，为了避免临界区的静态条件发生，有多种办法可以达到目的  阻塞式 Sychronized Lock 非阻塞式 原子变量  1、Sychronized对象锁sych">
 <meta property="og:locale" content="zh_CN">
@@ -80,7 +80,7 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.0","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+    var CONFIG = {"hostname":"ycdtbs.cn","root":"/","version":"1.9.0","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -517,7 +517,7 @@
   <div class="license-box my-3">
     <div class="license-title">
       <div>Java并发编程实战学习笔记（四）</div>
-      <div>http://example.com/2021/12/24/Java并发编程学习笔记（四）/</div>
+      <div>http://ycdtbs.cn/2021/12/24/Java并发编程学习笔记（四）/</div>
     </div>
     <div class="license-meta">
       
