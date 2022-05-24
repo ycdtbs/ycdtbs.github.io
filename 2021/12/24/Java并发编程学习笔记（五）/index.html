@@ -1,0 +1,778 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Java并发编程实战-保护性暂停1、wait和notify 在之前的学习中说到过，当线程获取到锁之后嫩owner会设置为当前线程，其他的线程进入到entryList中阻塞等待，但是如果线程一执行过程中没有满足条件，那么此时可以调用线程1的wait方法，将其放入到waitset中进行等待  owner线程发现条件不满足运行时候，调用wait方法会放入到waitset中 block和wait都不会占用">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java并发编程实战学习笔记（五）">
+<meta property="og:url" content="http://example.com/2021/12/24/Java%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%94%EF%BC%89/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Java并发编程实战-保护性暂停1、wait和notify 在之前的学习中说到过，当线程获取到锁之后嫩owner会设置为当前线程，其他的线程进入到entryList中阻塞等待，但是如果线程一执行过程中没有满足条件，那么此时可以调用线程1的wait方法，将其放入到waitset中进行等待  owner线程发现条件不满足运行时候，调用wait方法会放入到waitset中 block和wait都不会占用">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://wodebokea.oss-cn-beijing.aliyuncs.com/img/wait%E5%92%8Cnotify.png">
+<meta property="article:published_time" content="2021-12-24T14:25:25.000Z">
+<meta property="article:modified_time" content="2022-05-24T16:36:50.273Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="Java并发编程">
+<meta property="article:tag" content="学习笔记">
+<meta property="article:tag" content="多线程">
+<meta property="article:tag" content="并发">
+<meta property="article:tag" content="保护暂停模式">
+<meta property="article:tag" content="多线程设计模式">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://wodebokea.oss-cn-beijing.aliyuncs.com/img/wait%E5%92%8Cnotify.png">
+  
+  
+  
+  <title>Java并发编程实战学习笔记（五） - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.0","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>你这愚蠢的土拨鼠</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Java并发编程实战学习笔记（五）"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2021-12-24 22:25" pubdate>
+          2021年12月24日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          7.1k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          60 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Java并发编程实战学习笔记（五）</h1>
+            
+            <div class="markdown-body">
+              
+              <h3 id="Java并发编程实战-保护性暂停"><a href="#Java并发编程实战-保护性暂停" class="headerlink" title="Java并发编程实战-保护性暂停"></a>Java并发编程实战-保护性暂停</h3><h5 id="1、wait和notify"><a href="#1、wait和notify" class="headerlink" title="1、wait和notify"></a>1、wait和notify</h5><p><img src="https://wodebokea.oss-cn-beijing.aliyuncs.com/img/wait%E5%92%8Cnotify.png" srcset="/img/loading.gif" lazyload></p>
+<p>在之前的学习中说到过，当线程获取到锁之后嫩owner会设置为当前线程，其他的线程进入到entryList中阻塞等待，但是如果线程一执行过程中没有满足条件，那么此时可以调用线程1的wait方法，将其放入到waitset中进行等待</p>
+<ul>
+<li>owner线程发现条件不满足运行时候，调用wait方法会放入到waitset中</li>
+<li>block和wait都不会占用cpu的时间片</li>
+<li>entrylist中的线程是block状态，当owner线程释放锁的时候就会被唤醒</li>
+<li>waitset中的线程是wait状态，只有owner线程调用该notify唤醒的时候才会启动</li>
+<li>waitset中的线程唤醒之后会进入enterlist一起竞争锁</li>
+</ul>
+<h5 id="2、相关API"><a href="#2、相关API" class="headerlink" title="2、相关API"></a>2、相关API</h5><ul>
+<li>wait<ul>
+<li>owner线程调用wait方法，线程进入到waitset中</li>
+</ul>
+</li>
+<li>notify<ul>
+<li>owner线程随机唤醒一个线程</li>
+</ul>
+</li>
+<li>notifyAll<ul>
+<li>owner线程唤醒所有线程</li>
+</ul>
+</li>
+<li>wait(long n)<ul>
+<li>有时间的等待，如果没有人唤醒就结束等待</li>
+</ul>
+</li>
+</ul>
+<p>注意的是，以上的所有方法是线程之间协作的手段，都必须是owner线程才可以调用的方法</p>
+<p><strong>notify和notifyall的区别</strong>：notify是挑一个唤醒，notifyall是唤醒所有的线程</p>
+<h5 id="3、sleep和wait的区别"><a href="#3、sleep和wait的区别" class="headerlink" title="3、sleep和wait的区别"></a>3、sleep和wait的区别</h5><ul>
+<li>sleep是线程的静态方法，wait是object的方法</li>
+<li>wait需要先获得对象锁，必须先要获得锁</li>
+<li>sleep不会释放锁，wait会释放锁</li>
+</ul>
+<h5 id="4、保护性暂停-Guarded-Suspension"><a href="#4、保护性暂停-Guarded-Suspension" class="headerlink" title="4、保护性暂停 Guarded Suspension"></a>4、保护性暂停 Guarded Suspension</h5><p>保护性暂停用在一个线程等待另一个线程运行的结果</p>
+<ul>
+<li>使用要点<ul>
+<li>如果一个结果需要从一个线程到另一个线程，那么让他们关联同一个GuardedObject</li>
+<li>如果有结果不断从一个线程到另一个线程，请使用消息队列</li>
+<li>join和feature的实现就是用的这个</li>
+<li>因为要等待同步，所以这个是同步模式</li>
+</ul>
+</li>
+</ul>
+<h5 id="5、代码实现-简单模式"><a href="#5、代码实现-简单模式" class="headerlink" title="5、代码实现 简单模式"></a>5、代码实现 简单模式</h5><ul>
+<li>get方法循环等待</li>
+<li>set方法设置完毕后调用notifyall唤醒线程</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">test04</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> &#123;<br>        <span class="hljs-type">Guraede</span> <span class="hljs-variable">guraede</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Guraede</span>();<br>        <span class="hljs-type">Thread</span> <span class="hljs-variable">thread</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Thread</span>(() -&gt; &#123;<br>            <span class="hljs-type">Object</span> <span class="hljs-variable">o</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Object</span>();<br>            System.out.println(<span class="hljs-string">&quot;创建了一个对象 10秒后赋值&quot;</span>);<br>            <span class="hljs-keyword">try</span> &#123;<br>                TimeUnit.SECONDS.sleep(<span class="hljs-number">10</span>);<br>            &#125; <span class="hljs-keyword">catch</span> (InterruptedException e) &#123;<br>                e.printStackTrace();<br>            &#125;<br>            guraede.setObject(o);<br>            System.out.println(<span class="hljs-string">&quot;执行了赋值&quot;</span>);<br>        &#125;);<br>        thread.start();<br>        <span class="hljs-type">Thread</span> <span class="hljs-variable">thread1</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Thread</span>(() -&gt; &#123;<br>            <span class="hljs-type">Object</span> <span class="hljs-variable">object</span> <span class="hljs-operator">=</span> guraede.getObject();<br>            <span class="hljs-keyword">if</span> (object != <span class="hljs-literal">null</span>)&#123;<br>                System.out.println(<span class="hljs-string">&quot;获取到了对象&quot;</span> + object.hashCode());<br>            &#125;<br><br>        &#125;);<br>        thread1.start();<br>    &#125;<br>&#125;<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Guraede</span>&#123;<br>    <span class="hljs-keyword">private</span> Object object;<br>    <span class="hljs-keyword">public</span> Object <span class="hljs-title function_">getObject</span><span class="hljs-params">()</span>&#123;<br>        System.out.println(<span class="hljs-string">&quot;调用了获取线程&quot;</span>);<br>        <span class="hljs-keyword">synchronized</span> (<span class="hljs-built_in">this</span>)&#123;<br>            <span class="hljs-keyword">while</span> (object == <span class="hljs-literal">null</span>)&#123;<br>                <span class="hljs-keyword">try</span> &#123;<br>                    System.out.println(<span class="hljs-string">&quot;循环等待&quot;</span>);<br>                    <span class="hljs-built_in">this</span>.wait();<br>                    <span class="hljs-comment">//循环等待</span><br>                &#125; <span class="hljs-keyword">catch</span> (InterruptedException e) &#123;<br>                    e.printStackTrace();<br>                &#125;<br>            &#125;<br>            System.out.println(<span class="hljs-string">&quot;拿到值了&quot;</span>);<br>            <span class="hljs-keyword">return</span> object;<br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">setObject</span><span class="hljs-params">(Object object)</span>&#123;<br>        <span class="hljs-keyword">synchronized</span> (<span class="hljs-built_in">this</span>)&#123;<br>            <span class="hljs-built_in">this</span>.object = object;<br>            <span class="hljs-built_in">this</span>.notifyAll();<br>            System.out.println(<span class="hljs-string">&quot;唤醒等待线程&quot;</span>);<br>        &#125;<br>    &#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<h5 id="6、保护性暂停超时等待"><a href="#6、保护性暂停超时等待" class="headerlink" title="6、保护性暂停超时等待"></a>6、保护性暂停超时等待</h5><ul>
+<li>在代码中记录了时间差</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">test04</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> &#123;<br>        <span class="hljs-type">Guraede</span> <span class="hljs-variable">guraede</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Guraede</span>();<br>        <span class="hljs-type">Thread</span> <span class="hljs-variable">thread</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Thread</span>(() -&gt; &#123;<br>            <span class="hljs-type">Object</span> <span class="hljs-variable">o</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Object</span>();<br>            System.out.println(<span class="hljs-string">&quot;创建了一个对象 10秒后赋值&quot;</span>);<br>            <span class="hljs-keyword">try</span> &#123;<br>                TimeUnit.SECONDS.sleep(<span class="hljs-number">10</span>);<br>            &#125; <span class="hljs-keyword">catch</span> (InterruptedException e) &#123;<br>                e.printStackTrace();<br>            &#125;<br>            guraede.setObject(o);<br>            System.out.println(<span class="hljs-string">&quot;执行了赋值&quot;</span>);<br>        &#125;);<br>        thread.start();<br>        <span class="hljs-type">Thread</span> <span class="hljs-variable">thread1</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Thread</span>(() -&gt; &#123;<br>            <span class="hljs-type">Object</span> <span class="hljs-variable">object</span> <span class="hljs-operator">=</span> guraede.getObject(<span class="hljs-number">3</span>);<br>            <span class="hljs-keyword">if</span> (object != <span class="hljs-literal">null</span>)&#123;<br>                System.out.println(<span class="hljs-string">&quot;获取到了对象&quot;</span> + object.hashCode());<br>            &#125;<br>        &#125;);<br>        thread1.start();<br>    &#125;<br>&#125;<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Guraede</span>&#123;<br>    <span class="hljs-keyword">private</span> Object object;<br>    <span class="hljs-keyword">public</span> Object <span class="hljs-title function_">getObject</span><span class="hljs-params">(<span class="hljs-type">long</span> time)</span>&#123;<br>        System.out.println(<span class="hljs-string">&quot;调用了获取线程&quot;</span>);<br>        <span class="hljs-comment">// 记录开始时间</span><br>        <span class="hljs-type">long</span> <span class="hljs-variable">begingTime</span> <span class="hljs-operator">=</span> System.currentTimeMillis();<br>        <span class="hljs-type">long</span> <span class="hljs-variable">speedTime</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>;<br>        <span class="hljs-keyword">synchronized</span> (<span class="hljs-built_in">this</span>)&#123;<br>            <span class="hljs-keyword">while</span> (object == <span class="hljs-literal">null</span>)&#123;<br>                <span class="hljs-keyword">try</span> &#123;<br>                    System.out.println(<span class="hljs-string">&quot;循环等待&quot;</span>);<br>                    <span class="hljs-keyword">if</span> (speedTime &gt;= time)&#123;<br>                        System.out.println(<span class="hljs-string">&quot;时间太久了我不等了&quot;</span>);<br>                        <span class="hljs-keyword">break</span>;<br>                    &#125;<br>                    <span class="hljs-built_in">this</span>.wait(time - speedTime);<br>                    <span class="hljs-comment">//循环等待</span><br>                &#125; <span class="hljs-keyword">catch</span> (InterruptedException e) &#123;<br>                    e.printStackTrace();<br>                &#125;<br>                speedTime = System.currentTimeMillis() - begingTime;<br>                System.out.println(<span class="hljs-string">&quot;经历的时间&quot;</span>);<br>            &#125;<br>            System.out.println(<span class="hljs-string">&quot;拿到值了&quot;</span>);<br>            <span class="hljs-keyword">return</span> object;<br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">setObject</span><span class="hljs-params">(Object object)</span>&#123;<br>        <span class="hljs-keyword">synchronized</span> (<span class="hljs-built_in">this</span>)&#123;<br>            <span class="hljs-built_in">this</span>.object = object;<br>            <span class="hljs-built_in">this</span>.notifyAll();<br>            System.out.println(<span class="hljs-string">&quot;唤醒等待线程&quot;</span>);<br>        &#125;<br>    &#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<h5 id="7、join的原理"><a href="#7、join的原理" class="headerlink" title="7、join的原理"></a>7、join的原理</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">synchronized</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">join</span><span class="hljs-params">(<span class="hljs-type">long</span> millis)</span><br>    <span class="hljs-keyword">throws</span> InterruptedException &#123;<br>        <span class="hljs-type">long</span> <span class="hljs-variable">base</span> <span class="hljs-operator">=</span> System.currentTimeMillis();<br>        <span class="hljs-type">long</span> <span class="hljs-variable">now</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>;<br><br>        <span class="hljs-keyword">if</span> (millis &lt; <span class="hljs-number">0</span>) &#123;<br>            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">IllegalArgumentException</span>(<span class="hljs-string">&quot;timeout value is negative&quot;</span>);<br>        &#125;<br><br>        <span class="hljs-keyword">if</span> (millis == <span class="hljs-number">0</span>) &#123;<br>            <span class="hljs-keyword">while</span> (isAlive()) &#123;<br>                wait(<span class="hljs-number">0</span>);<br>            &#125;<br>        &#125; <span class="hljs-keyword">else</span> &#123;<br>            <span class="hljs-keyword">while</span> (isAlive()) &#123;<br>                <span class="hljs-type">long</span> <span class="hljs-variable">delay</span> <span class="hljs-operator">=</span> millis - now;<br>                <span class="hljs-keyword">if</span> (delay &lt;= <span class="hljs-number">0</span>) &#123;<br>                    <span class="hljs-keyword">break</span>;<br>                &#125;<br>                wait(delay);<br>                now = System.currentTimeMillis() - base;<br>            &#125;<br>        &#125;<br>    &#125;<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>Join底层就是采用了保护性暂停的原理</li>
+</ul>
+<h5 id="8、邮递员问题，多个生产者和消费者之间共享一个gurade对象比较困难-保护性暂停的一一对应"><a href="#8、邮递员问题，多个生产者和消费者之间共享一个gurade对象比较困难-保护性暂停的一一对应" class="headerlink" title="8、邮递员问题，多个生产者和消费者之间共享一个gurade对象比较困难,保护性暂停的一一对应"></a>8、邮递员问题，多个生产者和消费者之间共享一个gurade对象比较困难,保护性暂停的一一对应</h5><ul>
+<li>创建一个保护类<strong>GuardedObject</strong>，用来传递消息监听消息获得情况</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">GuardedObject</span> &#123;<br>    <span class="hljs-comment">// 保护对象类 保护对象类就负责判断对象</span><br>    <span class="hljs-keyword">private</span> <span class="hljs-type">int</span> id;<br>    <span class="hljs-keyword">private</span> Object object;<br>    <span class="hljs-keyword">public</span> Object <span class="hljs-title function_">get</span><span class="hljs-params">(<span class="hljs-type">long</span> time)</span>&#123;<br>        <span class="hljs-keyword">synchronized</span> (<span class="hljs-built_in">this</span>)&#123;<br>            <span class="hljs-type">long</span> <span class="hljs-variable">beginTime</span> <span class="hljs-operator">=</span> System.currentTimeMillis();<br>            <span class="hljs-type">long</span> <span class="hljs-variable">passTime</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>;<br>            <span class="hljs-keyword">while</span> (object == <span class="hljs-literal">null</span>)&#123;<br>                System.out.println(<span class="hljs-string">&quot;开始等待&quot;</span>);<br>                <span class="hljs-keyword">if</span> (passTime &gt;= time)&#123;<br>                    <span class="hljs-keyword">break</span>;<br>                &#125;<br>                <span class="hljs-keyword">try</span> &#123;<br>                    <span class="hljs-keyword">if</span> (passTime == <span class="hljs-number">0</span>)&#123;<br>                        <span class="hljs-built_in">this</span>.wait(time);<br>                    &#125;<span class="hljs-keyword">else</span> &#123;<br>                        <span class="hljs-built_in">this</span>.wait(passTime - time);<br>                    &#125;<br>                &#125; <span class="hljs-keyword">catch</span> (InterruptedException e) &#123;<br>                    e.printStackTrace();<br>                &#125;<br>                passTime = System.currentTimeMillis() - beginTime;<br>            &#125;<br>            <span class="hljs-keyword">return</span> object;<br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">set</span><span class="hljs-params">(Object object)</span>&#123;<br>        <span class="hljs-keyword">synchronized</span> (<span class="hljs-built_in">this</span>)&#123;<br>            <span class="hljs-built_in">this</span>.object = object;<br>            <span class="hljs-built_in">this</span>.notifyAll();<br>        &#125;<br>    &#125;<br><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>创建一个管理类，用来管理这些保护的对象</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Managerment</span> &#123;<br>    <span class="hljs-comment">// 管理类用来管理所有的保护对象</span><br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> Map&lt;Integer,GuardedObject&gt; managerment = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Hashtable</span>&lt;&gt;();<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-type">int</span> <span class="hljs-variable">id</span> <span class="hljs-operator">=</span> <span class="hljs-number">1</span>;<br>    <span class="hljs-comment">// 定义一个获取ID的方法</span><br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">synchronized</span> <span class="hljs-type">int</span> <span class="hljs-title function_">getid</span><span class="hljs-params">()</span>&#123;<br>        <span class="hljs-keyword">return</span> id++;<br>    &#125;<br>    <span class="hljs-comment">// 定义一个获取GuardeObject的方法</span><br>    <span class="hljs-keyword">public</span> GuardedObject <span class="hljs-title function_">getGuardeObject</span><span class="hljs-params">()</span>&#123;<br>        <span class="hljs-type">GuardedObject</span> <span class="hljs-variable">guardedObject</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">GuardedObject</span>();<br>        <span class="hljs-type">int</span> <span class="hljs-variable">id</span> <span class="hljs-operator">=</span> getid();<br>        managerment.put(id,guardedObject);<br>        <span class="hljs-keyword">return</span> guardedObject;<br>    &#125;<br>    <span class="hljs-comment">// 获取所有的ID</span><br>    <span class="hljs-keyword">public</span> Set&lt;Integer&gt; <span class="hljs-title function_">getkeyList</span><span class="hljs-params">()</span>&#123;<br>        <span class="hljs-keyword">return</span> managerment.keySet();<br>    &#125;<br>    <span class="hljs-comment">// 根据id获取Guarded</span><br>    <span class="hljs-keyword">public</span> GuardedObject <span class="hljs-title function_">getguardetByID</span><span class="hljs-params">(<span class="hljs-type">int</span> id)</span>&#123;<br>        <span class="hljs-keyword">return</span> managerment.get(id);<br>    &#125;<br>    <span class="hljs-comment">// 根据Valud获取id</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-type">int</span> <span class="hljs-title function_">getIdByObj</span><span class="hljs-params">(GuardedObject guardedObject)</span>&#123;<br>        Set&lt;Integer&gt; integers = managerment.keySet();<br>        <span class="hljs-keyword">for</span> (Integer i:integers<br>             ) &#123;<br>            <span class="hljs-keyword">if</span> (managerment.get(i) == guardedObject)&#123;<br>                <span class="hljs-keyword">return</span> i;<br>            &#125;<br>        &#125;<br>        <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>    &#125;<br><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>创建一个生产者</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">producter</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">Thread</span> &#123;<br>    <span class="hljs-keyword">private</span>  <span class="hljs-type">int</span> mailId;<br>    <span class="hljs-keyword">private</span>  Object message;<br>    <span class="hljs-keyword">public</span> <span class="hljs-title function_">producter</span><span class="hljs-params">(<span class="hljs-type">int</span> mailId,Object message)</span>&#123;<br>        <span class="hljs-built_in">this</span>.mailId = mailId;<br>        <span class="hljs-built_in">this</span>.message = message;<br>    &#125;<br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">run</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-type">Managerment</span> <span class="hljs-variable">managerment</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Managerment</span>();<br>        System.out.println(<span class="hljs-built_in">this</span>.mailId + <span class="hljs-string">&quot;送信了&quot;</span>);<br>        <span class="hljs-type">GuardedObject</span> <span class="hljs-variable">guardedObject</span> <span class="hljs-operator">=</span> managerment.getguardetByID(<span class="hljs-built_in">this</span>.mailId);<br>        guardedObject.set(<span class="hljs-built_in">this</span>.message);<br>    &#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>创建一个消费者</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">consumer</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">Thread</span>&#123;<br>    <span class="hljs-comment">// 定义一个生产者线程</span><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">run</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-type">Managerment</span> <span class="hljs-variable">managerment</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Managerment</span>();<br>        <span class="hljs-type">GuardedObject</span> <span class="hljs-variable">guardeObject</span> <span class="hljs-operator">=</span> managerment.getGuardeObject();<br>        <span class="hljs-type">int</span> <span class="hljs-variable">idByObj</span> <span class="hljs-operator">=</span> managerment.getIdByObj(guardeObject);<br>        <span class="hljs-type">Object</span> <span class="hljs-variable">message</span> <span class="hljs-operator">=</span> guardeObject.get(<span class="hljs-number">5</span>);<br>        <span class="hljs-keyword">if</span> (message != <span class="hljs-literal">null</span>)&#123;<br>            System.out.println(idByObj + <span class="hljs-string">&quot;手到了数据&quot;</span>);<br>        &#125;<span class="hljs-keyword">else</span> &#123;<br>            System.out.println(idByObj + <span class="hljs-string">&quot;没送到我不要了&quot;</span>);<br>        &#125;<br>    &#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>主测试类</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">testClass</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> <span class="hljs-keyword">throws</span> InterruptedException &#123;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>;i &lt;=<span class="hljs-number">3</span>;i++)&#123;<br>            <span class="hljs-comment">// 先启动二十个消费者</span><br>            <span class="hljs-keyword">new</span> <span class="hljs-title class_">consumer</span>().start();<br>        &#125;<br>        <span class="hljs-keyword">try</span> &#123;<br>            TimeUnit.SECONDS.sleep(<span class="hljs-number">1</span>);<br>        &#125; <span class="hljs-keyword">catch</span> (InterruptedException e) &#123;<br>            e.printStackTrace();<br>        &#125;<br>        System.out.println(<span class="hljs-string">&quot;邮递员开始送信&quot;</span>);<br>        <span class="hljs-type">Managerment</span> <span class="hljs-variable">managerment</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Managerment</span>();<br>        Set&lt;Integer&gt; integers = managerment.getkeyList();<br>        <span class="hljs-keyword">for</span> (Integer i:integers<br>             ) &#123;<br>            TimeUnit.SECONDS.sleep(<span class="hljs-number">1</span>);<br><br>            <span class="hljs-keyword">new</span> <span class="hljs-title class_">producter</span>(i,<span class="hljs-keyword">new</span> <span class="hljs-title class_">Object</span>()).start();<br><br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>以上的案例描述了一个典型的一个生产者对应一个消费者的管理模式，能够保证多个生产者和多个消费者一一对应的关系，保证其每一格对应在拿到消息后在执行接下来的工作</p>
+
+              
+            </div>
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" class="category-chain-item">学习笔记</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Java%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/">#Java并发编程</a>
+      
+        <a href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">#学习笔记</a>
+      
+        <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/">#多线程</a>
+      
+        <a href="/tags/%E5%B9%B6%E5%8F%91/">#并发</a>
+      
+        <a href="/tags/%E4%BF%9D%E6%8A%A4%E6%9A%82%E5%81%9C%E6%A8%A1%E5%BC%8F/">#保护暂停模式</a>
+      
+        <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">#多线程设计模式</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Java并发编程实战学习笔记（五）</div>
+      <div>http://example.com/2021/12/24/Java并发编程学习笔记（五）/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>John Doe</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2021年12月24日</div>
+        </div>
+      
+      
+      <div class="license-meta-item">
+        <div>许可协议</div>
+        <div>
+          
+            
+            
+              <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+              <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                <i class="iconfont icon-by"></i>
+              </span>
+              </a>
+            
+          
+        </div>
+      </div>
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/05/18/%E5%9F%BA%E4%BA%8EMilvues%E5%90%91%E9%87%8F%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E%E7%9A%84%E5%A4%A7%E8%A7%84%E6%A8%A1%E4%BA%BA%E8%84%B8%E8%AF%86%E5%88%AB/" title="基于Milvues向量搜索引擎的大规模人脸识别">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">基于Milvues向量搜索引擎的大规模人脸识别</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/12/24/Java%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%9B%9B%EF%BC%89/" title="Java并发编程实战学习笔记（四）">
+                        <span class="hidden-mobile">Java并发编程实战学习笔记（四）</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.0/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      headingSelector : CONFIG.toc.headingSelector || 'h1,h2,h3,h4,h5,h6',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      collapseDepth   : CONFIG.toc.collapseDepth || 0,
+      scrollSmooth    : true,
+      headingsOffset  : -boardTop
+    });
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+  });
+</script>
+
+
+  <script>
+  (function() {
+    var enableLang = CONFIG.code_language.enable && CONFIG.code_language.default;
+    var enableCopy = CONFIG.copy_btn;
+    if (!enableLang && !enableCopy) {
+      return;
+    }
+
+    function getBgClass(ele) {
+      return Fluid.utils.getBackgroundLightness(ele) >= 0 ? 'code-widget-light' : 'code-widget-dark';
+    }
+
+    var copyTmpl = '';
+    copyTmpl += '<div class="code-widget">';
+    copyTmpl += 'LANG';
+    copyTmpl += '</div>';
+    jQuery('.markdown-body pre').each(function() {
+      var $pre = jQuery(this);
+      if ($pre.find('code.mermaid').length > 0) {
+        return;
+      }
+      if ($pre.find('span.line').length > 0) {
+        return;
+      }
+
+      var lang = '';
+
+      if (enableLang) {
+        lang = CONFIG.code_language.default;
+        if ($pre[0].children.length > 0 && $pre[0].children[0].classList.length >= 2 && $pre.children().hasClass('hljs')) {
+          lang = $pre[0].children[0].classList[1];
+        } else if ($pre[0].getAttribute('data-language')) {
+          lang = $pre[0].getAttribute('data-language');
+        } else if ($pre.parent().hasClass('sourceCode') && $pre[0].children.length > 0 && $pre[0].children[0].classList.length >= 2) {
+          lang = $pre[0].children[0].classList[1];
+          $pre.parent().addClass('code-wrapper');
+        } else if ($pre.parent().hasClass('markdown-body') && $pre[0].classList.length === 0) {
+          $pre.wrap('<div class="code-wrapper"></div>');
+        }
+        lang = lang.toUpperCase().replace('NONE', CONFIG.code_language.default);
+      }
+      $pre.append(copyTmpl.replace('LANG', lang).replace('code-widget">',
+        getBgClass($pre[0]) + (enableCopy ? ' code-widget copy-btn" data-clipboard-snippet><i class="iconfont icon-copy"></i>' : ' code-widget">')));
+
+      if (enableCopy) {
+        Fluid.utils.createScript('https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js', function() {
+          var clipboard = new window.ClipboardJS('.copy-btn', {
+            target: function(trigger) {
+              var nodes = trigger.parentNode.childNodes;
+              for (var i = 0; i < nodes.length; i++) {
+                if (nodes[i].tagName === 'CODE') {
+                  return nodes[i];
+                }
+              }
+            }
+          });
+          clipboard.on('success', function(e) {
+            e.clearSelection();
+            e.trigger.innerHTML = e.trigger.innerHTML.replace('icon-copy', 'icon-success');
+            setTimeout(function() {
+              e.trigger.innerHTML = e.trigger.innerHTML.replace('icon-success', 'icon-copy');
+            }, 2000);
+          });
+        });
+      }
+    });
+  })();
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
