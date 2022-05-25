@@ -18,7 +18,7 @@
   
     <meta name="description" content="Java并发编程实战-多锁程序1、现象描述当我们需要在一个类中完成多件事情的时候，我们如果对这个类上锁，会导致程序并发性很低很低，所以我们可以引入多把锁，每个锁干不同的事情增加并发度 存在的问题  多个线程竞争锁容易发生死锁  2、活跃性-死锁 线程1需要获得A 然后获得B  线程2需要获得B 然后获得A 1234567891011121314151617181920212223242526272">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Java并发编程实战学习笔记（八）">
+<meta property="og:title" content="Java并发编程实战-多锁程序">
 <meta property="og:url" content="http://ycdtbs.cn/2021/12/27/Java%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%85%AB%EF%BC%89/index.html">
 <meta property="og:site_name" content="唐成博客">
 <meta property="og:description" content="Java并发编程实战-多锁程序1、现象描述当我们需要在一个类中完成多件事情的时候，我们如果对这个类上锁，会导致程序并发性很低很低，所以我们可以引入多把锁，每个锁干不同的事情增加并发度 存在的问题  多个线程竞争锁容易发生死锁  2、活跃性-死锁 线程1需要获得A 然后获得B  线程2需要获得B 然后获得A 1234567891011121314151617181920212223242526272">
@@ -26,7 +26,7 @@
 <meta property="og:image" content="https://wodebokea.oss-cn-beijing.aliyuncs.com/img/%E6%AD%BB%E9%94%81%E6%A3%80%E6%B5%8B.png">
 <meta property="og:image" content="https://wodebokea.oss-cn-beijing.aliyuncs.com/img/%E5%93%B2%E5%AD%A6%E5%AE%B6%E5%B0%B1%E9%A4%90%E9%97%AE%E9%A2%98.png">
 <meta property="article:published_time" content="2021-12-27T14:25:25.000Z">
-<meta property="article:modified_time" content="2022-05-25T12:44:53.082Z">
+<meta property="article:modified_time" content="2022-05-25T16:12:38.249Z">
 <meta property="article:author" content="tang cheng">
 <meta property="article:tag" content="Java并发编程">
 <meta property="article:tag" content="学习笔记">
@@ -39,7 +39,7 @@
   
   
   
-  <title>Java并发编程实战学习笔记（八） - 唐成博客</title>
+  <title>Java并发编程实战-多锁程序 - 唐成博客</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -202,7 +202,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="Java并发编程实战学习笔记（八）"></span>
+            <span id="subtitle" data-typed-text="Java并发编程实战-多锁程序"></span>
           
         </div>
 
@@ -274,7 +274,7 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">Java并发编程实战学习笔记（八）</h1>
+            <h1 style="display: none">Java并发编程实战-多锁程序</h1>
             
             <div class="markdown-body">
               
@@ -434,7 +434,7 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>Java并发编程实战学习笔记（八）</div>
+      <div>Java并发编程实战-多锁程序</div>
       <div>http://ycdtbs.cn/2021/12/27/Java并发编程学习笔记（八）/</div>
     </div>
     <div class="license-meta">
@@ -477,9 +477,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2022/05/18/%E5%9F%BA%E4%BA%8EMilvues%E5%90%91%E9%87%8F%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E%E7%9A%84%E5%A4%A7%E8%A7%84%E6%A8%A1%E4%BA%BA%E8%84%B8%E8%AF%86%E5%88%AB/" title="基于Milvues向量搜索引擎的大规模人脸识别">
+                      <a href="/2021/12/28/Java%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B9%9D%EF%BC%89/" title="Java并发编程实战-常见模式">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">基于Milvues向量搜索引擎的大规模人脸识别</span>
+                        <span class="hidden-mobile">Java并发编程实战-常见模式</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -487,8 +487,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2021/12/26/Java%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%83%EF%BC%89/" title="Java并发编程实战学习笔记（七）">
-                        <span class="hidden-mobile">Java并发编程实战学习笔记（七）</span>
+                      <a href="/2021/12/26/Java%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%83%EF%BC%89/" title="Java并发编程实战-其他的线程API">
+                        <span class="hidden-mobile">Java并发编程实战-其他的线程API</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
