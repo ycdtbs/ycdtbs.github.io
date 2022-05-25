@@ -16,30 +16,28 @@
   <meta name="author" content="tang cheng">
   <meta name="keywords" content="">
   
-    <meta name="description" content="Java并发编程实战-线程状态1、守护线程和主线程默认默认情况下，Java主线程需要等待所有的线程都运行结束才会结束，有一种线程叫做守护线程，只要其他非守护线程运行结束了，即使守护线程的代码没有执行完，也会被强制结束 主线程会等待所有的线程运行结束才会停止运行 在Java中有两类线程，即用户线程和守护线程 任何一个守护线程都是整个JVM中所有非守护线程的保姆 只要当前JVM实例中存在任何一个非守护">
+    <meta name="description" content="Java并发编程实战-其他的线程API1、park&amp;Uppark他们是LockSupport类中的方法 12LockSupport.park(); &#x2F;&#x2F; 暂停当前线程LockSupport.unpark(暂停线程对象) &#x2F;&#x2F;   先park在unpark 12345678910111213141516Thread thread1 &#x3D; new Thread(() -&gt; &amp;#123;">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Java并发编程实战学习笔记（三）">
-<meta property="og:url" content="http://ycdtbs.cn/2021/12/23/Java%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%89%EF%BC%89/index.html">
+<meta property="og:title" content="Java并发编程实战学习笔记（七）">
+<meta property="og:url" content="http://ycdtbs.cn/2021/12/26/Java%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%83%EF%BC%89/index.html">
 <meta property="og:site_name" content="唐成博客">
-<meta property="og:description" content="Java并发编程实战-线程状态1、守护线程和主线程默认默认情况下，Java主线程需要等待所有的线程都运行结束才会结束，有一种线程叫做守护线程，只要其他非守护线程运行结束了，即使守护线程的代码没有执行完，也会被强制结束 主线程会等待所有的线程运行结束才会停止运行 在Java中有两类线程，即用户线程和守护线程 任何一个守护线程都是整个JVM中所有非守护线程的保姆 只要当前JVM实例中存在任何一个非守护">
+<meta property="og:description" content="Java并发编程实战-其他的线程API1、park&amp;Uppark他们是LockSupport类中的方法 12LockSupport.park(); &#x2F;&#x2F; 暂停当前线程LockSupport.unpark(暂停线程对象) &#x2F;&#x2F;   先park在unpark 12345678910111213141516Thread thread1 &#x3D; new Thread(() -&gt; &amp;#123;">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://wodebokea.oss-cn-beijing.aliyuncs.com/img/%E7%BA%BF%E7%A8%8B%E7%9A%84%E4%BA%94%E7%A7%8D%E7%8A%B6%E6%80%81.png">
-<meta property="og:image" content="https://wodebokea.oss-cn-beijing.aliyuncs.com/img/%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%85%AD%E7%A7%8D%E7%8A%B6%E6%80%81.png">
-<meta property="og:image" content="https://wodebokea.oss-cn-beijing.aliyuncs.com/img/%E7%BA%BF%E7%A8%8B%E7%8A%B6%E6%80%81%E8%BD%AC%E6%8D%A2.png">
-<meta property="article:published_time" content="2021-12-23T13:41:25.000Z">
-<meta property="article:modified_time" content="2022-05-25T12:43:25.982Z">
+<meta property="og:image" content="https://wodebokea.oss-cn-beijing.aliyuncs.com/img/park%E5%8E%9F%E7%90%86.png">
+<meta property="article:published_time" content="2021-12-26T14:25:25.000Z">
+<meta property="article:modified_time" content="2022-05-25T09:35:30.278Z">
 <meta property="article:author" content="tang cheng">
 <meta property="article:tag" content="Java并发编程">
 <meta property="article:tag" content="学习笔记">
 <meta property="article:tag" content="多线程">
 <meta property="article:tag" content="并发">
-<meta property="article:tag" content="线程状态基本知识">
+<meta property="article:tag" content="park&amp;unpark">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://wodebokea.oss-cn-beijing.aliyuncs.com/img/%E7%BA%BF%E7%A8%8B%E7%9A%84%E4%BA%94%E7%A7%8D%E7%8A%B6%E6%80%81.png">
+<meta name="twitter:image" content="https://wodebokea.oss-cn-beijing.aliyuncs.com/img/park%E5%8E%9F%E7%90%86.png">
   
   
   
-  <title>Java并发编程实战学习笔记（三） - 唐成博客</title>
+  <title>Java并发编程实战学习笔记（七） - 唐成博客</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -202,7 +200,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="Java并发编程实战学习笔记（三）"></span>
+            <span id="subtitle" data-typed-text="Java并发编程实战学习笔记（七）"></span>
           
         </div>
 
@@ -213,8 +211,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2021-12-23 21:41" pubdate>
-          2021年12月23日 晚上
+        <time datetime="2021-12-26 22:25" pubdate>
+          2021年12月26日 晚上
         </time>
       </span>
     
@@ -225,7 +223,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.6k 字
+          872 字
         
       </span>
     
@@ -236,7 +234,7 @@
         
         
         
-          14 分钟
+          8 分钟
         
       </span>
     
@@ -274,53 +272,28 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">Java并发编程实战学习笔记（三）</h1>
+            <h1 style="display: none">Java并发编程实战学习笔记（七）</h1>
             
             <div class="markdown-body">
               
-              <h3 id="Java并发编程实战-线程状态"><a href="#Java并发编程实战-线程状态" class="headerlink" title="Java并发编程实战-线程状态"></a>Java并发编程实战-线程状态</h3><h4 id="1、守护线程和主线程"><a href="#1、守护线程和主线程" class="headerlink" title="1、守护线程和主线程"></a>1、守护线程和主线程</h4><p>默认默认情况下，Java主线程需要等待所有的线程都运行结束才会结束，有一种线程叫做守护线程，只要其他非守护线程运行结束了，即使守护线程的代码没有执行完，也会被强制结束</p>
-<p>主线程会等待所有的线程运行结束才会停止运行</p>
-<p>在Java中有两类线程，即用户线程和守护线程</p>
-<p>任何一个守护线程都是整个JVM中所有非守护线程的保姆</p>
-<p>只要当前JVM实例中存在任何一个非守护线程没有结束，守护线程就全部工作，只有当最后一个非守护线程结束工作时，守护线程才会结束工作</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">Thread</span> <span class="hljs-variable">thread</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Thread</span>(() -&gt; &#123;<br>            <span class="hljs-keyword">try</span> &#123;<br>                System.out.println(<span class="hljs-string">&quot;守护线程执行工作中&quot;</span>);<span class="hljs-comment">//模拟工作</span><br>                TimeUnit.SECONDS.sleep(<span class="hljs-number">30</span>);<br>            &#125; <span class="hljs-keyword">catch</span> (InterruptedException e) &#123;<br>                e.printStackTrace();<br>            &#125;<br>        &#125;);<br>        thread.setDaemon(<span class="hljs-literal">true</span>);<br>        thread.start();<br>        <span class="hljs-type">Thread</span> <span class="hljs-variable">thread1</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Thread</span>(() -&gt; &#123;<br>            <span class="hljs-keyword">try</span> &#123;<br>                TimeUnit.SECONDS.sleep(<span class="hljs-number">10</span>);<br>                System.out.println(<span class="hljs-string">&quot;我结束了&quot;</span>);<br>            &#125; <span class="hljs-keyword">catch</span> (InterruptedException e) &#123;<br><br>            &#125;<br>        &#125;);<br>        System.out.println(<span class="hljs-number">123</span>);<br>        thread1.start();<br></code></pre></td></tr></table></figure>
+              <h3 id="Java并发编程实战-其他的线程API"><a href="#Java并发编程实战-其他的线程API" class="headerlink" title="Java并发编程实战-其他的线程API"></a>Java并发编程实战-其他的线程API</h3><h5 id="1、park-amp-Uppark"><a href="#1、park-amp-Uppark" class="headerlink" title="1、park&amp;Uppark"></a>1、park&amp;Uppark</h5><p>他们是LockSupport类中的方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java">LockSupport.park(); <span class="hljs-comment">// 暂停当前线程</span><br>LockSupport.unpark(暂停线程对象) <span class="hljs-comment">// </span><br></code></pre></td></tr></table></figure>
 
-<p>代码现象：thread线程休眠30s，线程2休眠10秒，线程1设置为守护线程，当线程2十秒结束后，线程1直接结束</p>
-<h5 id="2、线程的五种状态"><a href="#2、线程的五种状态" class="headerlink" title="2、线程的五种状态"></a>2、线程的五种状态</h5><p><img src="https://wodebokea.oss-cn-beijing.aliyuncs.com/img/%E7%BA%BF%E7%A8%8B%E7%9A%84%E4%BA%94%E7%A7%8D%E7%8A%B6%E6%80%81.png" srcset="/img/loading.gif" lazyload></p>
-<h5 id="3、线程的六种状态"><a href="#3、线程的六种状态" class="headerlink" title="3、线程的六种状态"></a>3、线程的六种状态</h5><p><img src="https://wodebokea.oss-cn-beijing.aliyuncs.com/img/%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%85%AD%E7%A7%8D%E7%8A%B6%E6%80%81.png" srcset="/img/loading.gif" lazyload></p>
-<p>在Java层面，线程共有六种状态，分别是New、Runable、Terminated三个状态，这三个状态按照顺序执行从上到下，不可逆转</p>
-<p>在Runaable中有三个状态，分别是Block阻塞，wait无限等待和timewaiting有限等待</p>
-<p>从Runable到Timewaiting状态是由于调用了sleep方法或者wait方法睡眠了有限的时间后并且获取到了锁就进入runable状态，否则进入block状态</p>
-<p>从Runable到waiting状态是由于调用了wait或者sleep方法，若被唤起且获得了锁后可以回到Runable否则进去Blocak</p>
-<p>从Runable到Block很简单，就是获取了锁就可以恢复了</p>
-<h5 id="4、详细的讲述一下线程的六种状态以及他们之间的转换"><a href="#4、详细的讲述一下线程的六种状态以及他们之间的转换" class="headerlink" title="4、详细的讲述一下线程的六种状态以及他们之间的转换"></a>4、详细的讲述一下线程的六种状态以及他们之间的转换</h5><p><img src="https://wodebokea.oss-cn-beijing.aliyuncs.com/img/%E7%BA%BF%E7%A8%8B%E7%8A%B6%E6%80%81%E8%BD%AC%E6%8D%A2.png" srcset="/img/loading.gif" lazyload></p>
-<p><strong>情况1：new - runable</strong></p>
-<p>当创建线程后，分配到了cpu时间片就会进入到runable状态</p>
-<p><strong>情况2：runable和waiting状态</strong></p>
-<p>当我们的线程获取到了Sychronized锁之后呢，如果调用了wait方法，就会进入到witinf中</p>
-<p>如果调用了notify方法或者interput或者notifyall方法</p>
-<ul>
-<li>如果竞争到了锁，就会进入到runable</li>
-<li>如果没有竞争到锁，就进入blocked</li>
+<p>先park在unpark</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">Thread</span> <span class="hljs-variable">thread1</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Thread</span>(() -&gt; &#123;<br>           System.out.println(<span class="hljs-string">&quot;开启线程&quot;</span>);<br>           <span class="hljs-keyword">try</span> &#123;<br>               System.out.println(<span class="hljs-string">&quot;准备进入睡眠&quot;</span>);<br>               TimeUnit.SECONDS.sleep(<span class="hljs-number">5</span>);<br>               LockSupport.park();<br>               System.out.println(<span class="hljs-string">&quot;睡眠结束&quot;</span>);<br>           &#125; <span class="hljs-keyword">catch</span> (InterruptedException e) &#123;<br>               e.printStackTrace();<br>           &#125;<br>       &#125;);<br>       thread1.start();<br>       TimeUnit.SECONDS.sleep(<span class="hljs-number">1</span>);<br>       TimeUnit.SECONDS.sleep(<span class="hljs-number">2</span>);<br>       System.out.println(<span class="hljs-string">&quot;唤醒线程&quot;</span>);<br>       LockSupport.unpark(thread1);<br></code></pre></td></tr></table></figure>
+
+<h5 id="2、park与Object的wait和notify的区别"><a href="#2、park与Object的wait和notify的区别" class="headerlink" title="2、park与Object的wait和notify的区别"></a>2、park与Object的wait和notify的区别</h5><ul>
+<li>Object的相关方法必须获取到锁。是和monitor进行关联的</li>
+<li>park和unpark是以线程为单位精确唤醒，而且notify只能随机唤醒一个</li>
+<li>park和unpark可以提前uppark，如果执行了park会继续向下执行</li>
 </ul>
-<p><strong>情况3</strong></p>
-<p>当我们调用了join方法的时候就会让线程从runable转为waiting</p>
-<p>当线程结束运行之后或者调用了interput方法后就会回到runable状态</p>
-<p><strong>情况4</strong></p>
-<p>线程调用了park方法会进入到waiting状态，uppark取消状态</p>
-<p><strong>情况5</strong></p>
-<p>线程获得了锁后调用wait（long n）方法进入到timewaiting</p>
-<p>时间到了或者调用了interput后从timewaiting开始竞争锁</p>
-<p>竞争到了锁进入runalble</p>
-<p>否则block</p>
-<p><strong>情况6</strong></p>
-<p>调用了join方法</p>
-<p><strong>情况7</strong></p>
-<p>调用了sleep方法</p>
-<p><strong>情况8</strong></p>
-<p>调用了park（long time）</p>
-<p><strong>情况9</strong></p>
-<p>获取到了锁</p>
+<h5 id="3、park和unpark原理"><a href="#3、park和unpark原理" class="headerlink" title="3、park和unpark原理"></a>3、park和unpark原理</h5><p><img src="https://wodebokea.oss-cn-beijing.aliyuncs.com/img/park%E5%8E%9F%E7%90%86.png" srcset="/img/loading.gif" lazyload></p>
+<ul>
+<li>每一个线程都有一个Park对象与其进行关联</li>
+<li>park对象中有三个信息，mutex、cond、和control</li>
+<li>当我们调用park时，会检查control是不是0，如果是0，进入cond中去</li>
+<li>当我们调用unpark时，会将control设置为1，尝试唤醒cond，如果此时发现control是1，则唤醒线程并将control设置为0</li>
+</ul>
 
               
             </div>
@@ -361,7 +334,7 @@
       
         <a href="/tags/%E5%B9%B6%E5%8F%91/">#并发</a>
       
-        <a href="/tags/%E7%BA%BF%E7%A8%8B%E7%8A%B6%E6%80%81%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/">#线程状态基本知识</a>
+        <a href="/tags/park-unpark/">#park&unpark</a>
       
     </div>
   
@@ -373,8 +346,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>Java并发编程实战学习笔记（三）</div>
-      <div>http://ycdtbs.cn/2021/12/23/Java并发编程学习笔记（三）/</div>
+      <div>Java并发编程实战学习笔记（七）</div>
+      <div>http://ycdtbs.cn/2021/12/26/Java并发编程学习笔记（七）/</div>
     </div>
     <div class="license-meta">
       
@@ -386,7 +359,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2021年12月23日</div>
+          <div>2021年12月26日</div>
         </div>
       
       
@@ -416,9 +389,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2021/12/24/Java%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%9B%9B%EF%BC%89/" title="Java并发编程实战学习笔记（四）">
+                      <a href="/2021/12/27/Java%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%85%AB%EF%BC%89/" title="Java并发编程实战学习笔记（八）">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">Java并发编程实战学习笔记（四）</span>
+                        <span class="hidden-mobile">Java并发编程实战学习笔记（八）</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -426,8 +399,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2021/12/22/Java%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E5%AE%9E%E6%88%98%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%EF%BC%89/" title="Java并发编程实战学习笔记（二）">
-                        <span class="hidden-mobile">Java并发编程实战学习笔记（二）</span>
+                      <a href="/2021/12/25/Java%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%85%AD%EF%BC%89/" title="Java并发编程实战学习笔记（六）">
+                        <span class="hidden-mobile">Java并发编程实战学习笔记（六）</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
