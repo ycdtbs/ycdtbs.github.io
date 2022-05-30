@@ -97,6 +97,33 @@
   
   
   <entry>
+    <title>IO 模型</title>
+    <link href="/2022/01/30/IO-%E6%A8%A1%E5%9E%8B/"/>
+    <url>/2022/01/30/IO-%E6%A8%A1%E5%9E%8B/</url>
+    
+    <content type="html"><![CDATA[<h3 id="详解IO模型"><a href="#详解IO模型" class="headerlink" title="详解IO模型"></a>详解IO模型</h3><p>IO模型分为</p><ul><li>同步阻塞</li><li>同步非阻塞</li><li>多路复用</li><li>异步阻塞</li><li>异步非阻塞</li></ul><p>当我们调用channle.read或者stream,read的时候，会切换到操作系统的内核来完成真正的数据读取，数据读取分为两个阶段，分别是</p><ul><li>等待数据</li><li>复制数据</li></ul><p><img src="https://wodebokea.oss-cn-beijing.aliyuncs.com/img/%E8%AF%BB%E5%8F%96%E6%95%B0%E6%8D%AE%E7%9A%84%E6%AD%A5%E9%AA%A4.png"></p><p>其实IO模型的底层是如下五个模型</p><p>阻塞IO 非阻塞IO 多路复用 信号驱动 异步IO</p><p>用户空间是程序发起的用户空间，例如我们在程序中调用了Read等等，这个时候需要涉及到切换到操作系统的内核</p><ul><li>用户发起read后，read阻塞，同时内核空间也在阻塞等待数据，此时用户线程也被阻塞</li><li>非阻塞模式下<ul><li>如何调用read后没读取到数据，会一直循环，直到拿到数据</li><li>如果某一次拿到数据了，此时不会立刻返回，完成复制数据的阶段</li><li>非阻塞模式会涉及到大量的用户线程和内核线程的切换</li></ul></li><li>多路复用<ul><li>多路复用的关键在于Select</li><li>select阶段是阻塞的</li><li>read是在read阶段阻塞的</li></ul></li></ul><p><strong>多路复用比阻塞模式的优点</strong></p><p>1、阻塞IO在执行一个事件的时候无法执行另一个事件</p><p>2、多路复用一个select可以检测多个事件</p><ul><li>同步阻塞、同步非阻塞、多路复用、异步非阻塞<ul><li>同步：线程自己获取结果 一个线程负责所有的事情</li><li>异步：线程自己不去获取结果，而是由其他线程送来结果，至少两个线程</li></ul></li></ul><h5 id="零拷贝技术"><a href="#零拷贝技术" class="headerlink" title="零拷贝技术"></a>零拷贝技术</h5><p>在传统的IO模型中，例如我需要将一个文件发送到服务器上，那么他经历的过程是如下的</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">File</span> <span class="hljs-variable">file</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">File</span>(<span class="hljs-string">&quot;D:\\学习\\代码\\javabingfa\\nettystudy\\data2.txt&quot;</span>);<br><span class="hljs-type">RandomAccessFile</span> <span class="hljs-variable">rw</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">RandomAccessFile</span>(file, <span class="hljs-string">&quot;rw&quot;</span>);<br><span class="hljs-type">byte</span>[] bytes = <span class="hljs-keyword">new</span> <span class="hljs-title class_">byte</span>[(<span class="hljs-type">int</span>)file.length()];<br><span class="hljs-type">Socket</span> <span class="hljs-variable">socket</span> <span class="hljs-operator">=</span> <span class="hljs-literal">null</span>;<br>rw.read(bytes);<br>socket.getOutputStream().write(bytes);<br></code></pre></td></tr></table></figure><p>那么他在操作系统中的流向是这样的</p><p><img src="https://wodebokea.oss-cn-beijing.aliyuncs.com/img/%E9%9B%B6%E6%8B%B7%E8%B4%9D.png"></p><p>他经过了</p><ul><li>从磁盘读取到内核缓冲区</li><li>内核缓冲区读取到用户缓冲区</li><li>用户缓冲区读取到Socket缓冲区</li><li>Socket缓冲区读取到网卡缓冲区</li></ul><p>Java本身不具备操作IO的能力，首先需要从用户态切换至内核态，将数据读取到内核缓冲区中，然后在切换回用户态，将数据从内核缓冲区读取到用户缓冲区当中这时候cpu会参与操作，DMA不会参与操作，然后在将数据放入Sockket缓冲区中，最后在切换回内核态将数据拷贝到网卡中去</p><p>以上步骤经历了四次数据的拷贝，是一个重量级操作，非常消耗时间和性能，那么怎么优化呢？</p><h5 id="NIO优化"><a href="#NIO优化" class="headerlink" title="NIO优化"></a>NIO优化</h5><p>在NIO中，我们创建bytebuffer的方法是</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">ByteBuffer</span> <span class="hljs-variable">allocate</span> <span class="hljs-operator">=</span> ByteBuffer.allocate(<span class="hljs-number">1</span>);<br><span class="hljs-type">ByteBuffer</span> <span class="hljs-variable">byteBuffer</span> <span class="hljs-operator">=</span> ByteBuffer.allocateDirect(<span class="hljs-number">1</span>);<br></code></pre></td></tr></table></figure><ul><li>allocate创建的buffer是存放在Java的堆内存当中的</li><li>allcateDirece创建的buff是存放在系统内存中的，但是java内存和系统内存都可以访问</li></ul><p>此时的内核缓冲区和用户缓冲区之间的拷贝就可以避免了</p><p><img src="https://wodebokea.oss-cn-beijing.aliyuncs.com/img/%E5%90%8C%E4%B8%80%E5%BF%AB%E5%86%85%E5%AD%98.png"></p><h5 id="进一步优化"><a href="#进一步优化" class="headerlink" title="进一步优化"></a>进一步优化</h5><p>在Linux2.1中引入了senfile方法，它对应到我们的Java代码中就是FileChannel的transfrom方法</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">File</span> <span class="hljs-variable">file</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">File</span>(<span class="hljs-string">&quot;D:\\学习\\代码\\javabingfa\\nettystudy\\data2.txt&quot;</span>);<br><span class="hljs-type">FileChannel</span> <span class="hljs-variable">open</span> <span class="hljs-operator">=</span> FileChannel.open(file.toPath());<br>open.transferFrom()<br></code></pre></td></tr></table></figure><p><img src="https://wodebokea.oss-cn-beijing.aliyuncs.com/img/%E8%BF%9B%E4%B8%80%E6%AD%A5%E4%BC%98%E5%8C%96.png"></p><p>这一步的优化干掉了用户缓冲区，transfrom可以直接将数据从内核缓冲区拷贝到socket缓冲区，这部分由CPU参与，在拷贝到socket缓冲区后，在由DMA将数据发送到网卡</p><h5 id="再进一步优化"><a href="#再进一步优化" class="headerlink" title="再进一步优化"></a>再进一步优化</h5><p>在Linux2.4中升级了方法，还是java调用transfromto之后呢，从用户态切换到内核态，并将数据拷贝到内核缓冲区，然后在由内核缓冲区到网卡，只有少量的数据需要进入到socket缓冲区中，期间经历了一次状态切换，和两次拷贝</p><p><img src="https://wodebokea.oss-cn-beijing.aliyuncs.com/img/%E7%9B%B4%E6%8E%A5%E5%88%B0%E7%BD%91%E5%8D%A1.png"></p><h5 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h5><p>什么是DMA：DMA是专门处理数据传输的硬件</p><p>零拷贝不是说一次拷贝都没有，只是没有到JVM层面的拷贝</p><p>零拷贝只适合小文件</p><h5 id="AIO"><a href="#AIO" class="headerlink" title="AIO"></a>AIO</h5><p>netty不支持异步IO</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>学习笔记</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>IO模型</tag>
+      
+      <tag>零拷贝</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>Stream流的使用</title>
     <link href="/2022/01/11/JDK1-8-Stream%E6%B5%81%E7%9A%84%E4%BD%BF%E7%94%A8/"/>
     <url>/2022/01/11/JDK1-8-Stream%E6%B5%81%E7%9A%84%E4%BD%BF%E7%94%A8/</url>
