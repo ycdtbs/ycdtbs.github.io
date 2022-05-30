@@ -1,0 +1,989 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="tang cheng">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="NIO1、NIO1.1 NIO三大组件 Channel &amp; Buffer  channel是读取数据的双向通道，可以从channel将数据读到buffer，也可以将buffer的数据写入channel，而之前的stream要么是输入，要么是输出，channel比stream更为底层 常见的channel有  FileChannel 文件读取 DatagramChannel UDP编程 So">
+<meta property="og:type" content="article">
+<meta property="og:title" content="NIO基础知识">
+<meta property="og:url" content="http://ycdtbs.cn/2022/02/14/NIO/index.html">
+<meta property="og:site_name" content="唐成博客">
+<meta property="og:description" content="NIO1、NIO1.1 NIO三大组件 Channel &amp; Buffer  channel是读取数据的双向通道，可以从channel将数据读到buffer，也可以将buffer的数据写入channel，而之前的stream要么是输入，要么是输出，channel比stream更为底层 常见的channel有  FileChannel 文件读取 DatagramChannel UDP编程 So">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-02-13T16:21:55.000Z">
+<meta property="article:modified_time" content="2022-05-30T05:13:59.078Z">
+<meta property="article:author" content="tang cheng">
+<meta property="article:tag" content="Netty">
+<meta property="article:tag" content="网络编程">
+<meta property="article:tag" content="NIO">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>NIO基础知识 - 唐成博客</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"ycdtbs.cn","root":"/","version":"1.9.0","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>你这愚蠢的土拨鼠</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="NIO基础知识"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-02-14 00:21" pubdate>
+          2022年2月14日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          11k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          90 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">NIO基础知识</h1>
+            
+            <div class="markdown-body">
+              
+              <h3 id="NIO"><a href="#NIO" class="headerlink" title="NIO"></a>NIO</h3><h4 id="1、NIO"><a href="#1、NIO" class="headerlink" title="1、NIO"></a>1、NIO</h4><h5 id="1-1-NIO三大组件"><a href="#1-1-NIO三大组件" class="headerlink" title="1.1 NIO三大组件"></a>1.1 NIO三大组件</h5><ul>
+<li>Channel &amp; Buffer</li>
+</ul>
+<p>channel是读取数据的双向通道，可以从channel将数据读到buffer，也可以将buffer的数据写入channel，而之前的stream要么是输入，要么是输出，channel比stream更为底层</p>
+<p>常见的channel有</p>
+<ul>
+<li>FileChannel 文件读取</li>
+<li>DatagramChannel UDP编程</li>
+<li>SocketChannel 服务器编程</li>
+<li>ServerSocketChannle 服务器编程用于服务端</li>
+</ul>
+<h5 id="1-2、buffer"><a href="#1-2、buffer" class="headerlink" title="1.2、buffer"></a>1.2、buffer</h5><p>buffer用来缓冲读写数据，常见的buffer有</p>
+<ul>
+<li>ByteBuffer<ul>
+<li>MappedByteBuffer</li>
+<li>DirectByteBuffer</li>
+<li>HeaoByteBuffer</li>
+</ul>
+</li>
+<li>ShortBuffer</li>
+<li>IntBuffer</li>
+<li>LongBuffer</li>
+<li>FloatBuffer</li>
+<li>DoubleBuffer</li>
+<li>CharBuffer</li>
+</ul>
+<h5 id="1-3-Selector-选择器"><a href="#1-3-Selector-选择器" class="headerlink" title="1.3 Selector 选择器"></a>1.3 Selector 选择器</h5><p>在传统的多线程版本服务器开发过程中，每次来一个客户端都需要使用一个线程去操作客户端</p>
+<ul>
+<li>缺点<ul>
+<li>内存占用高</li>
+<li>xxxxxxxxxx source &#x2F;etc&#x2F;profileshell</li>
+<li>只适合连接数较少的情况</li>
+</ul>
+</li>
+</ul>
+<p>多线程版服务器的设计</p>
+<p><strong>线程池</strong></p>
+<p>线程池可以控制线程数</p>
+<ul>
+<li>缺点<ul>
+<li>阻塞模式下，一个线程只能处理一个Socket链接</li>
+<li>仅适合短链接场景线程的利用率不高</li>
+</ul>
+</li>
+</ul>
+<p><strong>Select版本的设计</strong></p>
+<p>一个线程管理一个Selector，获取这些channle上发生的事件，这些channle工作在非阻塞模式下，不会让线程吊死在一个channle上，适合连接数特别多，但是流量低的场景</p>
+<p>调用selector的select会阻塞直到channel发生了读写就绪时间，这些事件发大声，select方法会返回这些事件交给thread来处理</p>
+<h5 id="1-2-ByteBuffer"><a href="#1-2-ByteBuffer" class="headerlink" title="1.2 ByteBuffer"></a>1.2 ByteBuffer</h5><ul>
+<li>示例，用bytebuffer读取数据</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">try</span> (<span class="hljs-type">FileChannel</span> <span class="hljs-variable">channel</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">FileInputStream</span>(<span class="hljs-string">&quot;D:\\学习\\代码\\javabingfa\\nettystudy\\data.txt&quot;</span>).getChannel()) &#123;<br>            <span class="hljs-comment">// 准备缓冲区</span><br>            <span class="hljs-type">ByteBuffer</span> <span class="hljs-variable">allocate</span> <span class="hljs-operator">=</span> ByteBuffer.allocate(<span class="hljs-number">2</span>);<br>            <span class="hljs-keyword">while</span> (<span class="hljs-literal">true</span>)&#123;<br>                <span class="hljs-type">int</span> <span class="hljs-variable">read</span> <span class="hljs-operator">=</span> channel.read(allocate);<br>                <span class="hljs-keyword">if</span> (read == -<span class="hljs-number">1</span>)&#123;<br>                    <span class="hljs-keyword">break</span>;<br>                &#125;<br>                allocate.flip();<br>                <span class="hljs-keyword">while</span> (allocate.hasRemaining())&#123;<br>                    <span class="hljs-type">byte</span> <span class="hljs-variable">b</span> <span class="hljs-operator">=</span> allocate.get();<br>                    log.debug(<span class="hljs-string">&quot;读取到的字节&quot;</span> + b);<br>                &#125;<br>                allocate.flip();<br>            &#125;<br>        &#125; <span class="hljs-keyword">catch</span> (IOException e) &#123;<br>        &#125;<span class="hljs-keyword">finally</span> &#123;<br><br>        &#125;<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><p>使用步骤</p>
+<ul>
+<li>向bytebuffer写入数据，例如调用Channel.read</li>
+<li>调用flip切换至读模式</li>
+<li>从buffer读取数据</li>
+<li>调用clear或者compect切换至写模式</li>
+<li>重复</li>
+</ul>
+</li>
+<li><p>ByteBuffer结构</p>
+<ul>
+<li>capacity</li>
+<li>position</li>
+<li>limit</li>
+</ul>
+</li>
+</ul>
+<p>一开始的时候，position位于数组的0，capacity&#x3D;limit等于最大容量</p>
+<p>写模式下，position是写入的位置，当写入了四个字节后，position后移</p>
+<p>调用flip动作后，切换写为读取，此时会将position重新指向0，position切换为读指针，然后limit变成了读取限制，等于前面position的位置</p>
+<p>读取完毕后调用clear</p>
+<p>状态又回到最初的时候</p>
+<p><strong>compat和clear的区别</strong></p>
+<ul>
+<li>如果某种原因没有读完立马开始写，则需要compat方法压缩</li>
+<li>不会把position放到0的位置</li>
+</ul>
+<p><strong>初始化一个Bytebuffer</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">ByteBuffer</span> <span class="hljs-variable">byteBuffer</span> <span class="hljs-operator">=</span> ByteBuffer.allocate(<span class="hljs-number">10</span>);<br>        byteBuffer.put((<span class="hljs-type">byte</span>) <span class="hljs-number">0x97</span>);<br>        ByteBufferUtil.debugAll(byteBuffer);<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs rub">position: [1], limit: [10]<br>         +-------------------------------------------------+<br>0         |  0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f |<br>0+--------+-------------------------------------------------+----------------+<br>0|00000000| 97 00 00 00 00 00 00 00 00 00                   |..........      |<br>0+--------+-------------------------------------------------+----------------+<br><br></code></pre></td></tr></table></figure>
+
+<p>position是1，limit是10</p>
+<p><strong>如果不切换读模式会怎么样</strong></p>
+<p>如果不切换读模式会会导致position不会回到0，那么读取到的是1的位置</p>
+<p><strong>Bytebuffer常见方法</strong></p>
+<ul>
+<li><p>allocate</p>
+<ul>
+<li>分配内存</li>
+<li>bytebuffer的内存创建后不能更改大小</li>
+<li>创建的是heapBytebuffer，存放在java的堆内存中的</li>
+</ul>
+</li>
+<li><p>allocateDirect</p>
+<ul>
+<li>创建的是DirectBytebuffer</li>
+<li>堆内存的读写效率较低，堆内存会受到垃圾回收的影响</li>
+</ul>
+</li>
+<li><p>写入数据</p>
+<ul>
+<li>调用channel的read方法</li>
+<li>调用buffer自己的put方法</li>
+</ul>
+</li>
+<li><p>读取数据</p>
+<ul>
+<li><p>调用channel的write方法</p>
+</li>
+<li><p>调用buffer的get方法</p>
+<ul>
+<li>get方法可以让读指针向后走</li>
+<li>如何想要重复读取数据可以调用rewind方法将position后移或者使用get（i），但是position不会后移</li>
+</ul>
+</li>
+<li><p>调用rewind方法就是将position设置为0</p>
+</li>
+<li><p>mark 和 reset方法</p>
+<p>mark 是记录position的位置</p>
+<p>reset 是将position重置到mark位置</p>
+<p>使用方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs java">byteBuffer.flip();<br>byteBuffer.get(<span class="hljs-keyword">new</span> <span class="hljs-title class_">byte</span>[<span class="hljs-number">1</span>]);<br>byteBuffer.mark(); <span class="hljs-comment">// 记录position的位置</span><br><span class="hljs-type">int</span> <span class="hljs-variable">position</span> <span class="hljs-operator">=</span> byteBuffer.position();<br>System.out.println(position);<br>byteBuffer.get(<span class="hljs-keyword">new</span> <span class="hljs-title class_">byte</span>[<span class="hljs-number">2</span>]);<br>byteBuffer.reset();<br><span class="hljs-type">byte</span> <span class="hljs-variable">b</span> <span class="hljs-operator">=</span> byteBuffer.get();<br>System.out.println((<span class="hljs-type">char</span>) b);<br></code></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>Bytebuffer与字符串的转换</p>
+<ul>
+<li><p>字符串转为byteBuffer</p>
+<ul>
+<li><p>字符串转为byte数组</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">ByteBuffer</span> <span class="hljs-variable">allocate</span> <span class="hljs-operator">=</span> ByteBuffer.allocate(<span class="hljs-number">20</span>);<br><span class="hljs-type">ByteBuffer</span> <span class="hljs-variable">put</span> <span class="hljs-operator">=</span> allocate.put(<span class="hljs-string">&quot;你好&quot;</span>.getBytes());<br>ByteBufferUtil.debugAll(put);<br></code></pre></td></tr></table></figure>
+</li>
+<li><p>StandardCharsets 指定字符串</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">ByteBuffer</span> <span class="hljs-variable">hellow</span> <span class="hljs-operator">=</span> StandardCharsets.UTF_8.encode(<span class="hljs-string">&quot;你好&quot;</span>);<br>ByteBufferUtil.debugAll(hellow);<br></code></pre></td></tr></table></figure>
+</li>
+<li><p>ByteBuffer.wrap</p>
+</li>
+</ul>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">ByteBuffer</span> <span class="hljs-variable">wrap</span> <span class="hljs-operator">=</span> ByteBuffer.wrap(<span class="hljs-string">&quot;你好&quot;</span>.getBytes());<br>      <br></code></pre></td></tr></table></figure>
+</li>
+<li><p>bytebuffer转字符串</p>
+</li>
+</ul>
+</li>
+<li><p>分散读，集中写</p>
+<ul>
+<li>分散读取到多个bytebuffer</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">RandomAccessFile</span> <span class="hljs-variable">rw</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">RandomAccessFile</span>(<span class="hljs-string">&quot;D:\\学习\\代码\\javabingfa\\nettystudy\\data.txt&quot;</span>, <span class="hljs-string">&quot;rw&quot;</span>);<br><span class="hljs-type">FileChannel</span> <span class="hljs-variable">channel</span> <span class="hljs-operator">=</span> rw.getChannel();<br><span class="hljs-type">ByteBuffer</span> <span class="hljs-variable">allocate1</span> <span class="hljs-operator">=</span> ByteBuffer.allocate(<span class="hljs-number">3</span>);<br><span class="hljs-type">ByteBuffer</span> <span class="hljs-variable">allocate2</span> <span class="hljs-operator">=</span> ByteBuffer.allocate(<span class="hljs-number">3</span>);<br><span class="hljs-type">ByteBuffer</span> <span class="hljs-variable">allocate3</span> <span class="hljs-operator">=</span> ByteBuffer.allocate(<span class="hljs-number">4</span>);<br>channel.read(<span class="hljs-keyword">new</span> <span class="hljs-title class_">ByteBuffer</span>[]&#123;allocate1, allocate2, allocate3&#125;);<br>allocate1.flip();<br>allocate2.flip();<br>allocate3.flip();<br>ByteBufferUtil.debugAll(allocate1);<br>ByteBufferUtil.debugAll(allocate2);<br>ByteBufferUtil.debugAll(allocate3);<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>集中写</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">RandomAccessFile</span> <span class="hljs-variable">rw2</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">RandomAccessFile</span>(<span class="hljs-string">&quot;D:\\学习\\代码\\javabingfa\\nettystudy\\data2.txt&quot;</span>, <span class="hljs-string">&quot;rw&quot;</span>);<br><span class="hljs-type">FileChannel</span> <span class="hljs-variable">channel1</span> <span class="hljs-operator">=</span> rw2.getChannel();<br>channel1.write(<span class="hljs-keyword">new</span> <span class="hljs-title class_">ByteBuffer</span>[]&#123;allocate1,allocate2,allocate3,allocate3&#125;);<br></code></pre></td></tr></table></figure>
+
+
+</li>
+<li><p>Bytebyffer 解决粘包拆包</p>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">split</span><span class="hljs-params">(ByteBuffer allocate)</span>&#123;<br>        allocate.flip();<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; i &lt; allocate.limit(); i++) &#123;<br>            <span class="hljs-keyword">if</span> (allocate.get(i) == <span class="hljs-string">&#x27;\n&#x27;</span>)&#123;<br>                System.out.println(allocate.get(i));<br>                <span class="hljs-type">int</span> <span class="hljs-variable">length</span> <span class="hljs-operator">=</span> i + <span class="hljs-number">1</span> - allocate.position();<br>                <span class="hljs-type">ByteBuffer</span> <span class="hljs-variable">desc</span> <span class="hljs-operator">=</span> ByteBuffer.allocate(length);<br>                <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">j</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; j &lt; length; j++) &#123;<br>                    desc.put(allocate.get());<br>                &#125;<br>                ByteBufferUtil.debugAll(desc);<br><br>            &#125;<br>        &#125;<br>        allocate.compact();<br>    &#125;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> &#123;<br>        <span class="hljs-type">ByteBuffer</span> <span class="hljs-variable">allocate</span> <span class="hljs-operator">=</span> ByteBuffer.allocate(<span class="hljs-number">32</span>);<br>        allocate.put(<span class="hljs-string">&quot;hellow,word\nI&#x27;m zhangsan\nHo&quot;</span>.getBytes());<br>        split(allocate);<br>        allocate.put(<span class="hljs-string">&quot;w are you?\n&quot;</span>.getBytes());<br>        split(allocate);<br>    &#125;<br></code></pre></td></tr></table></figure>
+
+<h5 id="1-3-网络编程"><a href="#1-3-网络编程" class="headerlink" title="1.3 网络编程"></a>1.3 网络编程</h5><ul>
+<li><p>阻塞模式</p>
+<ul>
+<li>创建一个服务端</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">ByteBuffer</span> <span class="hljs-variable">allocate</span> <span class="hljs-operator">=</span> ByteBuffer.allocate(<span class="hljs-number">16</span>);<br>        <span class="hljs-type">ServerSocketChannel</span> <span class="hljs-variable">open</span> <span class="hljs-operator">=</span> ServerSocketChannel.open();<br>        open.bind(<span class="hljs-keyword">new</span> <span class="hljs-title class_">InetSocketAddress</span>(<span class="hljs-number">8888</span>));<br>        ArrayList&lt;SocketChannel&gt; socketChannels = <span class="hljs-keyword">new</span> <span class="hljs-title class_">ArrayList</span>&lt;&gt;();<br>        <span class="hljs-keyword">while</span> (<span class="hljs-literal">true</span>)&#123;<br>            log.debug(<span class="hljs-string">&quot;Connect.....&quot;</span>);<br>            <span class="hljs-type">SocketChannel</span> <span class="hljs-variable">accept</span> <span class="hljs-operator">=</span> open.accept();<br>            log.debug(<span class="hljs-string">&quot;ConnectSucceed&quot;</span>);<br>            socketChannels.add(accept);<br>            <span class="hljs-keyword">for</span> (SocketChannel channle:socketChannels<br>                 ) &#123;<br>                channle.read(allocate);<br>                allocate.flip();<br>                ByteBufferUtil.debugAll(allocate);<br>                allocate.clear();<br>            &#125;<br>        &#125;<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>创建一个客户端</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">SocketChannel</span> <span class="hljs-variable">open</span> <span class="hljs-operator">=</span> SocketChannel.open();<br>        <span class="hljs-type">boolean</span> <span class="hljs-variable">connect</span> <span class="hljs-operator">=</span> open.connect(<span class="hljs-keyword">new</span> <span class="hljs-title class_">InetSocketAddress</span>(<span class="hljs-string">&quot;127.0.0.1&quot;</span>,<span class="hljs-number">8888</span>));<br><br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>阻塞模式下，一个方法的执行会影响另一个方法</p>
+</blockquote>
+</li>
+<li><p>非阻塞模式</p>
+<ul>
+<li>修改为非阻塞模式</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">open.configureBlocking(<span class="hljs-literal">false</span>);<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h5 id="1-4-Selector"><a href="#1-4-Selector" class="headerlink" title="1.4 Selector"></a>1.4 Selector</h5><ul>
+<li>创建一个Selector</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">Selector</span> <span class="hljs-variable">selector</span> <span class="hljs-operator">=</span> Selector.open();<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>将channel交给selector管理<ul>
+<li>返回值是selectionKey，我们可以通过selectionKey获取事件和channel</li>
+<li>什么是事件<ul>
+<li>accept 连接事件</li>
+<li>connect 客户端连接建立后触发的事件</li>
+<li>read 对于socket来说，表示数据到了，可读事件</li>
+<li>write 可写事件</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">SelectionKey</span> <span class="hljs-variable">selectionKey</span> <span class="hljs-operator">=</span> socketChannel.register(selector, <span class="hljs-number">0</span>, <span class="hljs-literal">null</span>);<span class="hljs-comment">// 注册到上面</span><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>设置ssk关注的事件</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">selectionKey.interestOps(SelectionKey.OP_ACCEPT); <span class="hljs-comment">// 枚举值</span><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>select方法</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">selector.select(); <span class="hljs-comment">//没有事件线程会阻塞</span><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>处理事件<ul>
+<li>selectionKeys中包含了所有的可执行的事件</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs java">Set&lt;SelectionKey&gt; selectionKeys = selector.selectedKeys(); <span class="hljs-comment">// 拿到所有可用的事件</span><br>Set&lt;SelectionKey&gt; selectionKeys = selector.selectedKeys(); <span class="hljs-comment">// 拿到所有可用的事件</span><br>            Iterator&lt;SelectionKey&gt; iterator = selectionKeys.iterator();<br>            <span class="hljs-keyword">while</span> (iterator.hasNext())&#123;<br>                <span class="hljs-type">SelectionKey</span> <span class="hljs-variable">key</span> <span class="hljs-operator">=</span> iterator.next();<br>                <span class="hljs-comment">// 拿到了事件的key</span><br>                log.debug(key.toString());<br>                <span class="hljs-comment">// 通过key 拿到了channle</span><br>                <span class="hljs-type">ServerSocketChannel</span> <span class="hljs-variable">channel</span> <span class="hljs-operator">=</span> (ServerSocketChannel) key.channel();<br>                channel.accept(); <span class="hljs-comment">// 建立连接</span><br>                System.out.println(<span class="hljs-string">&quot;有人建立了连接&quot;</span>);<br>            &#125;<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>如果不处理事件会发生什么？<ul>
+<li>他会认为事件没有进行处理，无线循环，不会阻塞</li>
+</ul>
+</li>
+<li>读取事件处理</li>
+</ul>
+<p>在处理读取事件之前，我们必须知道怎么去区分事件</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java">key.isAcceptable()<br>key.isReadable()<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>区分事件后，处理读取的事件</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">if</span> (key.isReadable())&#123;<br>                    System.out.println(<span class="hljs-string">&quot;可读请求&quot;</span>);<br>                    <span class="hljs-type">SocketChannel</span> <span class="hljs-variable">channel</span> <span class="hljs-operator">=</span> (SocketChannel) key.channel();<br>                    <span class="hljs-type">ByteBuffer</span> <span class="hljs-variable">byteBuffer</span> <span class="hljs-operator">=</span> ByteBuffer.allocate(<span class="hljs-number">16</span>);<br>                    channel.read(byteBuffer);<br>                    byteBuffer.flip();<br>                    ByteBufferUtil.debugAll(byteBuffer);<br>                    byteBuffer.clear();<br>                    iterator.remove();<br>                &#125;<br></code></pre></td></tr></table></figure>
+
+<p><strong>注意：发生事件的key我们必须手动删除key</strong></p>
+<ul>
+<li>处理客户端断开</li>
+</ul>
+<p>​	在客户端断开时候，处理异常需要反注册，也就是需要从keyset中注销以上是非正常断开</p>
+<p>​	那么正常断开应该怎么处理呢</p>
+<ul>
+<li>根据read的结果判断是否需要移除key</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">key.cancel();<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><p>消息边界问题</p>
+<ul>
+<li>固定消息长度，数据包大小一样，服务器按照预定长度读取，缺点是浪费带宽</li>
+<li>按照分隔符拆分，缺点是效率低</li>
+<li>将长度信息放到头部动态处理消息边界<ul>
+<li>LTV模式</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>附件与扩容</p>
+<ul>
+<li>注册的时候关联附件 确保一个channle关联一个bytebuffer</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">SelectionKey</span> <span class="hljs-variable">register</span> <span class="hljs-operator">=</span> accept.register(selector, <span class="hljs-number">0</span>, ByteBuffer.allocate(<span class="hljs-number">16</span>));<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>使用key.attachment()获取附件</li>
+<li>设置新的附件key.attach(newByteBuffer);</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs java">split(byteBuffer);<br><span class="hljs-comment">// 扩容</span><br><span class="hljs-type">ByteBuffer</span> <span class="hljs-variable">newByteBuffer</span> <span class="hljs-operator">=</span> ByteBuffer.allocate(byteBuffer.capacity() * <span class="hljs-number">2</span>);<br>newByteBuffer.put(byteBuffer);<br>key.attach(newByteBuffer);<br>byteBuffer.clear();<br>iterator.remove();<br></code></pre></td></tr></table></figure>
+</li>
+<li><p>Bytebuffer的大小怎么分配</p>
+<ul>
+<li>每个Channel都需要记录可能被切分的消息，因为Bytebuffer不能被多个channel共同使用，因此需要设计大小可变的Bytebuffer</li>
+<li>Bytebuffer不能太大，比如一个Bytebuffer 1MB的话需要支持百万连接就要1TB内存，因此需要设计大小可变的Bytebuffer<ul>
+<li>一种思想是先分配一个比较小的buffer，然后如果不够在进行扩容</li>
+<li>另一种思路是用多个数组组成buffer吗，一个数组不够把多余的内容写入新的数组，在于前面的区别是消息存储不连续解析复杂，优点是避免了拷贝引起的性能损耗</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>可写事件</p>
+<ul>
+<li>建立连接后服务端给客户端发送数据，如果一次性发不完，关注一个可写事件</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">ByteBuffer</span> <span class="hljs-variable">dataBuffer</span> <span class="hljs-operator">=</span> Charset.defaultCharset().encode(stringBuilder.toString());<br>acceptChannel.write(dataBuffer);<span class="hljs-comment">//先进行写入操作</span><br><span class="hljs-keyword">if</span> (dataBuffer.hasRemaining())&#123;<br><span class="hljs-comment">// 如果有数据则关注一个可写事件</span><br>acceptChannel.register(selector,SelectionKey.OP_ACCEPT + SelectionKey.OP_WRITE);<br><span class="hljs-comment">// 将剩余的数据一起带过去</span><br>key.attach(dataBuffer);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>对可写事件进行处理</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">if</span> (key.isWritable())&#123;<br>    <span class="hljs-type">SocketChannel</span> <span class="hljs-variable">channel</span> <span class="hljs-operator">=</span> (SocketChannel) key.channel();<br>    <span class="hljs-type">ByteBuffer</span> <span class="hljs-variable">attachment</span> <span class="hljs-operator">=</span> (ByteBuffer) key.attachment();<br>    <span class="hljs-type">int</span> <span class="hljs-variable">write</span> <span class="hljs-operator">=</span> channel.write(attachment);<br>    System.out.println(<span class="hljs-string">&quot;继续写入&quot;</span> + write);<br>    <span class="hljs-keyword">if</span> (!attachment.hasRemaining())&#123;<br>        key.attach(<span class="hljs-literal">null</span>);<br>        key.interestOps(key.interestOps() - SelectionKey.OP_WRITE); <span class="hljs-comment">// 不再关注可写事件</span><br>    &#125;<br>&#125;<br>  <br></code></pre></td></tr></table></figure></li>
+</ul>
+<h5 id="1-5-多线程"><a href="#1-5-多线程" class="headerlink" title="1.5 多线程"></a>1.5 多线程</h5><p>利用多线程，主线程只负责连接事件，连接事件将任务分发给多个线程去处理，work1负责处理读事件，work2负责处理写事件</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">ThreadService</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> <span class="hljs-keyword">throws</span> IOException &#123;<br>        <span class="hljs-comment">// 主线程作为BOSS</span><br>        Thread.currentThread().setName(<span class="hljs-string">&quot;BOSS&quot;</span>);<br>        <span class="hljs-comment">// 创建Selector</span><br>        <span class="hljs-type">Selector</span> <span class="hljs-variable">boss</span> <span class="hljs-operator">=</span> Selector.open();<br>        <span class="hljs-comment">// 创建socker</span><br>        <span class="hljs-type">ServerSocketChannel</span> <span class="hljs-variable">serverSocketChannel</span> <span class="hljs-operator">=</span> ServerSocketChannel.open();<br>        serverSocketChannel.configureBlocking(<span class="hljs-literal">false</span>);<br>        serverSocketChannel.register(boss, SelectionKey.OP_ACCEPT,<span class="hljs-literal">null</span>);<br>        serverSocketChannel.bind(<span class="hljs-keyword">new</span> <span class="hljs-title class_">InetSocketAddress</span>(<span class="hljs-number">8888</span>));<br>        <span class="hljs-type">Worker</span> <span class="hljs-variable">work1</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Worker</span>(<span class="hljs-string">&quot;Work1&quot;</span>);<br>        <span class="hljs-keyword">while</span> (<span class="hljs-literal">true</span>)&#123;<br>            boss.select();<br>            Set&lt;SelectionKey&gt; selectionKeys = boss.selectedKeys();<br>            Iterator&lt;SelectionKey&gt; iterator = selectionKeys.iterator();<br>            <span class="hljs-keyword">while</span> (iterator.hasNext())&#123;<br>                <span class="hljs-type">SelectionKey</span> <span class="hljs-variable">key</span> <span class="hljs-operator">=</span> iterator.next();<br>                <span class="hljs-keyword">if</span> (key.isAcceptable())&#123;<br>                    <span class="hljs-comment">// 是连接请求</span><br>                    <span class="hljs-type">SocketChannel</span> <span class="hljs-variable">accept</span> <span class="hljs-operator">=</span> serverSocketChannel.accept();<br>                    accept.configureBlocking(<span class="hljs-literal">false</span>);<br>                    work1.initWorker(accept);<br><br>                &#125;<br>                iterator.remove();<br>            &#125;<br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">static</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Worker</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">Runnable</span>&#123;<br>        <span class="hljs-keyword">private</span> Thread thread;<br>        <span class="hljs-keyword">private</span> Selector workerSelector;<br>        <span class="hljs-keyword">private</span> <span class="hljs-keyword">volatile</span> <span class="hljs-type">boolean</span> <span class="hljs-variable">flag</span> <span class="hljs-operator">=</span> <span class="hljs-literal">false</span>;<br>        <span class="hljs-keyword">private</span> ConcurrentLinkedDeque&lt;Runnable&gt; deque = <span class="hljs-keyword">new</span> <span class="hljs-title class_">ConcurrentLinkedDeque</span>&lt;&gt;();<br>        <span class="hljs-keyword">public</span> <span class="hljs-title function_">Worker</span><span class="hljs-params">(String name)</span> &#123;<br>            <span class="hljs-built_in">this</span>.name = name;<br>        &#125;<br><br>        <span class="hljs-keyword">private</span> String name;<br>        <span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">initWorker</span><span class="hljs-params">(SocketChannel accept)</span> <span class="hljs-keyword">throws</span> IOException &#123;<br>            <span class="hljs-keyword">if</span> (!flag)&#123;<br>                System.out.println(<span class="hljs-string">&quot;初始化&quot;</span>);<br>                workerSelector = Selector.open();<br>                flag = <span class="hljs-literal">true</span>;<br>                thread = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Thread</span>(<span class="hljs-built_in">this</span>);<br>                thread.start();<br>            &#125;<br>            deque.add(() -&gt; &#123;<br>                <span class="hljs-keyword">try</span> &#123;<br>                    accept.register(workerSelector,SelectionKey.OP_READ,<span class="hljs-literal">null</span>);<br>                &#125; <span class="hljs-keyword">catch</span> (ClosedChannelException e) &#123;<br>                    e.printStackTrace();<br>                &#125;<br>            &#125;);<br>            workerSelector.wakeup(); <span class="hljs-comment">// 唤醒select</span><br><br>        &#125;<br><br>        <span class="hljs-meta">@Override</span><br>        <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">run</span><span class="hljs-params">()</span> &#123;<br>            <span class="hljs-comment">// worker的工作就是监测读写事件</span><br>            <span class="hljs-keyword">while</span> (<span class="hljs-literal">true</span>)&#123;<br>                <span class="hljs-keyword">try</span> &#123;<br>                    workerSelector.select();<br>                &#125; <span class="hljs-keyword">catch</span> (IOException e) &#123;<br>                    e.printStackTrace();<br>                &#125;<br>                <span class="hljs-type">Runnable</span> <span class="hljs-variable">task</span> <span class="hljs-operator">=</span> deque.poll();<br>                <span class="hljs-keyword">if</span> (task != <span class="hljs-literal">null</span>)&#123;<br>                    task.run();<br>                &#125;<br>                Set&lt;SelectionKey&gt; selectionKeys = workerSelector.selectedKeys();<br>                Iterator&lt;SelectionKey&gt; iterator = selectionKeys.iterator();<br>                <span class="hljs-keyword">while</span> (iterator.hasNext())&#123;<br>                    <span class="hljs-type">SelectionKey</span> <span class="hljs-variable">key</span> <span class="hljs-operator">=</span> iterator.next();<br>                    iterator.remove();<br>                    <span class="hljs-keyword">if</span> (key.isReadable())&#123;<br>                        <span class="hljs-type">ByteBuffer</span> <span class="hljs-variable">buffer</span> <span class="hljs-operator">=</span> ByteBuffer.allocate(<span class="hljs-number">10</span>);<br>                        <span class="hljs-type">SocketChannel</span> <span class="hljs-variable">socketChannel</span> <span class="hljs-operator">=</span> (SocketChannel) key.channel();<br>                        <span class="hljs-keyword">try</span> &#123;<br>                            socketChannel.read(buffer);<br>                            buffer.flip();<br>                            ByteBufferUtil.debugAll(buffer);<br>                        &#125; <span class="hljs-keyword">catch</span> (IOException e) &#123;<br>                            e.printStackTrace();<br>                        &#125;<br>                    &#125;<br>                &#125;<br>            &#125;<br>        &#125;<br>    &#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>存在的问题<ul>
+<li>由于是多线程运行，work在注册之前，select已经阻塞了，没有办法执行已经注册了的事件，必须有下一个事件进来的时候才能执行，因此，我们需要在注册完成后就对select进行唤醒</li>
+</ul>
+</li>
+<li>调用wakeup方法</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">workerSelector.wakeup(); <span class="hljs-comment">// 唤醒select</span><br></code></pre></td></tr></table></figure>
+
+
+              
+            </div>
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" class="category-chain-item">学习笔记</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Netty/">#Netty</a>
+      
+        <a href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/">#网络编程</a>
+      
+        <a href="/tags/NIO/">#NIO</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>NIO基础知识</div>
+      <div>http://ycdtbs.cn/2022/02/14/NIO/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>tang cheng</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年2月14日</div>
+        </div>
+      
+      
+      <div class="license-meta-item">
+        <div>许可协议</div>
+        <div>
+          
+            
+            
+              <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+              <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                <i class="iconfont icon-by"></i>
+              </span>
+              </a>
+            
+          
+        </div>
+      </div>
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/05/18/%E5%9F%BA%E4%BA%8EMilvues%E5%90%91%E9%87%8F%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E%E7%9A%84%E5%A4%A7%E8%A7%84%E6%A8%A1%E4%BA%BA%E8%84%B8%E8%AF%86%E5%88%AB/" title="基于Milvues向量搜索引擎的大规模人脸识别">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">基于Milvues向量搜索引擎的大规模人脸识别</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/01/11/JDK1-8-Stream%E6%B5%81%E7%9A%84%E4%BD%BF%E7%94%A8/" title="Stream流的使用">
+                        <span class="hidden-mobile">Stream流的使用</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.0/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      headingSelector : CONFIG.toc.headingSelector || 'h1,h2,h3,h4,h5,h6',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      collapseDepth   : CONFIG.toc.collapseDepth || 0,
+      scrollSmooth    : true,
+      headingsOffset  : -boardTop
+    });
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+  });
+</script>
+
+
+  <script>
+  (function() {
+    var enableLang = CONFIG.code_language.enable && CONFIG.code_language.default;
+    var enableCopy = CONFIG.copy_btn;
+    if (!enableLang && !enableCopy) {
+      return;
+    }
+
+    function getBgClass(ele) {
+      return Fluid.utils.getBackgroundLightness(ele) >= 0 ? 'code-widget-light' : 'code-widget-dark';
+    }
+
+    var copyTmpl = '';
+    copyTmpl += '<div class="code-widget">';
+    copyTmpl += 'LANG';
+    copyTmpl += '</div>';
+    jQuery('.markdown-body pre').each(function() {
+      var $pre = jQuery(this);
+      if ($pre.find('code.mermaid').length > 0) {
+        return;
+      }
+      if ($pre.find('span.line').length > 0) {
+        return;
+      }
+
+      var lang = '';
+
+      if (enableLang) {
+        lang = CONFIG.code_language.default;
+        if ($pre[0].children.length > 0 && $pre[0].children[0].classList.length >= 2 && $pre.children().hasClass('hljs')) {
+          lang = $pre[0].children[0].classList[1];
+        } else if ($pre[0].getAttribute('data-language')) {
+          lang = $pre[0].getAttribute('data-language');
+        } else if ($pre.parent().hasClass('sourceCode') && $pre[0].children.length > 0 && $pre[0].children[0].classList.length >= 2) {
+          lang = $pre[0].children[0].classList[1];
+          $pre.parent().addClass('code-wrapper');
+        } else if ($pre.parent().hasClass('markdown-body') && $pre[0].classList.length === 0) {
+          $pre.wrap('<div class="code-wrapper"></div>');
+        }
+        lang = lang.toUpperCase().replace('NONE', CONFIG.code_language.default);
+      }
+      $pre.append(copyTmpl.replace('LANG', lang).replace('code-widget">',
+        getBgClass($pre[0]) + (enableCopy ? ' code-widget copy-btn" data-clipboard-snippet><i class="iconfont icon-copy"></i>' : ' code-widget">')));
+
+      if (enableCopy) {
+        Fluid.utils.createScript('https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js', function() {
+          var clipboard = new window.ClipboardJS('.copy-btn', {
+            target: function(trigger) {
+              var nodes = trigger.parentNode.childNodes;
+              for (var i = 0; i < nodes.length; i++) {
+                if (nodes[i].tagName === 'CODE') {
+                  return nodes[i];
+                }
+              }
+            }
+          });
+          clipboard.on('success', function(e) {
+            e.clearSelection();
+            e.trigger.innerHTML = e.trigger.innerHTML.replace('icon-copy', 'icon-success');
+            setTimeout(function() {
+              e.trigger.innerHTML = e.trigger.innerHTML.replace('icon-success', 'icon-copy');
+            }, 2000);
+          });
+        });
+      }
+    });
+  })();
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

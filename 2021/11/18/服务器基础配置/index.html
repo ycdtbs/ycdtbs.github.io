@@ -16,28 +16,24 @@
   <meta name="author" content="tang cheng">
   <meta name="keywords" content="">
   
-    <meta name="description" content="百度云Api与SpringBoot实现的人脸识别登录功能任何问题都可通过bilibli私信我，虽然我很菜，但是很乐意解答bilibli项目中非常重要的gettoken的方法中AK与SK需要自己从百度云人脸识别库获取（代码中删去了这部分） 1、项目简介项目中使用了SpringBoot+Thymleaf+百度云的API接口实现的人脸识别功能，其中融合了人脸库的管理功能，实现对人脸的增删改查。对于原生的">
+    <meta name="description" content="Linux新的服务器基础环境搭建快捷文档1、安装SSH 安装  1yum install openssh-server   配置  123vim &#x2F;etc&#x2F;ssh&#x2F;sshd_config配置Port配置PermitRootLogin   启动服务  1systemctl start sshd.service   查看启动状态  1systemctl status sshd.service   设置">
 <meta property="og:type" content="article">
-<meta property="og:title" content="百度云Api与SpringBoot实现的人脸识别登录功能">
-<meta property="og:url" content="http://ycdtbs.cn/2021/09/21/%E7%99%BE%E5%BA%A6%E4%BA%BA%E8%84%B8%E8%AF%86%E5%88%ABAPI/index.html">
+<meta property="og:title" content="服务器的基础配置">
+<meta property="og:url" content="http://ycdtbs.cn/2021/11/18/%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%9F%BA%E7%A1%80%E9%85%8D%E7%BD%AE/index.html">
 <meta property="og:site_name" content="唐成博客">
-<meta property="og:description" content="百度云Api与SpringBoot实现的人脸识别登录功能任何问题都可通过bilibli私信我，虽然我很菜，但是很乐意解答bilibli项目中非常重要的gettoken的方法中AK与SK需要自己从百度云人脸识别库获取（代码中删去了这部分） 1、项目简介项目中使用了SpringBoot+Thymleaf+百度云的API接口实现的人脸识别功能，其中融合了人脸库的管理功能，实现对人脸的增删改查。对于原生的">
+<meta property="og:description" content="Linux新的服务器基础环境搭建快捷文档1、安装SSH 安装  1yum install openssh-server   配置  123vim &#x2F;etc&#x2F;ssh&#x2F;sshd_config配置Port配置PermitRootLogin   启动服务  1systemctl start sshd.service   查看启动状态  1systemctl status sshd.service   设置">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://githubpicture.oss-cn-beijing.aliyuncs.com/QQ%E6%88%AA%E5%9B%BE20200304214346.png?ynotemdtimestamp=1652771803320">
-<meta property="og:image" content="https://githubpicture.oss-cn-beijing.aliyuncs.com/QQ%E6%88%AA%E5%9B%BE20200304214430.png?ynotemdtimestamp=1652771803320">
-<meta property="og:image" content="https://githubpicture.oss-cn-beijing.aliyuncs.com/QQ%E6%88%AA%E5%9B%BE20200304215800.png?ynotemdtimestamp=1652771803320">
-<meta property="og:image" content="https://githubpicture.oss-cn-beijing.aliyuncs.com/QQ%E6%88%AA%E5%9B%BE20200304214510.png?ynotemdtimestamp=1652771803320">
-<meta property="article:published_time" content="2021-09-21T09:08:03.000Z">
-<meta property="article:modified_time" content="2022-05-21T12:49:54.807Z">
+<meta property="article:published_time" content="2021-11-18T05:08:03.000Z">
+<meta property="article:modified_time" content="2022-05-30T05:13:15.054Z">
 <meta property="article:author" content="tang cheng">
-<meta property="article:tag" content="Springboot">
-<meta property="article:tag" content="人脸识别">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="JDK">
+<meta property="article:tag" content="安装文档">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://githubpicture.oss-cn-beijing.aliyuncs.com/QQ%E6%88%AA%E5%9B%BE20200304214346.png?ynotemdtimestamp=1652771803320">
   
   
   
-  <title>百度云Api与SpringBoot实现的人脸识别登录功能 - 唐成博客</title>
+  <title>服务器的基础配置 - 唐成博客</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -200,7 +196,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="百度云Api与SpringBoot实现的人脸识别登录功能"></span>
+            <span id="subtitle" data-typed-text="服务器的基础配置"></span>
           
         </div>
 
@@ -211,8 +207,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2021-09-21 17:08" pubdate>
-          2021年9月21日 下午
+        <time datetime="2021-11-18 13:08" pubdate>
+          2021年11月18日 下午
         </time>
       </span>
     
@@ -223,7 +219,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          2.2k 字
+          667 字
         
       </span>
     
@@ -234,7 +230,7 @@
         
         
         
-          19 分钟
+          6 分钟
         
       </span>
     
@@ -272,15 +268,65 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">百度云Api与SpringBoot实现的人脸识别登录功能</h1>
+            <h1 style="display: none">服务器的基础配置</h1>
             
             <div class="markdown-body">
               
-              <h4 id="百度云Api与SpringBoot实现的人脸识别登录功能"><a href="#百度云Api与SpringBoot实现的人脸识别登录功能" class="headerlink" title="百度云Api与SpringBoot实现的人脸识别登录功能"></a>百度云Api与SpringBoot实现的人脸识别登录功能</h4><p><strong>任何问题都可通过bilibli私信我，虽然我很菜，但是很乐意解答</strong><br><a target="_blank" rel="noopener" href="https://space.bilibili.com/97483909">bilibli</a><br>项目中非常重要的gettoken的方法中AK与SK需要自己从百度云人脸识别库获取（代码中删去了这部分）</p>
-<h4 id="1、项目简介"><a href="#1、项目简介" class="headerlink" title="1、项目简介"></a>1、项目简介</h4><p>项目中使用了SpringBoot+Thymleaf+百度云的API接口实现的人脸识别功能，其中融合了人脸库的管理功能，实现对人脸的增删改查。<br>对于原生的百度云API文档可以点击下载<br><a target="_blank" rel="noopener" href="https://githubpicture.oss-cn-beijing.aliyuncs.com/FACE.pdf">点击下载百度云API官方文档–32M</a><br>项目演示和流程介绍可参考视频<br><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/av93519949#reply2469727748">视频演示</a><br><img src="https://githubpicture.oss-cn-beijing.aliyuncs.com/QQ%E6%88%AA%E5%9B%BE20200304214346.png?ynotemdtimestamp=1652771803320" srcset="/img/loading.gif" lazyload alt="image"><br><img src="https://githubpicture.oss-cn-beijing.aliyuncs.com/QQ%E6%88%AA%E5%9B%BE20200304214430.png?ynotemdtimestamp=1652771803320" srcset="/img/loading.gif" lazyload alt="image"><br><img src="https://githubpicture.oss-cn-beijing.aliyuncs.com/QQ%E6%88%AA%E5%9B%BE20200304215800.png?ynotemdtimestamp=1652771803320" srcset="/img/loading.gif" lazyload alt="image"><br><img src="https://githubpicture.oss-cn-beijing.aliyuncs.com/QQ%E6%88%AA%E5%9B%BE20200304214510.png?ynotemdtimestamp=1652771803320" srcset="/img/loading.gif" lazyload alt="image"></p>
-<h4 id="2、接口方法"><a href="#2、接口方法" class="headerlink" title="2、接口方法"></a>2、接口方法</h4><p>Face包下的的BaiduAiFace类是整个核心功能的接口<br><strong>FaceRegistration</strong> 方法为人脸注册<br><strong>FaceUpdate</strong> 方法为人脸更新<br><strong>FindPersonFaceList</strong> 方法为查询人脸信息<br><strong>FindGroupList</strong> 为查询本组的面部信息<br><strong>DelPersonFace</strong> 为删除人脸<br><strong>FaceSearch</strong> 为查找人脸</p>
-<h4 id="3、接口参数"><a href="#3、接口参数" class="headerlink" title="3、接口参数"></a>3、接口参数</h4><p>对于每个参数的具体含义与提要提供的参数参考百度云官方文档</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Component</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Setingmodel</span> &#123;<br>    <span class="hljs-keyword">private</span> String imgpath;<br>    <span class="hljs-keyword">private</span> String GroupID;<br>    <span class="hljs-keyword">private</span> String UserID;<br>    <span class="hljs-keyword">private</span> String Quality_Control;<br>    <span class="hljs-keyword">private</span> String Image_Type;<br>    <span class="hljs-keyword">private</span> String Liveness_Control;<br>    <span class="hljs-keyword">private</span> String Userinf;<br><br>    <span class="hljs-keyword">public</span> String <span class="hljs-title function_">getUserinf</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-keyword">return</span> Userinf;<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">setUserinf</span><span class="hljs-params">(String userinf)</span> &#123;<br>        Userinf = userinf;<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-title function_">Setingmodel</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-comment">/**</span><br><span class="hljs-comment">         * 图片类型</span><br><span class="hljs-comment">         * BASE64:图片的base64值，base64编码后的图片数据，编码后的图片大小不超过2M；</span><br><span class="hljs-comment">         * URL:图片的 URL地址( 可能由于网络等原因导致下载图片时间过长)；</span><br><span class="hljs-comment">         * FACE_TOKEN：人脸图片的唯一标识，调用人脸检测接口时</span><br><span class="hljs-comment">         * 会为每个人脸图片赋予一个唯一的FACE_TOKEN</span><br><span class="hljs-comment">         * 同一张图片多次检测得到的FACE_TOKEN是同一个。</span><br><span class="hljs-comment">         */</span><br>        <span class="hljs-built_in">this</span>.Image_Type = <span class="hljs-string">&quot;BASE64&quot;</span>;<br>        <span class="hljs-comment">/**</span><br><span class="hljs-comment">         * 图片质量控制</span><br><span class="hljs-comment">         * NONE: 不进行控制</span><br><span class="hljs-comment">         * LOW:较低的质量要求</span><br><span class="hljs-comment">         * NORMAL: 一般的质量要求</span><br><span class="hljs-comment">         * HIGH: 较高的质量要求</span><br><span class="hljs-comment">         * 默认 NONE</span><br><span class="hljs-comment">         */</span><br>        <span class="hljs-built_in">this</span>.Quality_Control = <span class="hljs-string">&quot;NONE&quot;</span>;<br>        <span class="hljs-comment">/**</span><br><span class="hljs-comment">         * 活体检测控制</span><br><span class="hljs-comment">         * NONE: 不进行控制</span><br><span class="hljs-comment">         * LOW:较低的活体要求(高通过率 低攻击拒绝率)</span><br><span class="hljs-comment">         * NORMAL: 一般的活体要求(平衡的攻击拒绝率, 通过率)</span><br><span class="hljs-comment">         * HIGH: 较高的活体要求(高攻击拒绝率 低通过率)</span><br><span class="hljs-comment">         * 默认NONE</span><br><span class="hljs-comment">         */</span><br>        <span class="hljs-built_in">this</span>.Liveness_Control = <span class="hljs-string">&quot;NONE&quot;</span>;<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> String <span class="hljs-title function_">getImgpath</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-keyword">return</span> imgpath;<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">setImgpath</span><span class="hljs-params">(String imgpath)</span> &#123;<br>        <span class="hljs-built_in">this</span>.imgpath = imgpath;<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> String <span class="hljs-title function_">getGroupID</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-keyword">return</span> GroupID;<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">setGroupID</span><span class="hljs-params">(String groupID)</span> &#123;<br>        GroupID = groupID;<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> String <span class="hljs-title function_">getUserID</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-keyword">return</span> UserID;<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">setUserID</span><span class="hljs-params">(String userID)</span> &#123;<br>        UserID = userID;<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> String <span class="hljs-title function_">getQuality_Control</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-keyword">return</span> Quality_Control;<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">setQuality_Control</span><span class="hljs-params">(String quality_Control)</span> &#123;<br>        Quality_Control = quality_Control;<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> String <span class="hljs-title function_">getImage_Type</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-keyword">return</span> Image_Type;<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">setImage_Type</span><span class="hljs-params">(String image_Type)</span> &#123;<br>        Image_Type = image_Type;<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> String <span class="hljs-title function_">getLiveness_Control</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-keyword">return</span> Liveness_Control;<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">setLiveness_Control</span><span class="hljs-params">(String liveness_Control)</span> &#123;<br>        Liveness_Control = liveness_Control;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+              <h3 id="Linux新的服务器基础环境搭建快捷文档"><a href="#Linux新的服务器基础环境搭建快捷文档" class="headerlink" title="Linux新的服务器基础环境搭建快捷文档"></a>Linux新的服务器基础环境搭建快捷文档</h3><h4 id="1、安装SSH"><a href="#1、安装SSH" class="headerlink" title="1、安装SSH"></a>1、安装SSH</h4><ul>
+<li>安装</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">yum install openssh-server<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>配置</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell">vim /etc/ssh/sshd_config<br>配置Port<br>配置PermitRootLogin<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>启动服务</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">systemctl start sshd.service<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>查看启动状态</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">systemctl status sshd.service<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>设置开机启动</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">systemctl enable sshd.service<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>检查22端口</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs shell">netstat -an | grep 22<br><span class="hljs-meta prompt_"># </span><span class="language-bash">如果没有开放则使用以下命令</span><br>firewall-cmd --permanent --zone=public --add-port=22/tcp<br>firewall-cmd --permanent --zone=public --add-port=22/udp<br>firewall-cmd --reload<br></code></pre></td></tr></table></figure>
+
+<h4 id="2、安装JDK"><a href="#2、安装JDK" class="headerlink" title="2、安装JDK"></a>2、安装JDK</h4><ul>
+<li>国内源</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">nmcli connection reload<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>新建&#x2F;usr&#x2F;java</li>
+<li>解压</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">tar -zvxf jdk-8u202-linux-x64.tar.gz<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>配置环境变量</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">vim /etc/profile<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>加入如下内容</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs shell">JAVA_HOME=/usr/java/jdk1.8.0_60<br><br>PATH=$JAVA_HOME/bin:$PATH<br><br>CLASSPATH=$JAVA_HOME/jre/lib/ext:$JAVA_HOME/lib/tools.jar<br><br>export PATH JAVA_HOME CLASSPATH<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>重载source文件</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">source /etc/profile<br></code></pre></td></tr></table></figure>
 
               
             </div>
@@ -298,7 +344,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/%E9%A1%B9%E7%9B%AE%E6%96%87%E6%A1%A3/" class="category-chain-item">项目文档</a>
+  <a href="/categories/%E5%AE%89%E8%A3%85%E9%83%A8%E7%BD%B2%E6%96%87%E6%A1%A3/" class="category-chain-item">安装部署文档</a>
   
   
 
@@ -313,9 +359,11 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/Springboot/">#Springboot</a>
+        <a href="/tags/Linux/">#Linux</a>
       
-        <a href="/tags/%E4%BA%BA%E8%84%B8%E8%AF%86%E5%88%AB/">#人脸识别</a>
+        <a href="/tags/JDK/">#JDK</a>
+      
+        <a href="/tags/%E5%AE%89%E8%A3%85%E6%96%87%E6%A1%A3/">#安装文档</a>
       
     </div>
   
@@ -327,8 +375,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>百度云Api与SpringBoot实现的人脸识别登录功能</div>
-      <div>http://ycdtbs.cn/2021/09/21/百度人脸识别API/</div>
+      <div>服务器的基础配置</div>
+      <div>http://ycdtbs.cn/2021/11/18/服务器基础配置/</div>
     </div>
     <div class="license-meta">
       
@@ -340,7 +388,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2021年9月21日</div>
+          <div>2021年11月18日</div>
         </div>
       
       
@@ -370,15 +418,21 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2021/11/18/%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%9F%BA%E7%A1%80%E9%85%8D%E7%BD%AE/" title="服务器的基础配置">
+                      <a href="/2021/12/21/Java%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E5%AE%9E%E6%88%98%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%80%EF%BC%89/" title="Java并发编程-线程的基础知识">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">服务器的基础配置</span>
+                        <span class="hidden-mobile">Java并发编程-线程的基础知识</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
                   </article>
                   <article class="post-next col-6">
                     
+                    
+                      <a href="/2021/09/21/%E7%99%BE%E5%BA%A6%E4%BA%BA%E8%84%B8%E8%AF%86%E5%88%ABAPI/" title="百度云Api与SpringBoot实现的人脸识别登录功能">
+                        <span class="hidden-mobile">百度云Api与SpringBoot实现的人脸识别登录功能</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
                     
                   </article>
                 </div>
