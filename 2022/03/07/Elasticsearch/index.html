@@ -1,0 +1,1621 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="tang cheng">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Elasticsearch1、为什么要学习ElasticsearchElasticsearch的主要功能  分布式搜索引擎 大数据近实时分析引擎  产品特性  高性能 容易使用和扩展  2、Elasticsearch简介和发展历史Elasticsearch是基于Java语言开发的搜索引擎库类 创建于1999不阿不，2005年成为Apache顶级开源项目 Lucene具有高性能容易扩展的优点 Luc">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Elasticsearch">
+<meta property="og:url" content="http://ycdtbs.cn/2022/03/07/Elasticsearch/index.html">
+<meta property="og:site_name" content="唐成博客">
+<meta property="og:description" content="Elasticsearch1、为什么要学习ElasticsearchElasticsearch的主要功能  分布式搜索引擎 大数据近实时分析引擎  产品特性  高性能 容易使用和扩展  2、Elasticsearch简介和发展历史Elasticsearch是基于Java语言开发的搜索引擎库类 创建于1999不阿不，2005年成为Apache顶级开源项目 Lucene具有高性能容易扩展的优点 Luc">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://wodebokea.oss-cn-beijing.aliyuncs.com/img/elk%E6%8A%80%E6%9C%AF%E6%A0%88.png">
+<meta property="og:image" content="https://wodebokea.oss-cn-beijing.aliyuncs.com/img/%E6%8C%87%E6%A0%87%E5%88%86%E6%9E%90%20%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90.png">
+<meta property="og:image" content="https://wodebokea.oss-cn-beijing.aliyuncs.com/img/Kibana%E6%B7%BB%E5%8A%A0%E6%A0%B7%E4%BE%8B%E6%95%B0%E6%8D%AE.png">
+<meta property="og:image" content="https://wodebokea.oss-cn-beijing.aliyuncs.com/img/%E5%88%86%E7%89%87.png">
+<meta property="og:image" content="https://wodebokea.oss-cn-beijing.aliyuncs.com/img/%E7%B4%A2%E5%BC%95%E6%A8%A1%E6%9D%BF.png">
+<meta property="og:image" content="https://wodebokea.oss-cn-beijing.aliyuncs.com/img/%E5%80%92%E6%8E%92%E7%B4%A2%E5%BC%95.png">
+<meta property="og:image" content="https://wodebokea.oss-cn-beijing.aliyuncs.com/img/%E5%85%A8%E6%96%87%E6%9F%A5%E8%AF%A2.png">
+<meta property="og:image" content="https://wodebokea.oss-cn-beijing.aliyuncs.com/img/%E5%A4%9A%E5%80%BC%E9%97%AE%E9%A2%98.png">
+<meta property="og:image" content="https://wodebokea.oss-cn-beijing.aliyuncs.com/img/%E7%9B%B8%E5%85%B3%E5%BA%A6%E7%AE%97%E5%88%86.png">
+<meta property="article:published_time" content="2022-03-07T08:23:54.000Z">
+<meta property="article:modified_time" content="2022-06-07T08:24:40.380Z">
+<meta property="article:author" content="tang cheng">
+<meta property="article:tag" content="Elasticsearch">
+<meta property="article:tag" content="搜索引擎">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://wodebokea.oss-cn-beijing.aliyuncs.com/img/elk%E6%8A%80%E6%9C%AF%E6%A0%88.png">
+  
+  
+  
+  <title>Elasticsearch - 唐成博客</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"ycdtbs.cn","root":"/","version":"1.9.0","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>你这愚蠢的土拨鼠</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Elasticsearch"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-03-07 16:23" pubdate>
+          2022年3月7日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          23k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          193 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Elasticsearch</h1>
+            
+            <div class="markdown-body">
+              
+              <h2 id="Elasticsearch"><a href="#Elasticsearch" class="headerlink" title="Elasticsearch"></a>Elasticsearch</h2><h3 id="1、为什么要学习Elasticsearch"><a href="#1、为什么要学习Elasticsearch" class="headerlink" title="1、为什么要学习Elasticsearch"></a>1、为什么要学习Elasticsearch</h3><p><strong>Elasticsearch的主要功能</strong></p>
+<ul>
+<li>分布式搜索引擎</li>
+<li>大数据近实时分析引擎</li>
+</ul>
+<p><strong>产品特性</strong></p>
+<ul>
+<li>高性能</li>
+<li>容易使用和扩展</li>
+</ul>
+<h3 id="2、Elasticsearch简介和发展历史"><a href="#2、Elasticsearch简介和发展历史" class="headerlink" title="2、Elasticsearch简介和发展历史"></a>2、Elasticsearch简介和发展历史</h3><p>Elasticsearch是基于Java语言开发的搜索引擎库类</p>
+<p>创建于1999不阿不，2005年成为Apache顶级开源项目</p>
+<p>Lucene具有高性能容易扩展的优点</p>
+<p><strong>Lucene的局限性</strong></p>
+<ul>
+<li>只能基于Java语言开发</li>
+<li>类库的接口学习曲线陡峭</li>
+<li>原生并并不支持水平拓展</li>
+</ul>
+<p><strong>主要功能</strong></p>
+<p>海量数据的分布式存储和集群管理</p>
+<p>近实时搜索，性能卓越</p>
+<ul>
+<li>结构化&#x2F;全文&#x2F;地理位置&#x2F;自动完成</li>
+</ul>
+<p>海量数据的近实时分析</p>
+<ul>
+<li>聚合功能</li>
+</ul>
+<h3 id="3、Elastic-Stack生态圈"><a href="#3、Elastic-Stack生态圈" class="headerlink" title="3、Elastic Stack生态圈"></a>3、Elastic Stack生态圈</h3><p><img src="https://wodebokea.oss-cn-beijing.aliyuncs.com/img/elk%E6%8A%80%E6%9C%AF%E6%A0%88.png" srcset="/img/loading.gif" lazyload></p>
+<h4 id="3-1-Logstash-数据处理管道"><a href="#3-1-Logstash-数据处理管道" class="headerlink" title="3.1 Logstash 数据处理管道"></a>3.1 Logstash 数据处理管道</h4><p><strong>Logstash是开源的数据处理管道，支持从不同来源采集数据转换数据，并将数据发送到不同的存储库中</strong></p>
+<p>特点</p>
+<ul>
+<li>实时解析和转换数据<ul>
+<li>从IP地址破译出地理坐标</li>
+<li>将PLL数据匿名化，完全排除敏感字段</li>
+</ul>
+</li>
+<li>可扩展<ul>
+<li>200多个插件</li>
+</ul>
+</li>
+<li>可靠性安全性<ul>
+<li>Logstash会通过持久化队列来保证至少将运行中的事件送达一次</li>
+<li>数据传输加密</li>
+</ul>
+</li>
+<li>监控</li>
+</ul>
+<h4 id="3-2-Kibana-可视化分析利器"><a href="#3-2-Kibana-可视化分析利器" class="headerlink" title="3.2 Kibana 可视化分析利器"></a>3.2 Kibana 可视化分析利器</h4><p><strong>数据可视化工具</strong></p>
+<ul>
+<li>提供可视化图表</li>
+<li>利用机器学习</li>
+</ul>
+<h4 id="3-3-BEATS-轻量的数据采集器"><a href="#3-3-BEATS-轻量的数据采集器" class="headerlink" title="3.3 BEATS 轻量的数据采集器"></a>3.3 BEATS 轻量的数据采集器</h4><p><strong>GO语言开发的</strong>针对不同的数据源进行数据采集器</p>
+<h4 id="3-4-X-Pack-商业化套件"><a href="#3-4-X-Pack-商业化套件" class="headerlink" title="3.4 X-Pack 商业化套件"></a>3.4 X-Pack 商业化套件</h4><p><strong>收费</strong></p>
+<h4 id="3-5-应用场景"><a href="#3-5-应用场景" class="headerlink" title="3.5 应用场景"></a>3.5 应用场景</h4><ul>
+<li>搜索<ul>
+<li>网站搜索</li>
+<li>垂直搜索</li>
+<li>代码搜索</li>
+</ul>
+</li>
+<li>分析<ul>
+<li>日志管理与分析</li>
+<li>安全指标监控</li>
+<li>应用性能监控</li>
+<li>web抓取舆情分析</li>
+</ul>
+</li>
+</ul>
+<p><strong>日志收集</strong></p>
+<p>日志搜集-格式化分析-全文检索-风险告警</p>
+<p><strong>Elasticsearch与数据库的集成</strong></p>
+<ul>
+<li>单独使用Elasticsearch存储</li>
+<li>以下情况可以考虑与数据库集成<ul>
+<li>与现有系统的集成</li>
+<li>需要考虑事务性</li>
+<li>数据更新频繁</li>
+</ul>
+</li>
+</ul>
+<p><strong>指标分析&#x2F;日志分析</strong></p>
+<p><img src="https://wodebokea.oss-cn-beijing.aliyuncs.com/img/%E6%8C%87%E6%A0%87%E5%88%86%E6%9E%90%20%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="4、Elasticsearch安装与简单部署"><a href="#4、Elasticsearch安装与简单部署" class="headerlink" title="4、Elasticsearch安装与简单部署"></a>4、Elasticsearch安装与简单部署</h3><h4 id="4-1-Elasticsearch的文件目录结构"><a href="#4-1-Elasticsearch的文件目录结构" class="headerlink" title="4.1 Elasticsearch的文件目录结构"></a>4.1 Elasticsearch的文件目录结构</h4><table>
+<thead>
+<tr>
+<th>目录</th>
+<th>配置文件</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>bin</td>
+<td></td>
+<td>脚本文件、包括启动ES、安装插件、运行统计数据等等</td>
+</tr>
+<tr>
+<td>config</td>
+<td>sleaticsearch.yml</td>
+<td>集群配置文件，user，role based相关配置</td>
+</tr>
+<tr>
+<td>JDK</td>
+<td></td>
+<td>Java运行环境</td>
+</tr>
+<tr>
+<td>data</td>
+<td>path.data</td>
+<td>数据文件</td>
+</tr>
+<tr>
+<td>lib</td>
+<td></td>
+<td>Java类库</td>
+</tr>
+<tr>
+<td>logs</td>
+<td>path.log</td>
+<td>日志文件</td>
+</tr>
+<tr>
+<td>modules</td>
+<td></td>
+<td>包含所有ES模块</td>
+</tr>
+<tr>
+<td>plugins</td>
+<td></td>
+<td>包含所有已安装插件</td>
+</tr>
+</tbody></table>
+<h4 id="4-2-JVM配置"><a href="#4-2-JVM配置" class="headerlink" title="4.2 JVM配置"></a>4.2 JVM配置</h4><ul>
+<li>修改JVM -config&#x2F;jvm.options</li>
+<li>配置建议<ul>
+<li>XMS和XMS设置成一样</li>
+<li>Xmx不要超过机器内存的50%</li>
+<li>不要超过30GB</li>
+</ul>
+</li>
+</ul>
+<h4 id="4-3-安装"><a href="#4-3-安装" class="headerlink" title="4.3 安装"></a>4.3 安装</h4><p><a target="_blank" rel="noopener" href="https://www.elastic.co/cn/downloads">https://www.elastic.co/cn/downloads</a></p>
+<p>安装过程中可能会出现的一些问题总结</p>
+<blockquote>
+<p>1、seccomp unavailable 错误</p>
+<p><strong>解决方法</strong>：elasticsearch.yml 配置</p>
+<p>bootstrap.memory_lock: false</p>
+<p>bootstrap.system_call_filter: false</p>
+<p>2、max file descriptors [4096] for elasticsearch process likely too low, increase to at least [65536]</p>
+<p><strong>解决方法</strong>：修改 &#x2F;etc&#x2F;security&#x2F;limits.conf</p>
+<p>hard nofile 80000 </p>
+<p>soft nofile 80000</p>
+<p>3、 max virtual memory areas vm.max_map_count [65530] is too low</p>
+<p><strong>解决方法</strong>：修改 &#x2F;etc&#x2F;sysctl.conf</p>
+<p>vm.max_map_count &#x3D; 262144</p>
+<p>然后 sysctl -p 生效</p>
+<p>4、the default discovery settings are unsuitable…., last least one of [….] must be configured</p>
+<p><strong>解决方法</strong>：elasticsearch.yml 开启配置：</p>
+<p>node.name: node-1</p>
+<p>cluster.initial_master_nodes: [“node-1”]</p>
+</blockquote>
+<h4 id="4-4-安装插件（示例）"><a href="#4-4-安装插件（示例）" class="headerlink" title="4.4 安装插件（示例）"></a>4.4 安装插件（示例）</h4><p>安装analysis-icu分词器</p>
+<p><strong>查看安装的插件列表</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">./elasticsearch-plugin list<br></code></pre></td></tr></table></figure>
+
+<p><strong>安装anaylysis-icu分词器</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">./elasticsearch-plugin install analysis-icu <br></code></pre></td></tr></table></figure>
+
+<h4 id="4-5-如何运行多个Elasticsearch-实例"><a href="#4-5-如何运行多个Elasticsearch-实例" class="headerlink" title="4.5 如何运行多个Elasticsearch 实例"></a>4.5 如何运行多个Elasticsearch 实例</h4><h4 id="4-6-Docker环境中运行ELK"><a href="#4-6-Docker环境中运行ELK" class="headerlink" title="4.6 Docker环境中运行ELK"></a>4.6 Docker环境中运行ELK</h4><p>后续补充</p>
+<h3 id="5、安装Kibana"><a href="#5、安装Kibana" class="headerlink" title="5、安装Kibana"></a>5、安装Kibana</h3><h4 id="5-1-安装下载"><a href="#5-1-安装下载" class="headerlink" title="5.1 安装下载"></a>5.1 安装下载</h4><p><a target="_blank" rel="noopener" href="https://www.elastic.co/cn/downloads">https://www.elastic.co/cn/downloads</a></p>
+<h4 id="5-2-Kibana添加样例数据"><a href="#5-2-Kibana添加样例数据" class="headerlink" title="5.2 Kibana添加样例数据"></a>5.2 Kibana添加样例数据</h4><p>kibana为我们准备了一些学习数据，包括日志，订单，航班数据等等</p>
+<p><img src="https://wodebokea.oss-cn-beijing.aliyuncs.com/img/Kibana%E6%B7%BB%E5%8A%A0%E6%A0%B7%E4%BE%8B%E6%95%B0%E6%8D%AE.png" srcset="/img/loading.gif" lazyload></p>
+<h4 id="5-3-DEV-Tool"><a href="#5-3-DEV-Tool" class="headerlink" title="5.3 DEV Tool"></a>5.3 DEV Tool</h4><p>dev tool 帮助我们调试</p>
+<h3 id="6、Logstash"><a href="#6、Logstash" class="headerlink" title="6、Logstash"></a>6、Logstash</h3><p>安装Logstash，并且导入Movielens的测试数据集</p>
+<h4 id="6-1-下载"><a href="#6-1-下载" class="headerlink" title="6.1 下载"></a>6.1 下载</h4><p><a target="_blank" rel="noopener" href="https://www.elastic.co/cn/downloads/logstash">https://www.elastic.co/cn/downloads/logstash</a></p>
+<h4 id="6-2-下载数据集并且导入数据"><a href="#6-2-下载数据集并且导入数据" class="headerlink" title="6.2 下载数据集并且导入数据"></a>6.2 下载数据集并且导入数据</h4><p><a target="_blank" rel="noopener" href="https://grouplens.org/datasets/movielens/">https://grouplens.org/datasets/movielens/</a> 数据集</p>
+<p><strong>配置文件</strong></p>
+<p>此文件只为了导入数据使用，需要修改的是下载的数据源</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><code class="hljs config">input &#123;<br>  file &#123;<br>    path =&gt; &quot;/tangcheng/logstash-7.3.0/import/movies.csv&quot;<br>    start_position =&gt; &quot;beginning&quot;<br>    sincedb_path =&gt; &quot;/dev/null&quot;<br>  &#125;<br>&#125;<br>filter &#123;<br>  csv &#123;<br>    separator =&gt; &quot;,&quot;<br>    columns =&gt; [&quot;id&quot;,&quot;content&quot;,&quot;genre&quot;]<br>  &#125;<br><br>  mutate &#123;<br>    split =&gt; &#123; &quot;genre&quot; =&gt; &quot;|&quot; &#125;<br>    remove_field =&gt; [&quot;path&quot;, &quot;host&quot;,&quot;@timestamp&quot;,&quot;message&quot;]<br>  &#125;<br><br>  mutate &#123;<br><br>    split =&gt; [&quot;content&quot;, &quot;(&quot;]<br>    add_field =&gt; &#123; &quot;title&quot; =&gt; &quot;%&#123;[content][0]&#125;&quot;&#125;<br>    add_field =&gt; &#123; &quot;year&quot; =&gt; &quot;%&#123;[content][1]&#125;&quot;&#125;<br>  &#125;<br><br>  mutate &#123;<br>    convert =&gt; &#123;<br>      &quot;year&quot; =&gt; &quot;integer&quot;<br>    &#125;<br>    strip =&gt; [&quot;title&quot;]<br>    remove_field =&gt; [&quot;path&quot;, &quot;host&quot;,&quot;@timestamp&quot;,&quot;message&quot;,&quot;content&quot;]<br>  &#125;<br><br>&#125;<br>output &#123;<br>   elasticsearch &#123;<br>     hosts =&gt; &quot;http://localhost:9200&quot;<br>     index =&gt; &quot;movies&quot;<br>     document_id =&gt; &quot;%&#123;id&#125;&quot;<br>   &#125;<br>  stdout &#123;&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><strong>执行脚本导入数据</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">./logstash -f ../config/logstash.conf<br></code></pre></td></tr></table></figure>
+
+<h3 id="7、Elasticsearch-的基本概念"><a href="#7、Elasticsearch-的基本概念" class="headerlink" title="7、Elasticsearch 的基本概念"></a>7、Elasticsearch 的基本概念</h3><h4 id="7-1-文档-doucument"><a href="#7-1-文档-doucument" class="headerlink" title="7.1 文档 doucument"></a>7.1 文档 doucument</h4><p>Elasticsearch是面向文档的，文档是所有可搜索的数据的最小单位，例如</p>
+<ul>
+<li>日志中的日志项</li>
+<li>一本电影的具体信息</li>
+</ul>
+<p>文档会被序列化成JSON格式保存在Elasticsearch中</p>
+<ul>
+<li>JSON对象由字段组成</li>
+<li>每个字段都有对应的字段类型（字符串&#x2F;数值&#x2F;布尔&#x2F;日期&#x2F;二进制&#x2F;范围类型）</li>
+</ul>
+<p>每个文档都有一个ID</p>
+<ul>
+<li>可以自己指定ID</li>
+<li>也可以自动生成ID</li>
+</ul>
+<p><strong>文档的元数据</strong></p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;_index&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;movies&quot;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;_type&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;_doc&quot;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;_id&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;3510&quot;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;_version&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-number">1</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;_seq_no&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-number">2625</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;_primary_term&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-number">1</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;found&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-keyword">true</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;_source&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;title&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Frequency&quot;</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;genre&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><br>      <span class="hljs-string">&quot;Drama&quot;</span><span class="hljs-punctuation">,</span><br>      <span class="hljs-string">&quot;Thriller&quot;</span><br>    <span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;@version&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;1&quot;</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;year&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-number">2000</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;id&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;3510&quot;</span><br>  <span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>元数据<ul>
+<li>_index 文档所属的索引名</li>
+<li>_type 文档所属的类型名</li>
+<li>_id 文档唯一ID</li>
+<li>_source 文档原始JSON数据</li>
+<li>_version 文档的版本信息</li>
+<li>_source 相关性打分</li>
+</ul>
+</li>
+</ul>
+<h4 id="7-2-索引-Index"><a href="#7-2-索引-Index" class="headerlink" title="7.2 索引 Index"></a>7.2 索引 Index</h4><p><strong>索引Index是文档的容器</strong></p>
+<ul>
+<li>index体现了逻辑空间的概念，每个索引都有自己的mapping定义</li>
+<li>Shard体现了物理空间上的概念，索引中的数据分散在Shard上</li>
+</ul>
+<p><strong>索引的Mapping与Settings</strong></p>
+<ul>
+<li>Mapping定义文档字段的类型</li>
+<li>Seting定义不同的数据分布</li>
+</ul>
+<h4 id="7-3-类型-Type"><a href="#7-3-类型-Type" class="headerlink" title="7.3 类型 Type"></a>7.3 类型 Type</h4><p>在7.0中type已被废除</p>
+<h4 id="7-4-与关系型数据库的类比"><a href="#7-4-与关系型数据库的类比" class="headerlink" title="7.4 与关系型数据库的类比"></a>7.4 与关系型数据库的类比</h4><table>
+<thead>
+<tr>
+<th>关系型数据库</th>
+<th>ES</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Table</td>
+<td>Index、Type</td>
+<td>表</td>
+</tr>
+<tr>
+<td>Row</td>
+<td>Document</td>
+<td>一行数据</td>
+</tr>
+<tr>
+<td>Column</td>
+<td>Filed</td>
+<td>字段</td>
+</tr>
+<tr>
+<td>Schema</td>
+<td>Maping</td>
+<td>表定义</td>
+</tr>
+<tr>
+<td>SQL</td>
+<td>DSL</td>
+<td>查询语句</td>
+</tr>
+</tbody></table>
+<p>和关系型数据库的区别</p>
+<p>Elasticsearch - Schemaless 相关性，高性能全文检索</p>
+<p>RDMS 事物性</p>
+<h4 id="7-5-分布式特性"><a href="#7-5-分布式特性" class="headerlink" title="7.5 分布式特性"></a>7.5 分布式特性</h4><p><strong>分布式系统的可用性与拓展性</strong></p>
+<ul>
+<li>高可用性<ul>
+<li>表现在服务可用性:允许有节点停止服务</li>
+<li>数据可用性：部分节点丢失不会丢失数据</li>
+</ul>
+</li>
+<li>可扩展性<ul>
+<li>请求量提升&#x2F;数据的不断增长</li>
+</ul>
+</li>
+</ul>
+<p><strong>Elasticsearch分布式架构的好处</strong></p>
+<ul>
+<li>存储的水平扩容</li>
+<li>提供系统的可用性，部分节点停止服务后，整个集群服务不受影响</li>
+</ul>
+<p><strong>Elasticsearch的分布式架构</strong></p>
+<ul>
+<li>不同的集群通过不同的名字来区分，默认名字”elasticsearch“</li>
+<li>通过配置文件修改</li>
+<li>一个集群可以有一个或多个节点</li>
+</ul>
+<h4 id="7-6-节点-Node"><a href="#7-6-节点-Node" class="headerlink" title="7.6 节点 Node"></a>7.6 节点 Node</h4><p><strong>节点是一个Elasticsearch实例</strong></p>
+<ul>
+<li>节点的本质是一个java进程</li>
+<li>一台机器上可以运行多个Elasticsearch进行</li>
+</ul>
+<p><strong>每一个节点都有名字，通过配置文件配置</strong></p>
+<p><strong>每一个节点启动之后都会分配一个UID，保存在data目录下</strong></p>
+<p>不同的节点会承担不同的角色</p>
+<h5 id="7-6-1-Master-eligible-nodes-和-Master-Node"><a href="#7-6-1-Master-eligible-nodes-和-Master-Node" class="headerlink" title="7.6.1 Master-eligible nodes 和 Master Node"></a>7.6.1 Master-eligible nodes 和 Master Node</h5><p>每个节点启动后默认就是一个Master-eligible节点</p>
+<blockquote>
+<p>可以设置node.master:false</p>
+</blockquote>
+<p>Master-eligible节点可以参加选举为主机点成为Master节点</p>
+<p>第一个启动的节点会将自己选举为Master节点</p>
+<p>每个节点都保存了集群的状态，但是只有Master节点可以修改集群的状态</p>
+<ul>
+<li>集群的状态维护了一个集群中必要的信息<ul>
+<li>所有节点的信息</li>
+<li>所有索引和其他相关的mapping 和 Seting信息</li>
+<li>分片和路由信息</li>
+</ul>
+</li>
+<li>任意节点都能修改信息会导致数据的不一致性</li>
+</ul>
+<h5 id="7-6-2-Data-Node-Coordinating-Node"><a href="#7-6-2-Data-Node-Coordinating-Node" class="headerlink" title="7.6.2 Data Node Coordinating Node"></a>7.6.2 Data Node Coordinating Node</h5><p><strong>Data Node</strong> </p>
+<p>Data Node 是可以不存数据的节点，负责保存分片数据</p>
+<p><strong>Corrdination Node</strong></p>
+<p>负责接收client请求并分发的合适的节点并把最终的结果汇总在一起</p>
+<p>每个街斗都默认起到了Corrdination 的职责</p>
+<h5 id="7-6-3-其他节点类型"><a href="#7-6-3-其他节点类型" class="headerlink" title="7.6.3 其他节点类型"></a>7.6.3 其他节点类型</h5><p><strong>Hot &amp; Warm Node</strong></p>
+<p>冷热节点代表了不同配置的节点，降低集群部署成本</p>
+<p><strong>Machine Learn Node</strong></p>
+<p>负责跑机器学习的Job，用来做异常检测</p>
+<p><strong>Tribe Node</strong></p>
+<h5 id="7-6-4-配置节点类型"><a href="#7-6-4-配置节点类型" class="headerlink" title="7.6.4 配置节点类型"></a>7.6.4 配置节点类型</h5><p><strong>在开发环境中一个节点可以承担多种角色</strong></p>
+<p><strong>在生产环境中应该设置单一角色的节点</strong></p>
+<h4 id="7-7-分片-Shard"><a href="#7-7-分片-Shard" class="headerlink" title="7.7 分片 Shard"></a>7.7 分片 Shard</h4><p>分片又分为Primary Shard 和 Replica Shard</p>
+<ul>
+<li>主分片用以解决数据水平扩展的问题，通过主分片可以将数据分不到集群内所有的节点之上<ul>
+<li>一个分片是一个运行的Lucene的实例</li>
+<li>主分片数在索引创建时指定，后续不允许修改，除非Reindex</li>
+</ul>
+</li>
+<li>副本，用来解决数据高可用的问题，分片是主分片的拷贝<ul>
+<li>副本分片数可以动态调整</li>
+<li>增加副本数可以在一定程度上提高服务的可用性</li>
+</ul>
+</li>
+</ul>
+<p><strong>分片机制</strong></p>
+<p>一台三节点的集群</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs json">PUT /blogs<br><span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;settings&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-punctuation">&#123;</span><br>        <span class="hljs-attr">&quot;number_of_shards&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-number">3</span><span class="hljs-punctuation">,</span><br>        <span class="hljs-attr">&quot;number_of_replicas&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-number">1</span><br>    <span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<p><img src="https://wodebokea.oss-cn-beijing.aliyuncs.com/img/%E5%88%86%E7%89%87.png" srcset="/img/loading.gif" lazyload></p>
+<p> <strong>分片的设定</strong></p>
+<p>对于生产环境中分片的设定，需要提前做好容量规划</p>
+<ul>
+<li>分片数设置过小<ul>
+<li>后续无法增加节点实现水平扩展</li>
+<li>单个分片数据量太大，导致数据重新分配耗时</li>
+</ul>
+</li>
+<li>分片数设置过大，从7.0开始默认主分片设置为1，解决了overshading的问题<ul>
+<li>影响搜索结果相关性打分</li>
+<li>单个节点上过多的分片，会导致资源浪费，影响性能</li>
+</ul>
+</li>
+</ul>
+<h4 id="7-8-集群环境查看命令"><a href="#7-8-集群环境查看命令" class="headerlink" title="7.8 集群环境查看命令"></a>7.8 集群环境查看命令</h4><h5 id="7-8-1-集群状态查询"><a href="#7-8-1-集群状态查询" class="headerlink" title="7.8.1 集群状态查询"></a>7.8.1 集群状态查询</h5><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs json">GET _cluster/health<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;cluster_name&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;elasticsearch&quot;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;status&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;yellow&quot;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;timed_out&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-keyword">false</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;number_of_nodes&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-number">1</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;number_of_data_nodes&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-number">1</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;active_primary_shards&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-number">8</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;active_shards&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-number">8</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;relocating_shards&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-number">0</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;initializing_shards&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-number">0</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;unassigned_shards&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-number">3</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;delayed_unassigned_shards&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-number">0</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;number_of_pending_tasks&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-number">0</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;number_of_in_flight_fetch&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-number">0</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;task_max_waiting_in_queue_millis&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-number">0</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;active_shards_percent_as_number&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-number">72.72727272727273</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<h5 id="7-8-2-nodes状态查询"><a href="#7-8-2-nodes状态查询" class="headerlink" title="7.8.2 nodes状态查询"></a>7.8.2 nodes状态查询</h5><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs json">GET _cat/nodes?v<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell">ip             heap.percent ram.percent cpu load_1m load_5m load_15m node.role master name<br>192.168.64.132           17          96   1    0.03    0.04     0.05 dim       *      node-1<br><br></code></pre></td></tr></table></figure>
+
+<h5 id="7-8-3-分片状态查询"><a href="#7-8-3-分片状态查询" class="headerlink" title="7.8.3 分片状态查询"></a>7.8.3 分片状态查询</h5><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs json">GET _cat/shards<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs json">.kibana_1                    <span class="hljs-number">0</span> p STARTED      <span class="hljs-number">161</span>    <span class="hljs-number">1</span>mb <span class="hljs-number">192.168</span><span class="hljs-number">.64</span><span class="hljs-number">.132</span> node<span class="hljs-number">-1</span><br>book                         <span class="hljs-number">0</span> p STARTED        <span class="hljs-number">5</span> <span class="hljs-number">13.9</span>kb <span class="hljs-number">192.168</span><span class="hljs-number">.64</span><span class="hljs-number">.132</span> node<span class="hljs-number">-1</span><br>book                         <span class="hljs-number">0</span> r UNASSIGNED                             <br>kibana_sample_data_ecommerce <span class="hljs-number">0</span> p STARTED     <span class="hljs-number">4675</span>  <span class="hljs-number">4.9</span>mb <span class="hljs-number">192.168</span><span class="hljs-number">.64</span><span class="hljs-number">.132</span> node<span class="hljs-number">-1</span><br>demo_index                   <span class="hljs-number">0</span> p STARTED        <span class="hljs-number">0</span>   <span class="hljs-number">283</span>b <span class="hljs-number">192.168</span><span class="hljs-number">.64</span><span class="hljs-number">.132</span> node<span class="hljs-number">-1</span><br>demo_index                   <span class="hljs-number">0</span> r UNASSIGNED                             <br>kibana_sample_data_flights   <span class="hljs-number">0</span> p STARTED    <span class="hljs-number">13059</span>  <span class="hljs-number">6.6</span>mb <span class="hljs-number">192.168</span><span class="hljs-number">.64</span><span class="hljs-number">.132</span> node<span class="hljs-number">-1</span><br>kibana_sample_data_logs      <span class="hljs-number">0</span> p STARTED    <span class="hljs-number">14074</span> <span class="hljs-number">11.9</span>mb <span class="hljs-number">192.168</span><span class="hljs-number">.64</span><span class="hljs-number">.132</span> node<span class="hljs-number">-1</span><br>.kibana_task_manager         <span class="hljs-number">0</span> p STARTED        <span class="hljs-number">2</span> <span class="hljs-number">27.2</span>kb <span class="hljs-number">192.168</span><span class="hljs-number">.64</span><span class="hljs-number">.132</span> node<span class="hljs-number">-1</span><br>movies                       <span class="hljs-number">0</span> p STARTED     <span class="hljs-number">9743</span>  <span class="hljs-number">1.4</span>mb <span class="hljs-number">192.168</span><span class="hljs-number">.64</span><span class="hljs-number">.132</span> node<span class="hljs-number">-1</span><br>movies                       <span class="hljs-number">0</span> r UNASSIGNED        <br></code></pre></td></tr></table></figure>
+
+<h4 id="7-9-Mapping"><a href="#7-9-Mapping" class="headerlink" title="7.9 Mapping"></a>7.9 Mapping</h4><p><strong>mapping是类似于数据库中表结构的定义</strong></p>
+<ul>
+<li>定义了字段名称</li>
+<li>定义了数据类型</li>
+<li>字段，倒排索引相关设置</li>
+</ul>
+<p><strong>Mapping会把JSON文档映射成为Lucene所需要的扁平格式</strong></p>
+<p><strong>一个Mapping属于一个索引的Type</strong></p>
+<ul>
+<li>每个文档都属于一个Type</li>
+<li>一个Type有一个mapping定义</li>
+<li>7.0开始，不需要再mapping定义中指定type信息</li>
+</ul>
+<h5 id="7-9-1-字段的数据类型"><a href="#7-9-1-字段的数据类型" class="headerlink" title="7.9.1 字段的数据类型"></a>7.9.1 字段的数据类型</h5><ul>
+<li>简单类型<ul>
+<li>Text&#x2F;keyword</li>
+<li>Date</li>
+<li>Inteager&#x2F;Floating</li>
+<li>Boolean</li>
+<li>IPv4 &amp; ipv6</li>
+</ul>
+</li>
+<li>复杂类型-对象和嵌套对象<ul>
+<li>对象类型</li>
+<li>嵌套类型</li>
+</ul>
+</li>
+<li>特殊类型<ul>
+<li>geo_point</li>
+<li>geo_shape</li>
+<li>percolator</li>
+</ul>
+</li>
+</ul>
+<h5 id="7-9-2-Dynamic-Mapping"><a href="#7-9-2-Dynamic-Mapping" class="headerlink" title="7.9.2 Dynamic Mapping"></a>7.9.2 Dynamic Mapping</h5><ul>
+<li>再写入文档的时候如果数据不存在，就会自动创建索引</li>
+<li>Dynamic Mapping的机制，使得我们无需手动定义Mapping，Elasticsearch会根据文档信息推算出字段的类型</li>
+<li>但是有时候会推算的不对，例如地理位置信息</li>
+<li>如果类型设置不对时，会导致一些功能无法正常运行，例如Range查询</li>
+</ul>
+<p>类型的自动识别是根据JSON的格式来识别的</p>
+<h5 id="7-9-3-能否修改Mapping的字段类型"><a href="#7-9-3-能否修改Mapping的字段类型" class="headerlink" title="7.9.3 能否修改Mapping的字段类型"></a>7.9.3 能否修改Mapping的字段类型</h5><p>两种情况</p>
+<ul>
+<li>新增字段<ul>
+<li>当Dynamic设置为true的时候，一旦有新增字段的文档写入，Mapping也同时被更新</li>
+<li>当Dynamic设置为false时候，Mapping不会被更新，新增字段的数据无法被索引，但是信息会出现在-source中</li>
+</ul>
+</li>
+<li>对已有字段，一旦数据写入就不允许修改</li>
+<li>如果希望改变字段类型，必须Reindex API重新索引</li>
+</ul>
+<p>原因</p>
+<ul>
+<li>如果修改了字段的类型会导致已经被索引的属性无法被搜素</li>
+<li>如果是增加新字段就不会有这样的影响</li>
+</ul>
+<h5 id="7-9-4-控制-Dynamic-Mappings"><a href="#7-9-4-控制-Dynamic-Mappings" class="headerlink" title="7.9.4 控制 Dynamic Mappings"></a>7.9.4 控制 Dynamic Mappings</h5><table>
+<thead>
+<tr>
+<th></th>
+<th>true</th>
+<th>false</th>
+<th>strict</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>文档可索引</td>
+<td>yes</td>
+<td>yes</td>
+<td>no</td>
+</tr>
+<tr>
+<td>字段可索引</td>
+<td>yes</td>
+<td>no</td>
+<td>no</td>
+</tr>
+<tr>
+<td>Maping可更新</td>
+<td>yes</td>
+<td>no</td>
+<td>no</td>
+</tr>
+</tbody></table>
+<p>当Dynamic1设置成fasle的时候，存在新增的字段的数据写入，该数据可以被索引，但是新增的字段被丢弃</p>
+<p>当设置成strict模式时候，数据写入直接出错</p>
+<p><strong>测试</strong></p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs json">PUT dynamic_mappingtest/_doc/<span class="hljs-number">1</span><br><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;newField&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;value&quot;</span><br><span class="hljs-punctuation">&#125;</span><br><span class="hljs-comment">// 新建了一个文档</span><br></code></pre></td></tr></table></figure>
+
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs json">PUT dynamic_mappingtest/_mapping<br><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;dynamic&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-keyword">false</span><br><span class="hljs-punctuation">&#125;</span><br><span class="hljs-comment">// 设置dynamic为false</span><br></code></pre></td></tr></table></figure>
+
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><code class="hljs json">PUT dynamic_mappingtest/_doc/<span class="hljs-number">10</span><br><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;name&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;value&quot;</span><br><span class="hljs-punctuation">&#125;</span><br><span class="hljs-comment">// 在创建一个文档，并根据name进行搜索</span><br>POST dynamic_mappingtest/_search<br><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;query&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;match&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>      <span class="hljs-attr">&quot;name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;value&quot;</span><br>    <span class="hljs-punctuation">&#125;</span><br>  <span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">&#125;</span><br><span class="hljs-comment">// 搜索结果为空</span><br><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;took&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-number">453</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;timed_out&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-keyword">false</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;_shards&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;total&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-number">1</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;successful&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-number">1</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;skipped&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-number">0</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;failed&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-number">0</span><br>  <span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;hits&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;total&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>      <span class="hljs-attr">&quot;value&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-number">0</span><span class="hljs-punctuation">,</span><br>      <span class="hljs-attr">&quot;relation&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;eq&quot;</span><br>    <span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;max_score&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-keyword">null</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;hits&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span> <span class="hljs-punctuation">]</span><br>  <span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">&#125;</span><br><span class="hljs-comment">// 但是数据确是存在的</span><br>GET dynamic_mappingtest/_doc/<span class="hljs-number">10</span><br><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;_index&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;dynamic_mappingtest&quot;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;_type&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;_doc&quot;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;_id&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;10&quot;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;_version&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-number">1</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;_seq_no&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-number">1</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;_primary_term&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-number">1</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;found&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-keyword">true</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;_source&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;name&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;value&quot;</span><br>  <span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<p>如果设置成严格模式strict</p>
+<p>那么新增字段就会被拒绝</p>
+<h5 id="7-9-5-如何显示的定义一个Mapping"><a href="#7-9-5-如何显示的定义一个Mapping" class="headerlink" title="7.9.5 如何显示的定义一个Mapping"></a>7.9.5 如何显示的定义一个Mapping</h5><p>我们在创建索引的时候可以定义mapping</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs json">PUT createMapping<br><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;mappings&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>    <br>  <span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>控制当前字段是否可以被索引</strong></p>
+<p>index</p>
+<ul>
+<li>默认为true，如果设置成false，该字段不可被搜索</li>
+</ul>
+<p>index Options</p>
+<ul>
+<li>Es提供了四种不同级别的Index Options配置，可以控制倒排索引记录的内容<ul>
+<li>docs 记录docid</li>
+<li>freqs 记录docid 和 trem frequencies 此频</li>
+<li>position 记录 doc id trem frequencies term position </li>
+<li>offsets 记录 文档id  词频 位置 偏移量</li>
+</ul>
+</li>
+<li>text类型默认记录position 其他默认为dics</li>
+<li>记录内容越多，占用存储空间越大</li>
+</ul>
+<p><strong>如果需要对Null值实现搜索</strong></p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs json">null_value<span class="hljs-punctuation">:</span><span class="hljs-string">&quot;NULL&quot;</span><br></code></pre></td></tr></table></figure>
+
+<h5 id="7-9-5-多字段类型"><a href="#7-9-5-多字段类型" class="headerlink" title="7.9.5 多字段类型"></a>7.9.5 多字段类型</h5><p>我们在创建索引的时候可以为一个字段增加一个默认的子字段</p>
+<ul>
+<li>多字段特性<ul>
+<li>厂商名称实现精确匹配</li>
+<li>增加一个keyword字段</li>
+</ul>
+</li>
+<li>使用不同的analyzer<ul>
+<li>不同语言</li>
+<li>pinyin字段的搜索</li>
+<li>还支持为搜索和索引指定不同的analyzer</li>
+</ul>
+</li>
+</ul>
+<p><strong>精确值和全文本搜索</strong></p>
+<p>精确值包括数字、日期、具体的一个字符串吧</p>
+<ul>
+<li>对应Elasticsearch中的keywords</li>
+</ul>
+<p>全文本、非结构化的文本数据</p>
+<ul>
+<li>elasticsearch 中的text</li>
+</ul>
+<p>精确值是不允许被倒排索引的</p>
+<h5 id="7-9-6-配置自定义的Analyzer"><a href="#7-9-6-配置自定义的Analyzer" class="headerlink" title="7.9.6 配置自定义的Analyzer"></a>7.9.6 配置自定义的Analyzer</h5><p>当ES自带的分词器无法满足时，我们可以通过组合自定义分词器</p>
+<p><strong>Character Filters</strong></p>
+<ul>
+<li>在分词之前对文本进行处理，例如增加删除及替换字符串，可以配置董哥Character Filters，会影响到分词的position和offset信息</li>
+<li>一些自带的 Character Filters<ul>
+<li>html strip 去除html标签</li>
+<li>mapping 字符串替换</li>
+<li>Pattern replace 正则匹配替换</li>
+</ul>
+</li>
+</ul>
+<p><strong>Tokenizer</strong></p>
+<p>将原始的文本按照一定的规则切分为词</p>
+<p>ES内置的Tokenizers</p>
+<ul>
+<li>whitespace 空格分词</li>
+<li>stanadard 默认分词</li>
+</ul>
+<p><strong>Token Filters</strong></p>
+<ul>
+<li>将Tokenizer输出的单词进行增加修改和删除</li>
+<li>自带的Token Filters<ul>
+<li>Lowercase stop synonym</li>
+</ul>
+</li>
+</ul>
+<h5 id="7-9-7-Index-Template-和-Dynamic-Template"><a href="#7-9-7-Index-Template-和-Dynamic-Template" class="headerlink" title="7.9.7 Index Template 和 Dynamic Template"></a>7.9.7 Index Template 和 Dynamic Template</h5><ul>
+<li>Index Temolates帮助我们设定Mapping 和Seting 并且按照一定的规则自动匹配到新创建的索引之上<ul>
+<li>模板仅仅在一个索引被创建时才会产生作用，修改模板不会影响已经创建的索引</li>
+<li>可以设定多个索引模板，这些设置会被merge在一起</li>
+<li>可以指定order的数值，控制merging（合并）的过程</li>
+</ul>
+</li>
+</ul>
+<p><img src="https://wodebokea.oss-cn-beijing.aliyuncs.com/img/%E7%B4%A2%E5%BC%95%E6%A8%A1%E6%9D%BF.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="8、文档基本的CRUD-Http"><a href="#8、文档基本的CRUD-Http" class="headerlink" title="8、文档基本的CRUD-Http"></a>8、文档基本的CRUD-Http</h3><h4 id="8-1-Create"><a href="#8-1-Create" class="headerlink" title="8.1 Create"></a>8.1 Create</h4><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs json">PUT users/_create/<span class="hljs-number">1</span><br><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;firstName&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;Jack&quot;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;lastName&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;Cheng&quot;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;tags&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-punctuation">[</span><span class="hljs-string">&quot;sing&quot;</span><span class="hljs-punctuation">,</span><span class="hljs-string">&quot;jump&quot;</span><span class="hljs-punctuation">]</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<p>支持根据输入的ID创建ID或者可以使用post自动创建ID</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs json">POST users/_doc<br><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;firstName&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;Jack&quot;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;lastName&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;Cheng&quot;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;tags&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-punctuation">[</span><span class="hljs-string">&quot;sing&quot;</span><span class="hljs-punctuation">,</span><span class="hljs-string">&quot;jump&quot;</span><span class="hljs-punctuation">]</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="8-2-Get"><a href="#8-2-Get" class="headerlink" title="8.2 Get"></a>8.2 Get</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">GET users/_doc/1<br></code></pre></td></tr></table></figure>
+
+<p>找到文档返回http200</p>
+<ul>
+<li>文档源信息<ul>
+<li>index type</li>
+<li>版本信息：同一个ID的文档及时被删除，Version号也会不断增加</li>
+<li>_source中默认包含了文档的所有原始信息</li>
+</ul>
+</li>
+</ul>
+<p>找不到文档返回404</p>
+<h4 id="8-3-update"><a href="#8-3-update" class="headerlink" title="8.3 update"></a>8.3 update</h4><p>更新分为全量更新和局部更新</p>
+<p><strong>全量更新</strong></p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs json">PUT users/_doc/<span class="hljs-number">1</span><br><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;user&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;Mike&quot;</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<p>全量更新会把所有字段清空</p>
+<p><strong>更新字段</strong></p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs json">PUT users/_doc/<span class="hljs-number">1</span><br><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;doc&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;user&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;Tong&quot;</span><br>  <span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="8-4-Bulk-API"><a href="#8-4-Bulk-API" class="headerlink" title="8.4 Bulk API"></a>8.4 Bulk API</h4><p>支持在一次API调用中，对不同的索引进行操作</p>
+<p>支持四种类型 <strong>Index、Create、Update、Delete</strong></p>
+<p>可以在URL中指定Index，也可以在请求的Payload中进行</p>
+<p>操作中单条操作失败并不会影响其他操作</p>
+<p>返回结果包括了每一条操作执行的结果</p>
+<p><strong><code>bulk</code>对<code>JSON串</code>的有着严格的要求。每个JSON串<code>不能换行</code>，只能放在同一行，同时，<code>相邻的JSON串之间必须要有换行</code>（Linux下是\n；Window下是\r\n）。bulk的每个操作必须要<code>一对JSON串</code>（delete语法除外）。</strong></p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs json">POST _bulk<br><span class="hljs-punctuation">&#123;</span><span class="hljs-attr">&quot;index&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-punctuation">&#123;</span><span class="hljs-attr">&quot;_index&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;user&quot;</span><span class="hljs-punctuation">,</span><span class="hljs-attr">&quot;_id&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;1&quot;</span><span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">&#123;</span><span class="hljs-attr">&quot;field&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;user&quot;</span><span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">&#123;</span><span class="hljs-attr">&quot;delete&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-punctuation">&#123;</span><span class="hljs-attr">&quot;_index&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;user&quot;</span><span class="hljs-punctuation">,</span><span class="hljs-attr">&quot;_id&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;1&quot;</span><span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">&#123;</span><span class="hljs-attr">&quot;create&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-punctuation">&#123;</span><span class="hljs-attr">&quot;_index&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;user&quot;</span><span class="hljs-punctuation">,</span><span class="hljs-attr">&quot;_id&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;1&quot;</span><span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">&#123;</span><span class="hljs-attr">&quot;user&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;tangcheng&quot;</span><span class="hljs-punctuation">,</span><span class="hljs-attr">&quot;age&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-number">18</span><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<p>以上是代表了一个bulk操作</p>
+<h4 id="8-5-Mget-API"><a href="#8-5-Mget-API" class="headerlink" title="8.5 Mget API"></a>8.5 Mget API</h4><p>批量读取</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs json">GET _mget<br><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;docs&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-punctuation">[</span><br>    <span class="hljs-punctuation">&#123;</span><span class="hljs-attr">&quot;_index&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;user&quot;</span><span class="hljs-punctuation">,</span><span class="hljs-attr">&quot;_id&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;1&quot;</span><span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-punctuation">&#123;</span><span class="hljs-attr">&quot;_index&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;user&quot;</span><span class="hljs-punctuation">,</span><span class="hljs-attr">&quot;_id&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;2&quot;</span><span class="hljs-punctuation">&#125;</span><br>    <span class="hljs-punctuation">]</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="9、倒排索引和分词器"><a href="#9、倒排索引和分词器" class="headerlink" title="9、倒排索引和分词器"></a>9、倒排索引和分词器</h3><h4 id="9-1-什么是倒排索引"><a href="#9-1-什么是倒排索引" class="headerlink" title="9.1 什么是倒排索引"></a>9.1 什么是倒排索引</h4><p><img src="https://wodebokea.oss-cn-beijing.aliyuncs.com/img/%E5%80%92%E6%8E%92%E7%B4%A2%E5%BC%95.png" srcset="/img/loading.gif" lazyload></p>
+<p>正排索引就相当于我们书籍的目录</p>
+<p>倒排索引就是利用分词，将词语在哪个文档中进行标注，这就是倒排索引</p>
+<p><strong>倒排索引的核心组成</strong></p>
+<p>倒排索引包含两个部分</p>
+<ul>
+<li>单词词典：记录所有文档的单词，记录单词到倒排列表的关联关系<ul>
+<li>单词词典一般比较大，可以通过b+树或者哈希拉链法实现，以满足高性能的插入和排序</li>
+</ul>
+</li>
+<li>倒排列表记录了单词对应的文档集合，由倒排索引项组成<ul>
+<li>倒排索引项<ul>
+<li>文档ID：记录出现这个单词的文档的id</li>
+<li>词频：记录该单词出现的次数用于相关性评分</li>
+<li>位置：单词在文档中分词的位置，用于语句搜索</li>
+<li>偏移：记录单词开始结束的位置用于高亮显示</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>Elasticsearch的JSON文档中每个字段都有自己的倒排索引</p>
+<p>可以指定对某些字段不做索引</p>
+<ul>
+<li>优点：节省存储空间</li>
+<li>缺点：字段无法被搜素</li>
+</ul>
+<h4 id="9-2-Analyzer分词器"><a href="#9-2-Analyzer分词器" class="headerlink" title="9.2 Analyzer分词器"></a>9.2 Analyzer分词器</h4><p>Analysis 文本分析是把全文本转换一系列单词（term&#x2F;token）的过程也叫做分词</p>
+<p>Analysis 是通过Analyzer实现的，可以使用Elsaticsearch内置的分析器或者按需定制化分析器</p>
+<p>除了在数据写入的时候需要应用分析器对查询语句进行分析</p>
+<p> <strong>Elasticsearch的内置分词器</strong></p>
+<ul>
+<li><strong>Standard Analyzer</strong> 默认分词器，按词切分小写处理</li>
+<li><strong>Simple Analyzer</strong> 按照非字母切分，小写处理</li>
+<li><strong>Stop Analyzer</strong> 小写处理，停用词过滤</li>
+<li><strong>Whitespace Analyzer</strong> 按照空格切分，不转小写</li>
+<li><strong>Keyword Analyzer 不分词</strong>，直接将输入当作输出</li>
+<li><strong>Patter Analyze</strong>r 正砸表达式，默认\W+ 分字符分割</li>
+<li><strong>Language</strong> 提供了30多种常见语言的分词器</li>
+<li><strong>Customer Analyzer</strong> 自定义分词器</li>
+</ul>
+<h5 id="9-1-analyzer-API"><a href="#9-1-analyzer-API" class="headerlink" title="9.1 _analyzer API"></a>9.1 _analyzer API</h5><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs json">GET /_analyze<br><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;analyzer&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;standard&quot;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;text&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;hello my name is cheng&quot;</span><br><span class="hljs-punctuation">&#125;</span><br>POST book/_analyze<br><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;field&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;name&quot;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;text&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;Bootstrap 开发指南&quot;</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<p>利用analyzer APi可以’</p>
+<ul>
+<li>指定Analyzer进行测试</li>
+<li>指定索引的字段进行测试</li>
+<li>自定义分词器进行测试</li>
+</ul>
+<h5 id="9-2-standard"><a href="#9-2-standard" class="headerlink" title="9.2 standard"></a>9.2 standard</h5><p>默认分词器，按照小写处理</p>
+<h5 id="9-3-Simple"><a href="#9-3-Simple" class="headerlink" title="9.3 Simple"></a>9.3 Simple</h5><p>对非字母进行去除</p>
+<p>小写处理</p>
+<h5 id="9-4-whitespace"><a href="#9-4-whitespace" class="headerlink" title="9.4 whitespace"></a>9.4 whitespace</h5><p>按照空格进行切分</p>
+<h5 id="9-5-stop-Analyzer"><a href="#9-5-stop-Analyzer" class="headerlink" title="9.5 stop Analyzer"></a>9.5 stop Analyzer</h5><p>相比于Simple Analyzer</p>
+<p>多了stop filter</p>
+<p>会把暂停此去除</p>
+<h5 id="9-6-keyword-Anlyzer"><a href="#9-6-keyword-Anlyzer" class="headerlink" title="9.6 keyword Anlyzer"></a>9.6 keyword Anlyzer</h5><p>不做任何分词处理</p>
+<h5 id="9-7-Pattern-Analyzer"><a href="#9-7-Pattern-Analyzer" class="headerlink" title="9.7 Pattern Analyzer"></a>9.7 Pattern Analyzer</h5><p>通过正则表达式进行分词</p>
+<p>默认是非字母</p>
+<h5 id="9-8-中文分词的难点"><a href="#9-8-中文分词的难点" class="headerlink" title="9.8 中文分词的难点"></a>9.8 中文分词的难点</h5><p>中文句子切分成为一个个的词</p>
+<p>英文中单词又自然的空格作为分割</p>
+<h5 id="9-9-ICU-Analyzer"><a href="#9-9-ICU-Analyzer" class="headerlink" title="9.9 ICU Analyzer"></a>9.9 ICU Analyzer</h5><p>提供了更好的unicode支持亚洲语言</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs shell">POST /_analyze<br>&#123;<br>  &quot;analyzer&quot;: &quot;icu_analyzer&quot;,<br>  &quot;text&quot;:&quot;这个苹果不大好吃&quot;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h5 id="9-10-IK分词器"><a href="#9-10-IK分词器" class="headerlink" title="9.10 IK分词器"></a>9.10 IK分词器</h5><ul>
+<li>支持自定义词库，支持热更新分词字典</li>
+</ul>
+<h5 id="9-11-THULAC"><a href="#9-11-THULAC" class="headerlink" title="9.11 THULAC"></a>9.11 THULAC</h5><p>清华大学自然语言处理和社会人文计算实验室的一套中文分词器</p>
+<h3 id="10-Search-Api"><a href="#10-Search-Api" class="headerlink" title="10 Search Api"></a>10 Search Api</h3><p>在Elasticsearch搜索API中分为</p>
+<p>URL search</p>
+<ul>
+<li>在url中使用参数</li>
+</ul>
+<p>Request Body Search</p>
+<ul>
+<li>利用json进行更加完备的搜索</li>
+</ul>
+<h4 id="10-1-URL查询"><a href="#10-1-URL查询" class="headerlink" title="10.1 URL查询"></a>10.1 URL查询</h4><ul>
+<li>使用q指定查询字符串</li>
+<li>query string syntax kv键值对</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">curl -xGet<br>&quot;ip:port/index/_search?q=name:tangcheng&quot;<br></code></pre></td></tr></table></figure>
+
+<h4 id="10-2-Request-Body"><a href="#10-2-Request-Body" class="headerlink" title="10.2 Request Body"></a>10.2 Request Body</h4><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs json">curl -xGet<br><span class="hljs-string">&quot;ip:port/index/_option&quot;</span><br><span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;query&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-punctuation">&#123;</span><br>        <span class="hljs-attr">&quot;match_all&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-punctuation">&#123;</span><span class="hljs-punctuation">&#125;</span> <span class="hljs-comment">// 返回所有文档</span><br>    <span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="10-3-Reponse"><a href="#10-3-Reponse" class="headerlink" title="10.3 Reponse"></a>10.3 Reponse</h4><p>发送一个请求</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs json">GET /book/_search<br><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;query&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;match_all&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><span class="hljs-punctuation">&#125;</span><br>  <span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;took&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-number">0</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;timed_out&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-keyword">false</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;_shards&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;total&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-number">1</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;successful&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-number">1</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;skipped&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-number">0</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;failed&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-number">0</span><br>  <span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;hits&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;total&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>      <span class="hljs-attr">&quot;value&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-number">5</span><span class="hljs-punctuation">,</span><br>      <span class="hljs-attr">&quot;relation&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;eq&quot;</span><br>    <span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;max_score&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-number">1.0</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;hits&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><br>     <span class="hljs-punctuation">&#123;</span><br>        <span class="hljs-attr">&quot;_index&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;book&quot;</span><span class="hljs-punctuation">,</span><br>        <span class="hljs-attr">&quot;_type&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;_doc&quot;</span><span class="hljs-punctuation">,</span><br>        <span class="hljs-attr">&quot;_id&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;DJjfOIEBTe7gcc0BLJ_h&quot;</span><span class="hljs-punctuation">,</span><br>        <span class="hljs-attr">&quot;_score&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-number">1.0</span><span class="hljs-punctuation">,</span><br>        <span class="hljs-attr">&quot;_source&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>          <span class="hljs-attr">&quot;script_fields&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>            <span class="hljs-attr">&quot;my_double_field&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>              <span class="hljs-attr">&quot;script&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>                <span class="hljs-attr">&quot;lang&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;expression&quot;</span><span class="hljs-punctuation">,</span><br>                <span class="hljs-attr">&quot;source&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;doc[&#x27;price&#x27; * mixNum]&quot;</span><span class="hljs-punctuation">,</span><br>                <span class="hljs-attr">&quot;params&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>                  <span class="hljs-attr">&quot;mixNum&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-number">2</span><br>                <span class="hljs-punctuation">&#125;</span><br>              <span class="hljs-punctuation">&#125;</span><br>            <span class="hljs-punctuation">&#125;</span><br>          <span class="hljs-punctuation">&#125;</span><br>        <span class="hljs-punctuation">&#125;</span><br>      <span class="hljs-punctuation">&#125;</span><br>    <span class="hljs-punctuation">]</span><br>  <span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">&#125;</span><br><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>took：花费的时间</li>
+<li>total：符合条件的总文档数</li>
+<li>hits：结果集，默认前十个文档</li>
+<li>index 索引名</li>
+<li>id：文档的id</li>
+<li>score：相关度评分</li>
+<li>source：文档的原始信息</li>
+</ul>
+<h4 id="10-4-URL-search详解"><a href="#10-4-URL-search详解" class="headerlink" title="10.4 URL search详解"></a>10.4 URL search详解</h4><p>Url search就是通过URL query实现搜索</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs shell">get /movies/_search?q=2012&amp;df=title&amp;sort=year:desc&amp;from=0&amp;size=10&amp;timeout=1s<br>&#123;<br>&quot;profile&quot;:&quot;true&quot;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>q ：指定查询语句</li>
+<li>df：默认字段，不指定时会对所有字段进行查询</li>
+<li>Sort 排序</li>
+<li>from size 用于分页</li>
+<li>Profile 可以查看查询是如何被执行的</li>
+</ul>
+<p><strong>泛查询</strong></p>
+<p>对_all 所有字段进行查询</p>
+<p><strong>对于查询语语句中是否带引号</strong></p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs json">GET /movies/_search?q=title<span class="hljs-punctuation">:</span><span class="hljs-string">&quot;Beautiful Mind&quot;</span><br>GET /movies/_search?q=title<span class="hljs-punctuation">:</span>Beautiful Mind<br></code></pre></td></tr></table></figure>
+
+<p>以上的两个查询是不一样的</p>
+<p><strong>对于加了引号的来说，执行的Phrase（短语）查询</strong></p>
+<p><strong>对于不加引号的来说，执行的是Team（词项）查询</strong></p>
+<p><strong>布尔操作</strong></p>
+<ul>
+<li>AND&#x2F;OR&#x2F;NOT 或者 &amp;&amp;&#x2F;||&#x2F;！<ul>
+<li>必须大写</li>
+<li>title:(martix NOT reloaded)</li>
+</ul>
+</li>
+<li>分组<ul>
+<li>+表示must</li>
+<li>-表示must_not</li>
+<li>title:(+martrix-reloaded)</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs shell">GET /movies/_search?q=title:(Beautiful AND Mind)<br>&#123;<br>  &quot;profile&quot;: &quot;true&quot;<br>&#125;<br>// 执行的布尔查询，必须含有beautful 和 mind<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs shell">GET /movies/_search?q=title:(Beautiful NOT Mind)<br>&#123;<br>  &quot;profile&quot;: &quot;true&quot;<br>&#125;<br>// title 包含Beautful 不包含 Mind<br></code></pre></td></tr></table></figure>
+
+
+
+<p><strong>范围查询</strong></p>
+<ul>
+<li>区间表示：[]闭区间,{}开区间<ul>
+<li>year：{2019 TO 2018}</li>
+<li>year:[* TO 2018]</li>
+</ul>
+</li>
+<li>算数符号<ul>
+<li>year:&gt;2010</li>
+<li>year:(&gt;2010 &amp;&amp; &lt;&#x3D;2018)</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs shell">GET /movies/_search?q=year:(&gt;2012 &amp;&amp; &lt;2018)<br>&#123;<br>  &quot;profile&quot;: &quot;true&quot;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><strong>通配符查询</strong></p>
+<ul>
+<li>通配符查询效率低，占用内存大不建议使用<ul>
+<li>？代表1个字符，*代表0或多个字符<ul>
+<li>title:mi?d</li>
+<li>title:be*</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>正则表达<ul>
+<li>title:[bt]oy</li>
+</ul>
+</li>
+<li>模糊匹配与近似查询<ul>
+<li>title:beautifl~1</li>
+</ul>
+</li>
+</ul>
+<h4 id="10-5-Requset-Body-Search"><a href="#10-5-Requset-Body-Search" class="headerlink" title="10.5 Requset Body Search"></a>10.5 Requset Body Search</h4><p>将查询语句通过HTTPRequest Body 发送给Elasticsearch</p>
+<p>内部有一套 Query DSL语法</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs json">POST /kibana_sample_data_ecommerce/_search<br><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;from&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">0</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;size&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">20</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;query&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;match_all&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><span class="hljs-punctuation">&#125;</span><br>  <span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<p>以上是一个简单的reqbody</p>
+<p><strong>一些demo</strong></p>
+<blockquote>
+<p>取出一些字段</p>
+</blockquote>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs json">POST /kibana_sample_data_ecommerce/_search<br><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;from&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">0</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;size&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">20</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;_source&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-string">&quot;currency*&quot;</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span> <br>  <span class="hljs-attr">&quot;query&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;match_all&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><span class="hljs-punctuation">&#125;</span><br>  <span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>排序</p>
+</blockquote>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs json">POST /kibana_sample_data_ecommerce/_search<br><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;from&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">0</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;size&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">20</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;_source&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-string">&quot;currency*&quot;</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span> <br>  <span class="hljs-attr">&quot;sort&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><br>    <span class="hljs-punctuation">&#123;</span><br>      <span class="hljs-attr">&quot;order_date&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;desc&quot;</span><br>    <span class="hljs-punctuation">&#125;</span><br>  <span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span> <br>  <span class="hljs-attr">&quot;query&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;match_all&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><span class="hljs-punctuation">&#125;</span><br>  <span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>脚本字段</strong></p>
+<p>可以使用painless脚本计算出一些新的字段出来</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs json">GET kibana_sample_data_ecommerce/_search<br><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;script_fields&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;新的字段&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>      <span class="hljs-attr">&quot;script&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>        <span class="hljs-attr">&quot;lang&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;painless&quot;</span><span class="hljs-punctuation">,</span><br>        <span class="hljs-attr">&quot;source&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;doc[&#x27;order_date&#x27;].value + &#x27;memeda&#x27;&quot;</span><br>      <span class="hljs-punctuation">&#125;</span><br>    <span class="hljs-punctuation">&#125;</span><br>  <span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;query&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;match_all&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><span class="hljs-punctuation">&#125;</span><br>  <span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>math query</strong></p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs json">POST movies/_search<br><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;query&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;match&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>      <span class="hljs-attr">&quot;title&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Last Chrismas&quot;</span><br>    <span class="hljs-punctuation">&#125;</span><br>  <span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<p>以上搜索中，是基于单词搜索的不是基于短语搜索的，因此返回的数据中即包含Last 也包含了 Chrismas</p>
+<p>如果要进行精确搜索，我们可以这么干</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs json">POST movies/_search<br><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;query&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;match&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>      <span class="hljs-attr">&quot;title&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>        <span class="hljs-attr">&quot;query&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Last Christmas&quot;</span><span class="hljs-punctuation">,</span><br>        <span class="hljs-attr">&quot;operator&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;and&quot;</span><br>      <span class="hljs-punctuation">&#125;</span><br>      <br>    <span class="hljs-punctuation">&#125;</span><br>  <span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>Query String Query</strong></p>
+<p>类似于 URL Query</p>
+<p><strong>Simple Query String</strong></p>
+<p>类似于Query String 但是会忽略错误语法，同时只支持部分查询语法，不支持 AND OR NOT</p>
+<h3 id="11、深入搜索"><a href="#11、深入搜索" class="headerlink" title="11、深入搜索"></a>11、深入搜索</h3><h4 id="11-1-基于词项和基于全文的搜索"><a href="#11-1-基于词项和基于全文的搜索" class="headerlink" title="11.1 基于词项和基于全文的搜索"></a>11.1 基于词项和基于全文的搜索</h4><p><strong>基于Term的查询</strong></p>
+<p>Term是表达语义的最小单位，搜索和利用统计语言模型进行自然语言处理都需要处理Term</p>
+<p>Term的特点</p>
+<ul>
+<li>在ES中，对Term查询对输入不做分词，会将输入作为一个整体，在倒排索引中查找精确的词项，并且使用相关度算分公司为每个包含该词项的文档进行相关度算分</li>
+<li>可以通过Constant Score将查询转换成一个Filtering，避免算分，并利用缓存提高性能</li>
+</ul>
+<p><strong>demo</strong></p>
+<p>创建三个数据，查看结果</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs json">POST /products/_bulk<br><span class="hljs-punctuation">&#123;</span><span class="hljs-attr">&quot;index&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-punctuation">&#123;</span><span class="hljs-attr">&quot;_id&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;1&quot;</span><span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">&#123;</span><span class="hljs-attr">&quot;productID&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;XHDK-A-1293-#Fj3&quot;</span><span class="hljs-punctuation">,</span><span class="hljs-attr">&quot;desc&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;iPhone&quot;</span><span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">&#123;</span><span class="hljs-attr">&quot;index&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-punctuation">&#123;</span><span class="hljs-attr">&quot;_id&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;2&quot;</span><span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">&#123;</span><span class="hljs-attr">&quot;productID&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;KDKE-B-9947-#kL5&quot;</span><span class="hljs-punctuation">,</span><span class="hljs-attr">&quot;desc&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;iPad&quot;</span><span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">&#123;</span><span class="hljs-attr">&quot;index&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-punctuation">&#123;</span><span class="hljs-attr">&quot;_id&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;3&quot;</span><span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">&#123;</span><span class="hljs-attr">&quot;productID&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;JODL-X-1927-#pV7&quot;</span><span class="hljs-punctuation">,</span><span class="hljs-attr">&quot;desc&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;MBP&quot;</span><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>执行第一个搜索</strong></p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs json">POST /products/_search<br><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;query&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;term&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>      <span class="hljs-attr">&quot;desc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>        <span class="hljs-attr">&quot;value&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;iPhone&quot;</span><br>      <span class="hljs-punctuation">&#125;</span><br>    <span class="hljs-punctuation">&#125;</span><br>  <span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<p>查询结果</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;took&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-number">0</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;timed_out&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-keyword">false</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;_shards&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;total&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-number">1</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;successful&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-number">1</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;skipped&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-number">0</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;failed&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-number">0</span><br>  <span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;hits&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;total&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>      <span class="hljs-attr">&quot;value&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-number">0</span><span class="hljs-punctuation">,</span><br>      <span class="hljs-attr">&quot;relation&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;eq&quot;</span><br>    <span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;max_score&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-keyword">null</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;hits&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span> <span class="hljs-punctuation">]</span><br>  <span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">&#125;</span><br><br></code></pre></td></tr></table></figure>
+
+<p>为什么查询结果是空的呢，因为trem查询不会对输入结果进行分词处理，值在进行分词的时候，已经被分词器分成了小写</p>
+<p>同样的道理，执行如下的搜索也不会查询到任何结果</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs json">POST /products/_search<br><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;query&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;term&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>      <span class="hljs-attr">&quot;productID&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>        <span class="hljs-attr">&quot;value&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;XHDK-A-1293-#Fj3&quot;</span><br>      <span class="hljs-punctuation">&#125;</span><br>    <span class="hljs-punctuation">&#125;</span><br>  <span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>我们验证一下ES对结果进行标准的分词会是什么样的结果</strong></p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs json">POST /_analyze<br><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;analyzer&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;standard&quot;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;text&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;XHDK-A-1293-#Fj3&quot;</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;tokens&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><br>    <span class="hljs-punctuation">&#123;</span><br>      <span class="hljs-attr">&quot;token&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;xhdk&quot;</span><span class="hljs-punctuation">,</span><br>      <span class="hljs-attr">&quot;start_offset&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-number">0</span><span class="hljs-punctuation">,</span><br>      <span class="hljs-attr">&quot;end_offset&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-number">4</span><span class="hljs-punctuation">,</span><br>      <span class="hljs-attr">&quot;type&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;&lt;ALPHANUM&gt;&quot;</span><span class="hljs-punctuation">,</span><br>      <span class="hljs-attr">&quot;position&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-number">0</span><br>    <span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-punctuation">&#123;</span><br>      <span class="hljs-attr">&quot;token&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;a&quot;</span><span class="hljs-punctuation">,</span><br>      <span class="hljs-attr">&quot;start_offset&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-number">5</span><span class="hljs-punctuation">,</span><br>      <span class="hljs-attr">&quot;end_offset&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-number">6</span><span class="hljs-punctuation">,</span><br>      <span class="hljs-attr">&quot;type&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;&lt;ALPHANUM&gt;&quot;</span><span class="hljs-punctuation">,</span><br>      <span class="hljs-attr">&quot;position&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-number">1</span><br>    <span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-punctuation">&#123;</span><br>      <span class="hljs-attr">&quot;token&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;1293&quot;</span><span class="hljs-punctuation">,</span><br>      <span class="hljs-attr">&quot;start_offset&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-number">7</span><span class="hljs-punctuation">,</span><br>      <span class="hljs-attr">&quot;end_offset&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-number">11</span><span class="hljs-punctuation">,</span><br>      <span class="hljs-attr">&quot;type&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;&lt;NUM&gt;&quot;</span><span class="hljs-punctuation">,</span><br>      <span class="hljs-attr">&quot;position&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-number">2</span><br>    <span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-punctuation">&#123;</span><br>      <span class="hljs-attr">&quot;token&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;fj3&quot;</span><span class="hljs-punctuation">,</span><br>      <span class="hljs-attr">&quot;start_offset&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-number">13</span><span class="hljs-punctuation">,</span><br>      <span class="hljs-attr">&quot;end_offset&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-number">16</span><span class="hljs-punctuation">,</span><br>      <span class="hljs-attr">&quot;type&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;&lt;ALPHANUM&gt;&quot;</span><span class="hljs-punctuation">,</span><br>      <span class="hljs-attr">&quot;position&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-number">3</span><br>    <span class="hljs-punctuation">&#125;</span><br>  <span class="hljs-punctuation">]</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<p>可以看到，他们对term词项进行了分词变成了小写，所以无法查询</p>
+<p><strong>解决方案</strong></p>
+<p>使用keywords字段进行查询</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs json">POST /products/_search<br><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;query&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;term&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>      <span class="hljs-attr">&quot;productID.keyword&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>        <span class="hljs-attr">&quot;value&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;XHDK-A-1293-#Fj3&quot;</span><br>      <span class="hljs-punctuation">&#125;</span><br>    <span class="hljs-punctuation">&#125;</span><br>  <span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<p>就可以正确查询到结果</p>
+<p><strong>全文本的查询流程</strong></p>
+<p><img src="https://wodebokea.oss-cn-beijing.aliyuncs.com/img/%E5%85%A8%E6%96%87%E6%9F%A5%E8%AF%A2.png" srcset="/img/loading.gif" lazyload></p>
+<p>基于全文本查询的特点</p>
+<ul>
+<li>索引和搜索时都会进行分词，查询字符串先传递到一个合适的分词器，然后生成一个供查询的词项列表</li>
+<li>查询会对每个词项逐个进行底层的查询，再将结果进行合并，并且为每个文档生成一个算分</li>
+</ul>
+<p><strong>基于词项的查找和基于全文的查找</strong></p>
+<ul>
+<li>通过字段Mapping控制字段的分词</li>
+<li>通过参数控制查询的percision</li>
+<li>基于词项的查找使用trem</li>
+<li>基于全文的使用match</li>
+</ul>
+<h4 id="11-2-结构化搜索"><a href="#11-2-结构化搜索" class="headerlink" title="11.2 结构化搜索"></a>11.2 结构化搜索</h4><p><strong>结构化搜索是值对结构化数据的搜索</strong></p>
+<ul>
+<li>日期、布尔类型和数字都是结构化的</li>
+<li>文本也可以是结构化的</li>
+</ul>
+<p><strong>demo</strong></p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs json">POST /products/_bulk<br><span class="hljs-punctuation">&#123;</span><span class="hljs-attr">&quot;index&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-punctuation">&#123;</span><span class="hljs-attr">&quot;_id&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;1&quot;</span><span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">&#123;</span><span class="hljs-attr">&quot;productID&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;XHDK-A-1293-#Fj3&quot;</span><span class="hljs-punctuation">,</span><span class="hljs-attr">&quot;desc&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;iPhone&quot;</span><span class="hljs-punctuation">,</span><span class="hljs-attr">&quot;price&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-number">10</span><span class="hljs-punctuation">,</span><span class="hljs-attr">&quot;avaliable&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-keyword">true</span><span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">&#123;</span><span class="hljs-attr">&quot;index&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-punctuation">&#123;</span><span class="hljs-attr">&quot;_id&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;2&quot;</span><span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">&#123;</span><span class="hljs-attr">&quot;productID&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;KDKE-B-9947-#kL5&quot;</span><span class="hljs-punctuation">,</span><span class="hljs-attr">&quot;desc&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;iPad&quot;</span><span class="hljs-punctuation">,</span><span class="hljs-attr">&quot;price&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-number">20</span><span class="hljs-punctuation">,</span><span class="hljs-attr">&quot;avaliable&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-keyword">true</span><span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">&#123;</span><span class="hljs-attr">&quot;index&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-punctuation">&#123;</span><span class="hljs-attr">&quot;_id&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;3&quot;</span><span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">&#123;</span><span class="hljs-attr">&quot;productID&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;JODL-X-1927-#pV7&quot;</span><span class="hljs-punctuation">,</span><span class="hljs-attr">&quot;desc&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;MBP&quot;</span><span class="hljs-punctuation">,</span><span class="hljs-attr">&quot;price&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-number">30</span><span class="hljs-punctuation">,</span><span class="hljs-attr">&quot;avaliable&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-keyword">false</span><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<p>对布尔值进行结构化搜索</p>
+<p><strong>使用trem</strong></p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs json">POST /products/_search<br><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;query&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;constant_score&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>      <span class="hljs-attr">&quot;filter&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>        <span class="hljs-attr">&quot;term&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>          <span class="hljs-attr">&quot;avaliable&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-keyword">false</span><br>        <span class="hljs-punctuation">&#125;</span><br>      <span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>      <span class="hljs-attr">&quot;boost&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">1.2</span><br>    <span class="hljs-punctuation">&#125;</span><br>  <span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>term查询是包含而不是相等</strong></p>
+<h4 id="11-3-相关性和相关性算分"><a href="#11-3-相关性和相关性算分" class="headerlink" title="11.3 相关性和相关性算分"></a>11.3 相关性和相关性算分</h4><p>搜索的相关性算分描述了一个文档和查询语句的匹配程度，ES会对每个匹配查询条件结果进行算分</p>
+<p>打分的本质是排序，需要把最符合用户需求的文档排在前面，默认的相关性算分采用TF-IDF，现在采用了BM25</p>
+<p><strong>词频 TF</strong></p>
+<p>度量文档相关度的方法是求和</p>
+<p><strong>IDF</strong></p>
+<p>逆文档频率</p>
+<p><strong>BM25</strong></p>
+<h4 id="11-4-Query-和-Filter"><a href="#11-4-Query-和-Filter" class="headerlink" title="11.4 Query 和 Filter"></a>11.4 Query 和 Filter</h4><p>高级搜索功能：支持多项文本输入，针对多个字段进行搜索</p>
+<ul>
+<li>Query会进行相关性算分</li>
+<li>Filter不需要算分</li>
+</ul>
+<p><strong>条件组合DEMO</strong></p>
+<ul>
+<li>假设要搜索一部电影包含了以下一些条件<ul>
+<li>评论中包含了Guitar，用户打分高于3分，上映日期在1993与2000年之间</li>
+</ul>
+</li>
+</ul>
+<p>这个搜索包含了三个逻辑，针对了不同的字段</p>
+<p>包含Gutar 评分大于3 上映日期在给定的范围</p>
+<p><strong>同时包含这三个逻辑，且有比较好的性能</strong></p>
+<p>bool Query</p>
+<p>一个bool 查询是一个或多个查询子句的组合</p>
+<p>总共包括四种子句，其中两种会影响算分，两种不影响蒜贩</p>
+<table>
+<thead>
+<tr>
+<th>must</th>
+<th>必须匹配 贡献算分</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>should</td>
+<td>选择性匹配 贡献算分</td>
+</tr>
+<tr>
+<td>must_not</td>
+<td>查询子句必须不能匹配</td>
+</tr>
+<tr>
+<td>filter</td>
+<td>必须匹配但是不贡献算分</td>
+</tr>
+</tbody></table>
+<p>布尔查询的例子</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs json">POST /products/_search<br><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;query&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;bool&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>      <span class="hljs-attr">&quot;must&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><br>        <span class="hljs-punctuation">&#123;</span><br>          <span class="hljs-attr">&quot;term&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>            <span class="hljs-attr">&quot;price&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>              <span class="hljs-attr">&quot;value&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;30&quot;</span><br>            <span class="hljs-punctuation">&#125;</span><br>          <span class="hljs-punctuation">&#125;</span><br>        <span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>        <span class="hljs-punctuation">&#123;</span><br>          <span class="hljs-attr">&quot;match&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>            <span class="hljs-attr">&quot;productID&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;JODL-X-1927-#pV7&quot;</span><br>          <span class="hljs-punctuation">&#125;</span><br>        <span class="hljs-punctuation">&#125;</span><br>      <span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span><br>      <span class="hljs-attr">&quot;filter&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>        <span class="hljs-attr">&quot;term&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>          <span class="hljs-attr">&quot;avaliable&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-keyword">false</span><br>        <span class="hljs-punctuation">&#125;</span><br>      <span class="hljs-punctuation">&#125;</span><br>    <span class="hljs-punctuation">&#125;</span><br>  <span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>子查询可以任意顺序出现</li>
+<li>可以嵌套多个查询</li>
+<li>如果Bool查询中，没有must条件，should中必须至少满足一条查询</li>
+</ul>
+<p><strong>如何解决结构化查询多值字段包含而不是相等的问题</strong></p>
+<p>多值问题在ES层面不好解决，我们可以在业务层面解决，新增一个字段，用来计数</p>
+<p><img src="https://wodebokea.oss-cn-beijing.aliyuncs.com/img/%E5%A4%9A%E5%80%BC%E9%97%AE%E9%A2%98.png" srcset="/img/loading.gif" lazyload></p>
+<p><strong>查询语句的结构会影响相关度算分</strong></p>
+<p><img src="https://wodebokea.oss-cn-beijing.aliyuncs.com/img/%E7%9B%B8%E5%85%B3%E5%BA%A6%E7%AE%97%E5%88%86.png" srcset="/img/loading.gif" lazyload></p>
+<p><strong>我们可以通过设置boost来影响相关度算分</strong></p>
+<p><strong>Boost 算分来进行排名</strong></p>
+<h4 id="11-5-单字符串多字段的查询-Dis-Max-Query"><a href="#11-5-单字符串多字段的查询-Dis-Max-Query" class="headerlink" title="11.5 单字符串多字段的查询 Dis Max Query"></a>11.5 单字符串多字段的查询 Dis Max Query</h4><p>项目中我们经常要用单字符串多字段的查询</p>
+<p>再多字段进行算分排序的时候，是单纯的求和，在出现字段竞争的时候会导致查询结果我们预期的不同</p>
+<p><strong>通过 Tie Breaker参数调整</strong></p>
+<p>获得最佳匹配语句的评分_source</p>
+<p>将其他匹配语句的评分与tie_breaker相乘</p>
+<p>对以上评分求和并规范化</p>
+<p><strong>Multi Match</strong></p>
+<p>单字符串多字段查询一般有三种场景</p>
+<ul>
+<li><p>最佳字段</p>
+<ul>
+<li>当字段之间相互竞争又相互关联，评分来自最佳匹配字段</li>
+</ul>
+</li>
+<li><p>多数字段</p>
+<ul>
+<li>处理英文内容时候的一种常见手段，在主字段抽取词干加入同义词</li>
+</ul>
+</li>
+<li><p>混合字段</p>
+<ul>
+<li>对于实体需要在多个字段中确定信息，单个字段只能匹配多的词</li>
+</ul>
+</li>
+</ul>
+<p><strong>跨字段搜索</strong></p>
+<p>跨字段搜索主要用于位置信息搜索</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs json">post address/_search<br><span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;query&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-punctuation">&#123;</span><br>        <span class="hljs-attr">&quot;multi_match&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-punctuation">&#123;</span><br>            <span class="hljs-attr">&quot;query&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;Poland street W1v&quot;</span><span class="hljs-punctuation">,</span><br>            <span class="hljs-attr">&quot;type&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;cross_fields&quot;</span><span class="hljs-punctuation">,</span><br>            <span class="hljs-attr">&quot;operator&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;and&quot;</span><span class="hljs-punctuation">,</span><br>            <span class="hljs-attr">&quot;fields&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-punctuation">[</span><span class="hljs-string">&quot;street&quot;</span><span class="hljs-punctuation">,</span><span class="hljs-string">&quot;city&quot;</span><span class="hljs-punctuation">,</span><span class="hljs-string">&quot;country&quot;</span><span class="hljs-punctuation">]</span><br>        <span class="hljs-punctuation">&#125;</span><br>    <span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<p>我们只需要将type设置成为cross_fields</p>
+<h4 id="11-6-多语言及中文分词检索"><a href="#11-6-多语言及中文分词检索" class="headerlink" title="11.6 多语言及中文分词检索"></a>11.6 多语言及中文分词检索</h4><p>HanLP - 面向生产环境的自然语言处理包</p>
+<p>IK分词器 - 支持字典热更新</p>
+<p>拼音分词器</p>
+
+              
+            </div>
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" class="category-chain-item">学习笔记</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Elasticsearch/">#Elasticsearch</a>
+      
+        <a href="/tags/%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E/">#搜索引擎</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Elasticsearch</div>
+      <div>http://ycdtbs.cn/2022/03/07/Elasticsearch/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>tang cheng</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年3月7日</div>
+        </div>
+      
+      
+      <div class="license-meta-item">
+        <div>许可协议</div>
+        <div>
+          
+            
+            
+              <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+              <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                <i class="iconfont icon-by"></i>
+              </span>
+              </a>
+            
+          
+        </div>
+      </div>
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/04/05/Zookeeper/" title="Zookeeper">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Zookeeper</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/03/05/Netty%E5%AD%A6%E4%B9%A0/" title="Netty学习笔记">
+                        <span class="hidden-mobile">Netty学习笔记</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.0/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      headingSelector : CONFIG.toc.headingSelector || 'h1,h2,h3,h4,h5,h6',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      collapseDepth   : CONFIG.toc.collapseDepth || 0,
+      scrollSmooth    : true,
+      headingsOffset  : -boardTop
+    });
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+  });
+</script>
+
+
+  <script>
+  (function() {
+    var enableLang = CONFIG.code_language.enable && CONFIG.code_language.default;
+    var enableCopy = CONFIG.copy_btn;
+    if (!enableLang && !enableCopy) {
+      return;
+    }
+
+    function getBgClass(ele) {
+      return Fluid.utils.getBackgroundLightness(ele) >= 0 ? 'code-widget-light' : 'code-widget-dark';
+    }
+
+    var copyTmpl = '';
+    copyTmpl += '<div class="code-widget">';
+    copyTmpl += 'LANG';
+    copyTmpl += '</div>';
+    jQuery('.markdown-body pre').each(function() {
+      var $pre = jQuery(this);
+      if ($pre.find('code.mermaid').length > 0) {
+        return;
+      }
+      if ($pre.find('span.line').length > 0) {
+        return;
+      }
+
+      var lang = '';
+
+      if (enableLang) {
+        lang = CONFIG.code_language.default;
+        if ($pre[0].children.length > 0 && $pre[0].children[0].classList.length >= 2 && $pre.children().hasClass('hljs')) {
+          lang = $pre[0].children[0].classList[1];
+        } else if ($pre[0].getAttribute('data-language')) {
+          lang = $pre[0].getAttribute('data-language');
+        } else if ($pre.parent().hasClass('sourceCode') && $pre[0].children.length > 0 && $pre[0].children[0].classList.length >= 2) {
+          lang = $pre[0].children[0].classList[1];
+          $pre.parent().addClass('code-wrapper');
+        } else if ($pre.parent().hasClass('markdown-body') && $pre[0].classList.length === 0) {
+          $pre.wrap('<div class="code-wrapper"></div>');
+        }
+        lang = lang.toUpperCase().replace('NONE', CONFIG.code_language.default);
+      }
+      $pre.append(copyTmpl.replace('LANG', lang).replace('code-widget">',
+        getBgClass($pre[0]) + (enableCopy ? ' code-widget copy-btn" data-clipboard-snippet><i class="iconfont icon-copy"></i>' : ' code-widget">')));
+
+      if (enableCopy) {
+        Fluid.utils.createScript('https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js', function() {
+          var clipboard = new window.ClipboardJS('.copy-btn', {
+            target: function(trigger) {
+              var nodes = trigger.parentNode.childNodes;
+              for (var i = 0; i < nodes.length; i++) {
+                if (nodes[i].tagName === 'CODE') {
+                  return nodes[i];
+                }
+              }
+            }
+          });
+          clipboard.on('success', function(e) {
+            e.clearSelection();
+            e.trigger.innerHTML = e.trigger.innerHTML.replace('icon-copy', 'icon-success');
+            setTimeout(function() {
+              e.trigger.innerHTML = e.trigger.innerHTML.replace('icon-success', 'icon-copy');
+            }, 2000);
+          });
+        });
+      }
+    });
+  })();
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
