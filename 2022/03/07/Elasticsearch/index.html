@@ -16,12 +16,12 @@
   <meta name="author" content="tang cheng">
   <meta name="keywords" content="">
   
-    <meta name="description" content="Elasticsearch1、为什么要学习ElasticsearchElasticsearch的主要功能  分布式搜索引擎 大数据近实时分析引擎  产品特性  高性能 容易使用和扩展  2、Elasticsearch简介和发展历史Elasticsearch是基于Java语言开发的搜索引擎库类 创建于1999不阿不，2005年成为Apache顶级开源项目 Lucene具有高性能容易扩展的优点 Luc">
+    <meta name="description" content="Elasticsearch-基础知识1、为什么要学习ElasticsearchElasticsearch的主要功能  分布式搜索引擎 大数据近实时分析引擎  产品特性  高性能 容易使用和扩展  2、Elasticsearch简介和发展历史Elasticsearch是基于Java语言开发的搜索引擎库类 创建于1999不阿不，2005年成为Apache顶级开源项目 Lucene具有高性能容易扩展的优">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Elasticsearch">
+<meta property="og:title" content="Elasticsearch-基础知识">
 <meta property="og:url" content="http://ycdtbs.cn/2022/03/07/Elasticsearch/index.html">
 <meta property="og:site_name" content="唐成博客">
-<meta property="og:description" content="Elasticsearch1、为什么要学习ElasticsearchElasticsearch的主要功能  分布式搜索引擎 大数据近实时分析引擎  产品特性  高性能 容易使用和扩展  2、Elasticsearch简介和发展历史Elasticsearch是基于Java语言开发的搜索引擎库类 创建于1999不阿不，2005年成为Apache顶级开源项目 Lucene具有高性能容易扩展的优点 Luc">
+<meta property="og:description" content="Elasticsearch-基础知识1、为什么要学习ElasticsearchElasticsearch的主要功能  分布式搜索引擎 大数据近实时分析引擎  产品特性  高性能 容易使用和扩展  2、Elasticsearch简介和发展历史Elasticsearch是基于Java语言开发的搜索引擎库类 创建于1999不阿不，2005年成为Apache顶级开源项目 Lucene具有高性能容易扩展的优">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://wodebokea.oss-cn-beijing.aliyuncs.com/img/elk%E6%8A%80%E6%9C%AF%E6%A0%88.png">
 <meta property="og:image" content="https://wodebokea.oss-cn-beijing.aliyuncs.com/img/%E6%8C%87%E6%A0%87%E5%88%86%E6%9E%90%20%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90.png">
@@ -32,8 +32,16 @@
 <meta property="og:image" content="https://wodebokea.oss-cn-beijing.aliyuncs.com/img/%E5%85%A8%E6%96%87%E6%9F%A5%E8%AF%A2.png">
 <meta property="og:image" content="https://wodebokea.oss-cn-beijing.aliyuncs.com/img/%E5%A4%9A%E5%80%BC%E9%97%AE%E9%A2%98.png">
 <meta property="og:image" content="https://wodebokea.oss-cn-beijing.aliyuncs.com/img/%E7%9B%B8%E5%85%B3%E5%BA%A6%E7%AE%97%E5%88%86.png">
+<meta property="og:image" content="https://wodebokea.oss-cn-beijing.aliyuncs.com/img/%E6%95%85%E9%9A%9C%E8%BD%AC%E7%A7%BB.png">
+<meta property="og:image" content="https://wodebokea.oss-cn-beijing.aliyuncs.com/img/%E6%95%85%E9%9A%9C%E8%BD%AC%E7%A7%BB%E6%B5%81%E7%A8%8B1.png">
+<meta property="og:image" content="https://wodebokea.oss-cn-beijing.aliyuncs.com/img/%E5%8F%98%E6%88%90%E9%BB%84%E8%89%B2.png">
+<meta property="og:image" content="https://wodebokea.oss-cn-beijing.aliyuncs.com/img/%E4%BF%AE%E5%A4%8D%E5%AE%8C%E6%AF%95.png">
+<meta property="og:image" content="https://wodebokea.oss-cn-beijing.aliyuncs.com/img/%E6%9B%B4%E6%96%B0%E6%96%87%E6%A1%A3%E7%9A%84%E6%B5%81%E7%A8%8B.png">
+<meta property="og:image" content="https://wodebokea.oss-cn-beijing.aliyuncs.com/img/es%E8%AE%A1%E9%87%8F%E7%AE%97%E6%B3%95.png">
+<meta property="og:image" content="https://wodebokea.oss-cn-beijing.aliyuncs.com/img/%E8%81%9A%E5%90%88%E5%88%86%E6%9E%90%E7%BB%93%E6%9E%9C.png">
+<meta property="og:image" content="https://wodebokea.oss-cn-beijing.aliyuncs.com/img/%E5%88%86%E6%A1%B6%E8%81%9A%E5%90%88%E4%B8%8D%E6%AD%A3%E7%A1%AE.png">
 <meta property="article:published_time" content="2022-03-07T08:23:54.000Z">
-<meta property="article:modified_time" content="2022-06-07T08:24:40.380Z">
+<meta property="article:modified_time" content="2022-06-08T08:40:33.577Z">
 <meta property="article:author" content="tang cheng">
 <meta property="article:tag" content="Elasticsearch">
 <meta property="article:tag" content="搜索引擎">
@@ -42,7 +50,7 @@
   
   
   
-  <title>Elasticsearch - 唐成博客</title>
+  <title>Elasticsearch-基础知识 - 唐成博客</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -205,7 +213,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="Elasticsearch"></span>
+            <span id="subtitle" data-typed-text="Elasticsearch-基础知识"></span>
           
         </div>
 
@@ -228,7 +236,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          23k 字
+          33k 字
         
       </span>
     
@@ -239,7 +247,7 @@
         
         
         
-          193 分钟
+          275 分钟
         
       </span>
     
@@ -277,11 +285,11 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">Elasticsearch</h1>
+            <h1 style="display: none">Elasticsearch-基础知识</h1>
             
             <div class="markdown-body">
               
-              <h2 id="Elasticsearch"><a href="#Elasticsearch" class="headerlink" title="Elasticsearch"></a>Elasticsearch</h2><h3 id="1、为什么要学习Elasticsearch"><a href="#1、为什么要学习Elasticsearch" class="headerlink" title="1、为什么要学习Elasticsearch"></a>1、为什么要学习Elasticsearch</h3><p><strong>Elasticsearch的主要功能</strong></p>
+              <h2 id="Elasticsearch-基础知识"><a href="#Elasticsearch-基础知识" class="headerlink" title="Elasticsearch-基础知识"></a>Elasticsearch-基础知识</h2><h3 id="1、为什么要学习Elasticsearch"><a href="#1、为什么要学习Elasticsearch" class="headerlink" title="1、为什么要学习Elasticsearch"></a>1、为什么要学习Elasticsearch</h3><p><strong>Elasticsearch的主要功能</strong></p>
 <ul>
 <li>分布式搜索引擎</li>
 <li>大数据近实时分析引擎</li>
@@ -452,6 +460,12 @@
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">./elasticsearch-plugin install analysis-icu <br></code></pre></td></tr></table></figure>
 
 <h4 id="4-5-如何运行多个Elasticsearch-实例"><a href="#4-5-如何运行多个Elasticsearch-实例" class="headerlink" title="4.5 如何运行多个Elasticsearch 实例"></a>4.5 如何运行多个Elasticsearch 实例</h4><h4 id="4-6-Docker环境中运行ELK"><a href="#4-6-Docker环境中运行ELK" class="headerlink" title="4.6 Docker环境中运行ELK"></a>4.6 Docker环境中运行ELK</h4><p>后续补充</p>
+<h4 id="4-7-启动多个实例"><a href="#4-7-启动多个实例" class="headerlink" title="4.7 启动多个实例"></a>4.7 启动多个实例</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs shell">./elasticsearch -E node.name=node-1 -E cluster.name=elasticsearch -E path.data=node1_data -E http.port=9200<br><br>./elasticsearch -E node.name=node-2 -E cluster.name=elasticsearch -E path.data=node2_data -E http.port=9201<br><br>./elasticsearch -E node.name=node-3 -E cluster.name=elasticsearch -E path.data=node3_data -E http.port=9203<br></code></pre></td></tr></table></figure>
+
+
+
+
+
 <h3 id="5、安装Kibana"><a href="#5、安装Kibana" class="headerlink" title="5、安装Kibana"></a>5、安装Kibana</h3><h4 id="5-1-安装下载"><a href="#5-1-安装下载" class="headerlink" title="5.1 安装下载"></a>5.1 安装下载</h4><p><a target="_blank" rel="noopener" href="https://www.elastic.co/cn/downloads">https://www.elastic.co/cn/downloads</a></p>
 <h4 id="5-2-Kibana添加样例数据"><a href="#5-2-Kibana添加样例数据" class="headerlink" title="5.2 Kibana添加样例数据"></a>5.2 Kibana添加样例数据</h4><p>kibana为我们准备了一些学习数据，包括日志，订单，航班数据等等</p>
 <p><img src="https://wodebokea.oss-cn-beijing.aliyuncs.com/img/Kibana%E6%B7%BB%E5%8A%A0%E6%A0%B7%E4%BE%8B%E6%95%B0%E6%8D%AE.png" srcset="/img/loading.gif" lazyload></p>
@@ -1214,6 +1228,415 @@
 <h4 id="11-6-多语言及中文分词检索"><a href="#11-6-多语言及中文分词检索" class="headerlink" title="11.6 多语言及中文分词检索"></a>11.6 多语言及中文分词检索</h4><p>HanLP - 面向生产环境的自然语言处理包</p>
 <p>IK分词器 - 支持字典热更新</p>
 <p>拼音分词器</p>
+<h3 id="12、Elasticsearch的分布式特性及分布式搜索机制"><a href="#12、Elasticsearch的分布式特性及分布式搜索机制" class="headerlink" title="12、Elasticsearch的分布式特性及分布式搜索机制"></a>12、Elasticsearch的分布式特性及分布式搜索机制</h3><h4 id="12-1-Elaticsearch的分布式特性"><a href="#12-1-Elaticsearch的分布式特性" class="headerlink" title="12.1 Elaticsearch的分布式特性"></a>12.1 Elaticsearch的分布式特性</h4><p>Elasticsearch分布式架构带来的好处</p>
+<ul>
+<li>存储的水平扩容，支持PB级数据</li>
+<li>提高系统的可用性，部分节点停止服务后整个集群的服务不受影响</li>
+</ul>
+<p>Elasticsearch的分布式架构</p>
+<ul>
+<li>不同的集群通过不同的名字来区分，默认的是elasticsearch</li>
+<li>通过配置文件修改</li>
+</ul>
+<p><strong>Coordingating Node</strong></p>
+<p>是处理请求的节点叫做Coordinating Node</p>
+<ul>
+<li>路由请求到正确的节点，例如创建索引的请求需要路由到master节点</li>
+</ul>
+<p>所有的节点默认都是Coordinating Node</p>
+<p>通过将其他类型设置成False,使其成为Dedicated Coordinating Node</p>
+<p><strong>Data Node</strong></p>
+<ul>
+<li>可以保存数据的节点叫做Data Node<ul>
+<li>节点启动后默认就是数据节点，可以设置node.data:false 禁止</li>
+</ul>
+</li>
+<li>Data Node的职责<ul>
+<li>保存分片数据，在数据拓展上起到了至关重要的作用</li>
+</ul>
+</li>
+<li>通过增加数据节点，可以解决水平扩展和解决数据单点问题</li>
+</ul>
+<p><strong>Master Node</strong></p>
+<p>master Node 的职责</p>
+<ul>
+<li>处理创建，删除索引等请求，决定分片被分配到了哪个节点，负责索引的创建于删除</li>
+<li>维护并且更新cluster state</li>
+</ul>
+<p>master Node 的最佳实践</p>
+<ul>
+<li>master节点非常重要</li>
+<li>为一个集群设置多个master节点，每个节点只承担Master的单一角色</li>
+</ul>
+<p>在生产环境中我们会配置多个Master Eligible节点，这些节点可以在必要时参选主流程成为Master节点</p>
+<p>每个节点启动后默认就是一个Master eligible节点</p>
+<p><strong>集群状态</strong></p>
+<ul>
+<li>集群状态信息维护了一个集群中必要的信息<ul>
+<li>所有的节点信息</li>
+<li>所有的索引和其相关的mapping</li>
+<li>分片的路由信息</li>
+</ul>
+</li>
+<li>每个节点都保存了集群的状态信息</li>
+<li>但是只有master节点才能修改集群的状态信息并负责同步给其他节点<ul>
+<li>因为任意节点都能修改信息会导致Cluster state信息不一致</li>
+</ul>
+</li>
+</ul>
+<p><strong>选举过程</strong></p>
+<p>互相ping对方，node id低的会成为被选举的节点</p>
+<p>其他节点加入集群但是不承担Master节点的角色，一旦发现被选中的主节点丢失，就会选举出新的matser</p>
+<p><strong>脑裂问题</strong></p>
+<p>网络问题导致存在两个master问题</p>
+<p>限定选举条件，设置仲裁，只有当master eligible节点数大于quorum时才会进行选举，也就是过半机制</p>
+<p>从7.0开始就无需进行这样的配置了</p>
+<h4 id="12-2-分片和集群的故障转移"><a href="#12-2-分片和集群的故障转移" class="headerlink" title="12.2 分片和集群的故障转移"></a>12.2 分片和集群的故障转移</h4><p><strong>分片是Elasticsearch分布式存储的基石</strong></p>
+<p>分片分为主分片和副本分片</p>
+<p>通过主分片将数据分布在所有的节点上</p>
+<ul>
+<li>主分片将一份索引的数据分散在多个数据节点上，实现存储的水平扩展</li>
+<li>主分片数在索引创建时指定，后续默认不能修改，如要修改，需要重建索引</li>
+</ul>
+<p>副本分片主要是确保数据可用性</p>
+<p>通过引入副本分片提高数据可用性，一旦主分片丢失，副本分片可以Promote成为主分片，副本分片数目可以动态调整，每个节点上都有完备的数据，如果不设置副本分片，一旦节点出现硬件故障，就有可能造成数据丢失</p>
+<p>提升系统的读取性能</p>
+<p>副本分片是由主分片同步，通过支持增加Replica个数，一定程度可以提高读取的吞吐量</p>
+<p><strong>分片数的设定</strong></p>
+<p>主分片数过小，如果一个索引增长很快，集群无法通过增加节点实现对这个索引的数据扩展</p>
+<p>主分片数设置过大导致单个shard容量很小，引发一个节点上有过多的分片，影响性能</p>
+<p>副本分片设置过多，会降低集群整体的写入性能</p>
+<p><strong>例子</strong></p>
+<p>在单节点集群的时候，设置主分片为3 副本分片是1</p>
+<ul>
+<li>副本分片无法分片，集群状态是黄色的</li>
+</ul>
+<p>增加一个数据节点后</p>
+<ul>
+<li>集群状态变为绿色</li>
+<li>集群具备了故障转移的能力</li>
+</ul>
+<p>再次增加一个数据节点</p>
+<ul>
+<li>主分片和副本分片会进行重新的分配</li>
+<li>通过增加节点，提高集群的计算能力</li>
+</ul>
+<p><strong>故障转移</strong></p>
+<p><img src="https://wodebokea.oss-cn-beijing.aliyuncs.com/img/%E6%95%85%E9%9A%9C%E8%BD%AC%E7%A7%BB.png" srcset="/img/loading.gif" lazyload></p>
+<ul>
+<li>一个Index，设置了三个主分片，一个副本分片</li>
+<li>node1是master节点，节点以外的出现了故障</li>
+<li>node2成为了master节点</li>
+<li>r0 和 r1 重新分配，集群变绿</li>
+</ul>
+<p><strong>集群健康状态</strong></p>
+<ul>
+<li>green 集群监控</li>
+<li>yellow 集群亚健康，主分片可用部分副本分片不可用</li>
+<li>red 不健康状态，部分主分片不可用</li>
+</ul>
+<p><strong>测试</strong></p>
+<p>集群初始状态拥有三个节点，一个索引有三个主分片一个副本分片</p>
+<p><img src="https://wodebokea.oss-cn-beijing.aliyuncs.com/img/%E6%95%85%E9%9A%9C%E8%BD%AC%E7%A7%BB%E6%B5%81%E7%A8%8B1.png" srcset="/img/loading.gif" lazyload></p>
+<p>关掉一台机器，此时集群节点变为黄色</p>
+<p><img src="https://wodebokea.oss-cn-beijing.aliyuncs.com/img/%E5%8F%98%E6%88%90%E9%BB%84%E8%89%B2.png" srcset="/img/loading.gif" lazyload></p>
+<p>稍等会故障转移处理完毕</p>
+<p><img src="https://wodebokea.oss-cn-beijing.aliyuncs.com/img/%E4%BF%AE%E5%A4%8D%E5%AE%8C%E6%AF%95.png" srcset="/img/loading.gif" lazyload></p>
+<h4 id="12-3-文档分布式存储"><a href="#12-3-文档分布式存储" class="headerlink" title="12.3 文档分布式存储"></a>12.3 文档分布式存储</h4><p>文档会存储在具体的某个主分片和某个副本分片上</p>
+<p>例如文档1会存储在P0分片和R0分片上</p>
+<p><strong>文档到分片的映射算法</strong></p>
+<ul>
+<li>确保文档能够均匀分布在所用分片上，充分利用硬件资源，避免机器空闲</li>
+<li>潜在的算法<ul>
+<li>随机</li>
+<li>维护文档到分片的映射关系，当文档数据量大的时候维护成本高</li>
+<li>实时计算，太勇敢文档自动算出需要去哪个分片获取数据</li>
+</ul>
+</li>
+<li>ES的算法<ul>
+<li>利用hash算法确认文档在哪个分片上</li>
+<li>设置index Seting后，主分片数就不可以随意修改了</li>
+</ul>
+</li>
+</ul>
+<p><strong>更新文档的流程</strong></p>
+<p><img src="https://wodebokea.oss-cn-beijing.aliyuncs.com/img/%E6%9B%B4%E6%96%B0%E6%96%87%E6%A1%A3%E7%9A%84%E6%B5%81%E7%A8%8B.png" srcset="/img/loading.gif" lazyload></p>
+<ol>
+<li>客户端发发起一个请求</li>
+<li>进行hash运算</li>
+<li>路由到所在的分片上</li>
+<li>删除</li>
+<li>新建</li>
+<li>返回</li>
+<li>响应</li>
+</ol>
+<h4 id="12-4-分片的生命周期"><a href="#12-4-分片的生命周期" class="headerlink" title="12.4 分片的生命周期"></a>12.4 分片的生命周期</h4><p><strong>分片的内部原理</strong></p>
+<p>分片是ES中的最小工作单元</p>
+<p>为什么ES的搜索是近实时的 1s后被搜到</p>
+<p>ES如何保证在断电时也不丢失数据</p>
+<p>删除文档为什么不会立刻释放空间</p>
+<p><strong>倒排索引的不可变性</strong></p>
+<p>倒排索引一旦生成不可更改</p>
+<p>不可变性带来的好处</p>
+<ul>
+<li>无需考虑并发写的问题，避免了锁机制带来的性能问题</li>
+<li>一旦读入内核的文件系统缓存，便停留在了那里，只要文件系统有足够的空间，大部分请求就会请求直接内存，不会命中磁盘提升了很大的性能</li>
+<li>缓存容易生成和维护，数据可以被压缩</li>
+</ul>
+<p>但是不可变性带来的调整，如果需要让一个文档可以被搜索，需要重建整个索引</p>
+<p><strong>Lucene Index</strong></p>
+<p>在lucnen中，单个倒排索引文件被称为Segment，Seg是自包含的不可变更的，多个Segment汇总在一起成为Lucene的Index，其对应的就是ES中的Shard</p>
+<p>当有新的文档写入的时候就会生成新的Segment，查询的时候会查询所有的Segment，并对结果进行汇总</p>
+<p>删除文档的信息保存在.del文件中</p>
+<p><strong>什么是Refresh</strong></p>
+<p>将Index buffer写入Segment的过程叫做Refresh，Refresh不执行fsync操作</p>
+<p>Refresh频率默认1s发生一次</p>
+<p>如果系统当中有大量数据写入就会产生很多的Segement</p>
+<p>Indexbuffer写满后也会触发refresh</p>
+<p><strong>什么是Transaction Log</strong></p>
+<p>虽然我们执行了Refresh，但是数据还是在文件系统的缓存当中的，所以有了transaction Log机制，每个分片都有一个transaction log</p>
+<ul>
+<li>文档在新加入的时候除了写道index Buffer中一份还要写道transaction里一份，而transaction log默认是5s执行一次或者在一个变更球球完成后刷一个盘</li>
+</ul>
+<p><strong>什么是Flush</strong></p>
+<ul>
+<li>调用Refresh、Index Buffer清空并且Refresh</li>
+<li>调用fsync将缓存中的segments写入磁盘</li>
+<li>清空Transaction Log</li>
+<li>默认30分钟调用一起</li>
+<li>Transaction Log满的时候</li>
+</ul>
+<p>主要就是执行落盘操作</p>
+<p><strong>Merge</strong></p>
+<ul>
+<li>Sgement很多需要被定期合并<ul>
+<li>减少Segments 删除已经删除的文档</li>
+</ul>
+</li>
+<li>ES和Lucene会自动进行Merge操作</li>
+</ul>
+<h4 id="12-5-分布式查询和相关性算分"><a href="#12-5-分布式查询和相关性算分" class="headerlink" title="12.5 分布式查询和相关性算分"></a>12.5 分布式查询和相关性算分</h4><p>Query 阶段</p>
+<ul>
+<li>当用户发出搜索请求到ES节点，节点收到请求后，会以Coordinating（协调）节点的身份主分片中随机选择一半的分片发出查询请求</li>
+<li>被选中分片执行查询和排序，然后每个分片都会返回From+SIze个排序后的文档ID和排序值，给Coordinating节点</li>
+</ul>
+<p>Fetch 阶段</p>
+<ul>
+<li>Coordinating 节点会将query阶段从买个分片获取的排序后的文档ID列表进行重排序选取From到From+size个文档的ID</li>
+<li>然后以multi get的方式到相应的分片获取详细的文档数据</li>
+</ul>
+<p>Query Then Fetch潜在的问题</p>
+<ul>
+<li>性能问题 <ul>
+<li>每个分片上要查询的文档的个数都是 form+size</li>
+<li>最终协调节点要处理大量的数据</li>
+<li>深度分页</li>
+</ul>
+</li>
+<li>相关性算分问题<ul>
+<li>每个分片都基于自己的分片上的数据进行相关度的计算，这会导致打分偏离的情况，特别是数据量很少的时候相关性算分在分片之间相互独立，当文档总数很少的情况下，如果主分片大于1，主分片数越多，相关性算分会越不准</li>
+</ul>
+</li>
+</ul>
+<p><strong>解决算分不准的方法</strong></p>
+<ul>
+<li>数据量不大的时候，可以将主分片数设为1<ul>
+<li>当数据量足够大的时候，只要保证文档均匀分散在各个分片上结果一般不会出现偏差</li>
+</ul>
+</li>
+<li>使用DFS Query Then Fetch<ul>
+<li>不建议使用</li>
+</ul>
+</li>
+</ul>
+<h4 id="12-6-排序及Doc-Values-amp-Fielddata"><a href="#12-6-排序及Doc-Values-amp-Fielddata" class="headerlink" title="12.6 排序及Doc Values &amp;Fielddata"></a>12.6 排序及Doc Values &amp;Fielddata</h4><p>ES默认采用相关性算分对结构进行降序排序</p>
+<p>可以通过设定sorting参数自行设定排序</p>
+<p><strong>排序的过程</strong></p>
+<ul>
+<li>排序是针对字段原始内容进行的，倒排索引无法发挥作用</li>
+<li>需要用到正排索引，通过文档ID和字段快速得到字段的原始内容</li>
+<li>Elasticsearch有两种实现方法<ul>
+<li>Fieldata</li>
+<li>Doc Values 列式存储对Text类型无效</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Doc Values</th>
+<th>Field Data</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>何时创建</td>
+<td>和倒排索引一起创建</td>
+<td>搜索时动态创建</td>
+</tr>
+<tr>
+<td>创建位置</td>
+<td>磁盘文件</td>
+<td>JVM Heap</td>
+</tr>
+<tr>
+<td>优点</td>
+<td>避免大量内存占用</td>
+<td>索引速度快不占用额外空间</td>
+</tr>
+<tr>
+<td>缺点</td>
+<td>降低索引速度，占用空间</td>
+<td>文档过多时动态创建开销大，占用过多的Jvm Heap</td>
+</tr>
+<tr>
+<td>默认值</td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<p><strong>关闭Doc Values</strong></p>
+<ul>
+<li>默认启用 可以通过Mapping设置关闭</li>
+</ul>
+<h4 id="12-7-分页和遍历"><a href="#12-7-分页和遍历" class="headerlink" title="12.7 分页和遍历"></a>12.7 分页和遍历</h4><p><strong>From&#x2F;Size</strong></p>
+<p>默认情况下，查询按照相关度算分排序，返回前十条记录</p>
+<p>ES天生就是分布式的，查询信息，但是数据分别保存在多个分片，多台机器上，ES天生就需要满足排序的需要，按照相关性进行算分</p>
+<ul>
+<li>当一个查询 From &#x3D; 990 size &#x3D; 10</li>
+<li>会在每个分片上线获取1000个分档，最后通过Coordinating节点聚合所有的结果在返回1000条</li>
+<li>页数越深，占用内存越多，为了避免深度分页带来的内存开销，ES有一个设定，默认限定到10000个文档</li>
+</ul>
+<p><strong>如何避免深度分页的问题</strong></p>
+<p>Search After避免深度分页的问题</p>
+<ul>
+<li>避免深度分页性能问题，可以实时获取下一页的文档信息<ul>
+<li>不支持指定页数，只能往下翻</li>
+</ul>
+</li>
+<li>需要第一次搜索时指定sort</li>
+</ul>
+<p><strong>Scroll API</strong></p>
+<ul>
+<li>创建一个快照，有新的数据写入后无法被查到</li>
+<li>每次查询后输入上一次的Scroll ID</li>
+</ul>
+<h4 id="12-8-ES的并发控制"><a href="#12-8-ES的并发控制" class="headerlink" title="12.8 ES的并发控制"></a>12.8 ES的并发控制</h4><ul>
+<li>两个Web程序同时更新某个文档，如果缺乏有效的并发，会导致更改的数据丢失</li>
+<li>悲观并发控制<ul>
+<li>假定有变更冲突的可能，会对资源进行加锁，防止冲突</li>
+</ul>
+</li>
+<li>乐观并发控制<ul>
+<li>假定冲突是不会发生的，不会阻塞正在尝试的操作，如果数据在读写中被修改，更新将会失败</li>
+<li>ES采用乐观并发控制</li>
+</ul>
+</li>
+<li>内部版本控制<ul>
+<li>低版本的es采用了version来控制</li>
+<li>高本本使用了seqno和primary term来控制</li>
+</ul>
+</li>
+</ul>
+<h3 id="13-ES的聚合分析"><a href="#13-ES的聚合分析" class="headerlink" title="13 ES的聚合分析"></a>13 ES的聚合分析</h3><h4 id="13-1-Bucket-amp-Metric聚合分析及嵌套报告"><a href="#13-1-Bucket-amp-Metric聚合分析及嵌套报告" class="headerlink" title="13.1 Bucket &amp; Metric聚合分析及嵌套报告"></a>13.1 Bucket &amp; Metric聚合分析及嵌套报告</h4><p>Metric 一系列统计方法</p>
+<p>Bucket 一些满足条件的文档</p>
+<p><strong>Aggregation 的语法</strong></p>
+<p>Aggregation属于Search的一部分，一般情况下建议将其size指定为0</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-attr">&quot;aggregations&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;&lt;aggregation_name&gt;&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-punctuation">&#123;</span><br>        <span class="hljs-attr">&quot;&lt;aggrregation_type&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-punctuation">&#123;</span><br>            &lt;ageeregation_body&gt;<br>        <span class="hljs-punctuation">&#125;</span><br>    <span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>单值分析</strong></p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs json">POST /monitor/_doc<br><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;kpiName&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;温度&quot;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;value&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-number">29</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs json">POST monitor/_search<br><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;size&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">0</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;aggs&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;maxValue&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>      <span class="hljs-attr">&quot;max&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>        <span class="hljs-attr">&quot;field&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;value&quot;</span><br>      <span class="hljs-punctuation">&#125;</span><br>    <span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;minValue&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-punctuation">&#123;</span><br>      <span class="hljs-attr">&quot;min&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>        <span class="hljs-attr">&quot;field&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;value&quot;</span><br>      <span class="hljs-punctuation">&#125;</span><br>    <span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;avgValue&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-punctuation">&#123;</span><br>      <span class="hljs-attr">&quot;avg&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>        <span class="hljs-attr">&quot;field&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;value&quot;</span><br>      <span class="hljs-punctuation">&#125;</span><br>    <span class="hljs-punctuation">&#125;</span><br>  <span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<hr>
+<p><strong>Bucket</strong></p>
+<p>按照一定的规则将文档分配到不同的桶中，从而达到分类的目的，ES提供了一些常见的Bucket Aggregation</p>
+<ul>
+<li>Terms</li>
+<li>数字类型<ul>
+<li>Range &#x2F;Data Range</li>
+</ul>
+</li>
+<li>支持嵌套，在桶里在做分桶</li>
+</ul>
+<p>如果需要对text字段做聚合分析，字段需要打开fielddata才能进行Terms Aggregation</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs json">POST monitor/_search<br><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;size&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">0</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;aggs&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;search_data&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>      <span class="hljs-attr">&quot;terms&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>        <span class="hljs-attr">&quot;field&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;kpiName.keyword&quot;</span><span class="hljs-punctuation">,</span><br>        <span class="hljs-attr">&quot;size&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">1</span><br>      <span class="hljs-punctuation">&#125;</span><br>    <span class="hljs-punctuation">&#125;</span><br>  <span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<p>可以用size控制分桶数量</p>
+<p><strong>demo</strong></p>
+<p>不同指标中，数字最大的具体信息</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs json">POST /monitor/_search<br><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;size&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">0</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;aggs&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;kpiList&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>      <span class="hljs-attr">&quot;terms&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>        <span class="hljs-attr">&quot;field&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;kpiName.keyword&quot;</span><span class="hljs-punctuation">,</span><br>        <span class="hljs-attr">&quot;size&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">10</span><br>      <span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>      <span class="hljs-attr">&quot;aggs&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-punctuation">&#123;</span><br>      <span class="hljs-attr">&quot;big_value&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-punctuation">&#123;</span><br>        <span class="hljs-attr">&quot;top_hits&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>          <span class="hljs-attr">&quot;size&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">1</span><span class="hljs-punctuation">,</span><br>          <span class="hljs-attr">&quot;sort&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><br>            <span class="hljs-punctuation">&#123;</span><br>              <span class="hljs-attr">&quot;value&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>                <span class="hljs-attr">&quot;order&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;desc&quot;</span><br>              <span class="hljs-punctuation">&#125;</span><br>            <span class="hljs-punctuation">&#125;</span><br>          <span class="hljs-punctuation">]</span><br>        <span class="hljs-punctuation">&#125;</span><br>      <span class="hljs-punctuation">&#125;</span><br>    <span class="hljs-punctuation">&#125;</span><br>    <span class="hljs-punctuation">&#125;</span><br>  <span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<p>优化Terms聚合性能</p>
+<p><strong>eager_global_ordinals:true</strong></p>
+<p><strong>Range &amp; Histogram 聚合</strong></p>
+<ul>
+<li>按照数字范围进行分桶</li>
+<li>在Range Aggregation 中可以自定义key</li>
+</ul>
+<p>demo </p>
+<ul>
+<li>按照值分组后内部进行排序</li>
+</ul>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><code class="hljs json">POST /monitor/_search<br><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;size&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">0</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;aggs&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;value_range&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>      <span class="hljs-attr">&quot;range&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>        <span class="hljs-attr">&quot;field&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;value&quot;</span><span class="hljs-punctuation">,</span><br>        <span class="hljs-attr">&quot;ranges&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><br>          <span class="hljs-punctuation">&#123;</span><br>            <span class="hljs-attr">&quot;from&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">0</span><span class="hljs-punctuation">,</span><br>            <span class="hljs-attr">&quot;to&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">100</span><span class="hljs-punctuation">,</span><br>            <span class="hljs-attr">&quot;key&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;0-100&quot;</span><br>          <span class="hljs-punctuation">&#125;</span><br>        <span class="hljs-punctuation">]</span><br>      <span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>      <span class="hljs-attr">&quot;aggs&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>        <span class="hljs-attr">&quot;kpiList&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>          <span class="hljs-attr">&quot;terms&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>            <span class="hljs-attr">&quot;field&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;kpiName.keyword&quot;</span><span class="hljs-punctuation">,</span><br>            <span class="hljs-attr">&quot;size&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">10</span><br>          <span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>          <span class="hljs-attr">&quot;aggs&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>            <span class="hljs-attr">&quot;top_three&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>              <span class="hljs-attr">&quot;top_hits&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>                <span class="hljs-attr">&quot;size&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">1</span><br>              <span class="hljs-punctuation">&#125;</span><br>            <span class="hljs-punctuation">&#125;</span><br>          <span class="hljs-punctuation">&#125;</span><br>        <span class="hljs-punctuation">&#125;</span><br>      <span class="hljs-punctuation">&#125;</span><br>    <span class="hljs-punctuation">&#125;</span><br>  <span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li>按照值的间隔分桶</li>
+</ul>
+<p>value 从0 - 100 以2为一个区间进行分割</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs json">POST /monitor/_search<br><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;size&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">0</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;aggs&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;value_list&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>      <span class="hljs-attr">&quot;histogram&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>        <span class="hljs-attr">&quot;field&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;value&quot;</span><span class="hljs-punctuation">,</span><br>        <span class="hljs-attr">&quot;interval&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">10</span><span class="hljs-punctuation">,</span><br>        <span class="hljs-attr">&quot;extended_bounds&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>          <span class="hljs-attr">&quot;min&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">0</span><span class="hljs-punctuation">,</span><br>          <span class="hljs-attr">&quot;max&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">100</span><br>        <span class="hljs-punctuation">&#125;</span><br>      <span class="hljs-punctuation">&#125;</span><br>    <span class="hljs-punctuation">&#125;</span><br>  <span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="13-2-Pipline-聚合分析"><a href="#13-2-Pipline-聚合分析" class="headerlink" title="13.2 Pipline 聚合分析"></a>13.2 Pipline 聚合分析</h4><p>Pipline就是对聚合分析在做聚合</p>
+<p>例如找出平均值最大的指标名称</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs json">POST /monitor/_search<br><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;size&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">0</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;aggs&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;kpiList&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>      <span class="hljs-attr">&quot;terms&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>        <span class="hljs-attr">&quot;field&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;kpiName.keyword&quot;</span><span class="hljs-punctuation">,</span><br>        <span class="hljs-attr">&quot;size&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">10</span><br>      <span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>      <span class="hljs-attr">&quot;aggs&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>        <span class="hljs-attr">&quot;avg_value&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>          <span class="hljs-attr">&quot;avg&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>            <span class="hljs-attr">&quot;field&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;value&quot;</span><br>          <span class="hljs-punctuation">&#125;</span><br>        <span class="hljs-punctuation">&#125;</span><br>      <span class="hljs-punctuation">&#125;</span><br>    <span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;max_kpivalue&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-punctuation">&#123;</span><br>      <span class="hljs-attr">&quot;max_bucket&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>        <span class="hljs-attr">&quot;buckets_path&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;kpiList&gt;avg_value&quot;</span><br>      <span class="hljs-punctuation">&#125;</span><br>    <span class="hljs-punctuation">&#125;</span><br>  <span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<hr>
+<p><strong>max_bucket:最大值</strong></p>
+<p><strong>min_bucket:最小值</strong></p>
+<p><strong>stats_bucket:多值输出</strong></p>
+<p>同时在内层也可以进行pipline</p>
+<h4 id="13-3-ES的聚合作用范围和排序"><a href="#13-3-ES的聚合作用范围和排序" class="headerlink" title="13.3 ES的聚合作用范围和排序"></a>13.3 ES的聚合作用范围和排序</h4><p>ES聚合分析的默认作用范围是query的查询结果集</p>
+<p>同时ES还支持一下方式改变聚合的作用范围</p>
+<ul>
+<li>Filter</li>
+<li>Post Filter</li>
+<li>Global</li>
+</ul>
+<p>使用Filter进行作用范围限定</p>
+<p>global会逃逸query的作用范围</p>
+<p>分桶默认是按照聚合的总数排序，也可以自定义排序规则</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs json">POST /monitor/_search<br><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;size&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">0</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;aggs&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;kpiList&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>      <span class="hljs-attr">&quot;terms&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>        <span class="hljs-attr">&quot;field&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;kpiName.keyword&quot;</span><span class="hljs-punctuation">,</span><br>        <span class="hljs-attr">&quot;size&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">10</span><span class="hljs-punctuation">,</span><br>        <span class="hljs-attr">&quot;order&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>          <span class="hljs-attr">&quot;_key&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;asc&quot;</span><br>        <span class="hljs-punctuation">&#125;</span><br>      <span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>      <span class="hljs-attr">&quot;aggs&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>        <span class="hljs-attr">&quot;avg_value&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>          <span class="hljs-attr">&quot;avg&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>            <span class="hljs-attr">&quot;field&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;value&quot;</span><br>          <span class="hljs-punctuation">&#125;</span><br>        <span class="hljs-punctuation">&#125;</span><br>      <span class="hljs-punctuation">&#125;</span><br>    <span class="hljs-punctuation">&#125;</span><br>  <span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="13-4-ES分析原理及精准度"><a href="#13-4-ES分析原理及精准度" class="headerlink" title="13.4 ES分析原理及精准度"></a>13.4 ES分析原理及精准度</h4><p>分布式系统近似统计算法</p>
+<p><img src="https://wodebokea.oss-cn-beijing.aliyuncs.com/img/es%E8%AE%A1%E9%87%8F%E7%AE%97%E6%B3%95.png" srcset="/img/loading.gif" lazyload></p>
+<p>分布式系统中，实时性数据量精确度无法都满足</p>
+<p>ES会损失一些精准度换取实时性</p>
+<p><strong>MIN的聚合分析执行流程</strong></p>
+<p><img src="https://wodebokea.oss-cn-beijing.aliyuncs.com/img/%E8%81%9A%E5%90%88%E5%88%86%E6%9E%90%E7%BB%93%E6%9E%9C.png" srcset="/img/loading.gif" lazyload></p>
+<p>ES的协同节点在收到请求后会下发到三个主分片上，三个主分片返回自己的最小值，然后通过协同节点进行计算</p>
+<p><strong>Term Aggregation 的返回值</strong></p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-attr">&quot;aggregations&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>   <span class="hljs-attr">&quot;kpiList&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>     <span class="hljs-attr">&quot;doc_count_error_upper_bound&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-number">0</span><span class="hljs-punctuation">,</span><br>     <span class="hljs-attr">&quot;sum_other_doc_count&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-number">0</span><span class="hljs-punctuation">,</span><br>     <span class="hljs-attr">&quot;buckets&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><br>       <span class="hljs-punctuation">&#123;</span><br>         <span class="hljs-attr">&quot;key&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;温度&quot;</span><span class="hljs-punctuation">,</span><br>         <span class="hljs-attr">&quot;doc_count&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-number">4</span><span class="hljs-punctuation">,</span><br>         <span class="hljs-attr">&quot;avg_value&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>           <span class="hljs-attr">&quot;value&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-number">25.25</span><br>         <span class="hljs-punctuation">&#125;</span><br>       <span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>       <span class="hljs-punctuation">&#123;</span><br>         <span class="hljs-attr">&quot;key&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;湿度&quot;</span><span class="hljs-punctuation">,</span><br>         <span class="hljs-attr">&quot;doc_count&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-number">4</span><span class="hljs-punctuation">,</span><br>         <span class="hljs-attr">&quot;avg_value&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>           <span class="hljs-attr">&quot;value&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-number">24.5</span><br>         <span class="hljs-punctuation">&#125;</span><br>       <span class="hljs-punctuation">&#125;</span><br>     <span class="hljs-punctuation">]</span><br>   <span class="hljs-punctuation">&#125;</span><br> <span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<p>在里面有两个参数</p>
+<p><strong>doc_count_error_upper_bound</strong>:代表没有在这次聚合中返回，但是可能潜在的聚合结果</p>
+<p><strong>sum_other_doc_count</strong>:这次聚合中没有统计到的文档数</p>
+<p><img src="https://wodebokea.oss-cn-beijing.aliyuncs.com/img/%E5%88%86%E6%A1%B6%E8%81%9A%E5%90%88%E4%B8%8D%E6%AD%A3%E7%A1%AE.png" srcset="/img/loading.gif" lazyload></p>
+<p>现象描述，数据有两个主分片，分片1返回的abc 分片2返回的abd，汇总后为abc，但是实际上正确的结果应该是abd</p>
+<p><strong>如何解决terms不准的问题</strong></p>
+<p>提升shard_size</p>
+<p>Terms聚合分析不准确的原因是因为数据分散在多个分片上，CoordinatingNode无法获取数据全貌</p>
+<p>解决方案，在数据量不大时设置主分片为1，实现准确性</p>
+<p>解决方案2：设置shard_size参数，提高精确度</p>
+<ul>
+<li><p>原理：每次从shard上额外多获取数据，提升准确率</p>
+<p>我们统计的时候可以适当的增加shard_size</p>
+</li>
+</ul>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs json">POST /monitor/_search<br><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;size&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">0</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;aggs&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;kpiList&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>      <span class="hljs-attr">&quot;terms&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>        <span class="hljs-attr">&quot;field&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;kpiName.keyword&quot;</span><span class="hljs-punctuation">,</span><br>        <span class="hljs-attr">&quot;size&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">10</span><span class="hljs-punctuation">,</span><br>        <span class="hljs-attr">&quot;shard_size&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">11</span><span class="hljs-punctuation">,</span> <br>        <span class="hljs-attr">&quot;order&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>          <span class="hljs-attr">&quot;_key&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;asc&quot;</span><br>        <span class="hljs-punctuation">&#125;</span><br>      <span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>      <span class="hljs-attr">&quot;aggs&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>        <span class="hljs-attr">&quot;avg_value&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>          <span class="hljs-attr">&quot;avg&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>            <span class="hljs-attr">&quot;field&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;value&quot;</span><br>          <span class="hljs-punctuation">&#125;</span><br>        <span class="hljs-punctuation">&#125;</span><br>      <span class="hljs-punctuation">&#125;</span><br>    <span class="hljs-punctuation">&#125;</span><br>  <span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
 
               
             </div>
@@ -1260,7 +1683,7 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>Elasticsearch</div>
+      <div>Elasticsearch-基础知识</div>
       <div>http://ycdtbs.cn/2022/03/07/Elasticsearch/</div>
     </div>
     <div class="license-meta">
