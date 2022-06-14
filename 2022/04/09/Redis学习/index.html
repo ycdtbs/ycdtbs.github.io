@@ -27,7 +27,7 @@
 <meta property="og:image" content="https://wodebokea.oss-cn-beijing.aliyuncs.com/img/%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E5%90%8D%E7%A7%B0.png">
 <meta property="og:image" content="https://wodebokea.oss-cn-beijing.aliyuncs.com/img/%E5%BC%80%E5%90%AFaof.png">
 <meta property="article:published_time" content="2022-04-09T02:27:09.000Z">
-<meta property="article:modified_time" content="2022-06-14T12:16:21.647Z">
+<meta property="article:modified_time" content="2022-06-14T12:48:42.783Z">
 <meta property="article:author" content="tang cheng">
 <meta property="article:tag" content="Redis">
 <meta name="twitter:card" content="summary_large_image">
@@ -232,7 +232,7 @@
         
         
         
-          99 分钟
+          104 分钟
         
       </span>
     
@@ -634,6 +634,84 @@
 <p>使用组</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">mset name&#123;user&#125; lucy age&#123;user&#125; 18<br></code></pre></td></tr></table></figure>
 
+<h3 id="12、-Redis的问题"><a href="#12、-Redis的问题" class="headerlink" title="12、 Redis的问题"></a>12、 Redis的问题</h3><h4 id="12-1-缓存穿透"><a href="#12-1-缓存穿透" class="headerlink" title="12.1 缓存穿透"></a>12.1 缓存穿透</h4><ul>
+<li><p>应用服务器压力变大了</p>
+</li>
+<li><p>redis命中率低</p>
+<ul>
+<li>一直查询数据库导致数据库崩了</li>
+<li>原因<ul>
+<li>redis查不到数据</li>
+<li>出现了很多非正常的url访问</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>对空值做缓存</p>
+<ul>
+<li>设置空结果时间会很短</li>
+</ul>
+</li>
+<li><p>设置可访问的名单</p>
+<ul>
+<li>使用bitmaps类型定义一个可访问的名单</li>
+</ul>
+</li>
+<li><p>采用布隆过滤器</p>
+<ul>
+<li>布隆过滤器是一个很长的二进制向量，位图和一系列所及映射函数</li>
+</ul>
+</li>
+</ul>
+<h4 id="12-2-缓存击穿"><a href="#12-2-缓存击穿" class="headerlink" title="12.2 缓存击穿"></a>12.2 缓存击穿</h4><p><strong>现象</strong></p>
+<p>数据库的访问压力瞬时增大</p>
+<p>redis并没有出现大量的key过期</p>
+<p>redis是正常的运行状态</p>
+<p><strong>原因</strong></p>
+<p>redis的某个key过期了，大量的访问</p>
+<p>热点key过期了</p>
+<ul>
+<li>预先设置热门数据</li>
+<li>实时调整：现场监控哪些热门数据，实时调整key过期时常</li>
+<li>使用锁<ul>
+<li>在缓存失效的时候不是立刻去load db</li>
+</ul>
+</li>
+</ul>
+<h4 id="12-3-缓存雪崩"><a href="#12-3-缓存雪崩" class="headerlink" title="12.3 缓存雪崩"></a>12.3 缓存雪崩</h4><p><strong>现象</strong></p>
+<p>数据库压力过大，应用访问变慢</p>
+<p><strong>原因</strong></p>
+<p>极少时间段内，查询大量key的集中过期情况</p>
+<ul>
+<li><p>构建多级缓存架构</p>
+</li>
+<li><p>使用锁或队列</p>
+<ul>
+<li>不适用高并发情况</li>
+</ul>
+</li>
+<li><p>设置过期标志更新缓存</p>
+<ul>
+<li>记录缓存数据是否过期，如果过期会触发通知另外的线程在后台去实际更新key的缓存</li>
+</ul>
+</li>
+</ul>
+<h4 id="12-4-分布式锁"><a href="#12-4-分布式锁" class="headerlink" title="12.4 分布式锁"></a>12.4 分布式锁</h4><p><strong>单纯的javaAPI 并不能提供分布式锁的能力，为了解决这个问题，需要一种跨JVM的互斥机制来控制共享资源的访问</strong></p>
+<p>分布式锁的主流解决方案</p>
+<ul>
+<li>基于数据库实现分布式锁</li>
+<li>基于缓存</li>
+<li>基于zookeeper</li>
+</ul>
+<p>通过setnx 释放锁</p>
+<p>释放锁用del</p>
+<p>锁一直没有释放，设置过期时间自动释放</p>
+<p><strong>分布式锁可能会导致释放别人的锁</strong></p>
+<p>使用uuid 防止误删</p>
+<ul>
+<li>uuid表示不同的操作</li>
+<li>释放锁的时候判断当前的uuid和要释放的uuid是否相同</li>
+</ul>
 
               
             </div>
