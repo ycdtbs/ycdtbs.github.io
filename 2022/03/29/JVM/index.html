@@ -1,0 +1,832 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="tang cheng">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="JVM 基础学习jvm实际上是一个标准，每个厂商有不同的java虚拟机的实现 1、JVM的内存结构1.1 程序计数器程序计数器是记住程序吓一跳执行执行的内存地址，由于我们的Java是多线程执行的，如果一个程序执行到一部分，然而此时CPU分配的时间片用完了，需要利用程序计数器记住程序执行的位置 程序计数器是线程私有的 程序计数器是利用了操作系统中的寄存器实现的，寄存器是我们操作系统中运行最快的部分">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JVM">
+<meta property="og:url" content="http://ycdtbs.cn/2022/03/29/JVM/index.html">
+<meta property="og:site_name" content="唐成博客">
+<meta property="og:description" content="JVM 基础学习jvm实际上是一个标准，每个厂商有不同的java虚拟机的实现 1、JVM的内存结构1.1 程序计数器程序计数器是记住程序吓一跳执行执行的内存地址，由于我们的Java是多线程执行的，如果一个程序执行到一部分，然而此时CPU分配的时间片用完了，需要利用程序计数器记住程序执行的位置 程序计数器是线程私有的 程序计数器是利用了操作系统中的寄存器实现的，寄存器是我们操作系统中运行最快的部分">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://wodebokea.oss-cn-beijing.aliyuncs.com/JVm/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20220621115010.png">
+<meta property="og:image" content="https://wodebokea.oss-cn-beijing.aliyuncs.com/img/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20220621115010.png">
+<meta property="og:image" content="https://wodebokea.oss-cn-beijing.aliyuncs.com/img/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E9%98%B6%E6%AE%B5.png">
+<meta property="article:published_time" content="2022-03-28T21:18:32.000Z">
+<meta property="article:modified_time" content="2022-06-28T21:20:44.360Z">
+<meta property="article:author" content="tang cheng">
+<meta property="article:tag" content="jvm">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://wodebokea.oss-cn-beijing.aliyuncs.com/JVm/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20220621115010.png">
+  
+  
+  
+  <title>JVM - 唐成博客</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"ycdtbs.cn","root":"/","version":"1.9.0","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>你这愚蠢的土拨鼠</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="JVM"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-03-29 05:18" pubdate>
+          2022年3月29日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.6k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          22 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">JVM</h1>
+            
+            <div class="markdown-body">
+              
+              <h2 id="JVM-基础学习"><a href="#JVM-基础学习" class="headerlink" title="JVM 基础学习"></a>JVM 基础学习</h2><p>jvm实际上是一个标准，每个厂商有不同的java虚拟机的实现</p>
+<h3 id="1、JVM的内存结构"><a href="#1、JVM的内存结构" class="headerlink" title="1、JVM的内存结构"></a>1、JVM的内存结构</h3><h4 id="1-1-程序计数器"><a href="#1-1-程序计数器" class="headerlink" title="1.1 程序计数器"></a>1.1 程序计数器</h4><p>程序计数器是记住程序吓一跳执行执行的内存地址，由于我们的Java是多线程执行的，如果一个程序执行到一部分，然而此时CPU分配的时间片用完了，需要利用程序计数器记住程序执行的位置</p>
+<p>程序计数器是线程私有的</p>
+<p>程序计数器是利用了操作系统中的寄存器实现的，寄存器是我们操作系统中运行最快的部分</p>
+<h4 id="1-2-虚拟机栈"><a href="#1-2-虚拟机栈" class="headerlink" title="1.2 虚拟机栈"></a>1.2 虚拟机栈</h4><p>虚拟机栈是线程运行的空间，我们每产生一个线程，就会创建一个虚拟机栈，虚拟机栈的单位叫做栈帧，每次调用一次方法就会产生一个栈帧，<strong>栈帧是一个方法运行时候需要的内存</strong></p>
+<p><strong>垃圾回收机制是否需要处理虚拟机栈</strong></p>
+<p>垃圾回收机制不处理栈当中的内存，因为我们的虚拟机栈方法调用完毕出栈后会自己释放内存</p>
+<p><strong>栈内存是越大越好吗</strong></p>
+<p>栈内存不是越大越好，如果我们的栈内存大会导致我们的线程数变少</p>
+<p><strong>方法区内的变量是否线程安全</strong></p>
+<p>方法区内的线程是线程安全的，但是要注意变量是否逃离了方法区</p>
+<p><strong>如何设置栈内存</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">-Xss  ## 虚拟机参数 可以设置栈内存<br></code></pre></td></tr></table></figure>
+
+<p><strong>栈内存溢出</strong></p>
+<p>一般栈内存溢出的原因都是因为递归调用导致的，或者栈帧过大导致了栈内存溢出</p>
+<p>例如我们在fastjson中类循环调用的时候，会导致栈内存溢出</p>
+<p><strong>如何查看栈内存</strong></p>
+<ul>
+<li>案例一 cpu占用过高<ul>
+<li>首先使用top命令查看占用情况</li>
+<li>利用ps -eo pid,tid %cpu 查看cpu占用ing看</li>
+<li>使用jstack 进程id查看代码哪里出现了问题</li>
+</ul>
+</li>
+<li>案例二 程序长时间无返回<ul>
+<li>查看是否有死锁</li>
+</ul>
+</li>
+</ul>
+<h4 id="1-3-本地方法区"><a href="#1-3-本地方法区" class="headerlink" title="1.3 本地方法区"></a>1.3 本地方法区</h4><p>本地方法区是为了调用本地方法而设置的区域</p>
+<h4 id="1-4-堆内存"><a href="#1-4-堆内存" class="headerlink" title="1.4 堆内存"></a>1.4 堆内存</h4><p>堆是线程共享的内存，通过new关键字创建的都会放在堆内存中，堆内存是受到垃圾回收机制所影响的区域，Java中几乎所有的对象都在这里被分配</p>
+<p><strong>如何设置堆内存大小</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">-xmx ## 设置堆内存大小<br></code></pre></td></tr></table></figure>
+
+<p><strong>如何查看堆内存溢出</strong></p>
+<ul>
+<li>JPS命令</li>
+<li>JMP命令</li>
+<li>Jconsole命令</li>
+<li>Jmp-heap命令</li>
+<li>jvisualvm</li>
+</ul>
+<h4 id="1-5-方法区"><a href="#1-5-方法区" class="headerlink" title="1.5 方法区"></a>1.5 方法区</h4><p>方法区是各个线程共享的区域，用于存储已经呗虚拟机加载的类型信息，常量静态常量等等，从逻辑上来讲他是堆内存的一部分，不同时期的虚拟机对于方法区定义的位置不同，在jdk1.8以前，方法区存放在永久代中，所以当时经常会发生内存溢出，jdk1.8之后，将方法区独立出来，使用了元空间，元空间直接由内存管理，但是最终留下了运行时常量池</p>
+<p><strong>常量池</strong></p>
+<p>常量池就是一张表，虚拟机根据这张表要找到执行的类名，方法名，参数类型，字面量等信息</p>
+<p><strong>运行时常量池</strong></p>
+<p>常量池是class文件中的，当类被加载完毕后，常量池的信息会放到内存当中，成为运行时常量池</p>
+<p><strong>StringTable 串池</strong></p>
+<ul>
+<li><p>常量池中的字符串仅仅是符号，第一次用到时才变为对象</p>
+</li>
+<li><p>利用传池的机制，来避免重复创建字符串对象</p>
+</li>
+<li><p>字符串变量拼接的原理是Stringbuilder</p>
+</li>
+<li><p>字符串常量拼接的原理是编译器优化</p>
+</li>
+<li><p>可以使用interin方法，主动将串池中还没有的字符串对象放入串池</p>
+<ul>
+<li>1.8将这个字符串对象尝试放入串池，如果有则不会放入，没有没有则放入串池，会把串池中的对象返回</li>
+</ul>
+</li>
+</ul>
+<h2 id="垃圾回收"><a href="#垃圾回收" class="headerlink" title="垃圾回收"></a>垃圾回收</h2><h3 id="1、-垃圾回收器"><a href="#1、-垃圾回收器" class="headerlink" title="1、 垃圾回收器"></a>1、 垃圾回收器</h3><h4 id="1-1-垃圾回收器分类"><a href="#1-1-垃圾回收器分类" class="headerlink" title="1.1 垃圾回收器分类"></a>1.1 垃圾回收器分类</h4><ol>
+<li>串行的垃圾回收器<ul>
+<li>单线程</li>
+<li>堆内存较小，适用于个人电脑</li>
+</ul>
+</li>
+<li>吞吐量优先的垃圾回收器<ul>
+<li>多线程的</li>
+<li>堆内存较大，需要多核CPU支持</li>
+<li>在单位时间内stw的时间最短</li>
+</ul>
+</li>
+<li>响应时间优先<ul>
+<li>多线程</li>
+<li>堆内存较大、多核CPU</li>
+<li>尽可能的让单次的stw的时间最短</li>
+</ul>
+</li>
+</ol>
+<h4 id="1-2-串行的垃圾回收器"><a href="#1-2-串行的垃圾回收器" class="headerlink" title="1.2 串行的垃圾回收器"></a>1.2 串行的垃圾回收器</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">--XX:+UseSerialGC=Serial + SerialOld<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>Serial 工作在新生代使用复制算法、</li>
+<li>SerialOld 工作在老年代，使用的是标记整理算法</li>
+</ul>
+<p><img src="https://wodebokea.oss-cn-beijing.aliyuncs.com/JVm/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20220621115010.png" srcset="/img/loading.gif" lazyload></p>
+<h4 id="1-3-吞吐量优先的垃圾回收器"><a href="#1-3-吞吐量优先的垃圾回收器" class="headerlink" title="1.3 吞吐量优先的垃圾回收器"></a>1.3 吞吐量优先的垃圾回收器</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs shell">-XX:+UseParallelGC~ -XX:+UseParallelOldGC ## 默认开启<br>-XX:+UseAdaptiveSizePolicy ## 采用自适应的大小策略<br>-XX:+GCTimeRatio=ratio ## GC tiee ratio 调整垃圾回收时间和总时间的占比<br>-XX:+MaxGCpauseMillis=ms ## 最大暂停毫秒数<br>-XX:+ParallelGCThreads=n ## <br></code></pre></td></tr></table></figure>
+
+<p><img src="https://wodebokea.oss-cn-beijing.aliyuncs.com/img/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20220621115010.png" srcset="/img/loading.gif" lazyload></p>
+<h4 id="1-4-响应时间优先"><a href="#1-4-响应时间优先" class="headerlink" title="1.4 响应时间优先"></a>1.4 响应时间优先</h4><p>老年代垃圾回收器</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs shell">-XX:+UseConcMarkSweepGC~-XX:+UseParaNewGC~SerialOld<br>-XX:+ParallelGCThreads=n~ -XX:ConcGCThreads=threads ## 并发线程数，垃圾回收器<br>-XX:+CMSInitiatigOccupancyFraction=percent ## 执行CMS的占比<br>-XX:+CMSScavengeBeforeRemark ## <br></code></pre></td></tr></table></figure>
+
+<h3 id="2、G1-垃圾回收器"><a href="#2、G1-垃圾回收器" class="headerlink" title="2、G1 垃圾回收器"></a>2、G1 垃圾回收器</h3><p><strong>Garbage First</strong></p>
+<p>适用场景</p>
+<ul>
+<li>同事注重吞吐量和低延迟，默认的暂停目标是200ms</li>
+<li>超大堆内存，会将堆划分为多个大小相等的Region</li>
+<li>整体上是标记整理算法，两个区域之间是复制算法</li>
+</ul>
+<p>相关参数</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell">-XX:+UseG1GC<br>-XX:+G1HeapRegionSize=size<br>-XX:+MaxGCPauseMillis=time<br></code></pre></td></tr></table></figure>
+
+<p><strong>垃圾回收阶段</strong></p>
+<p><img src="https://wodebokea.oss-cn-beijing.aliyuncs.com/img/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E9%98%B6%E6%AE%B5.png" srcset="/img/loading.gif" lazyload></p>
+<p><strong>新生代 Young Collection阶段</strong></p>
+<p>新生代垃圾回收会触发STW，使用复制算法放入幸存区</p>
+<p><strong>新生代 + 并发标记阶段</strong></p>
+<ul>
+<li>在yougc时进行初始标记</li>
+<li>当老年代占用的堆空间比例达到阈值时，进行并发标记，不会stw</li>
+</ul>
+<p><strong>Mixed Collection</strong></p>
+<p>会对eso进行全面垃圾回收</p>
+<ul>
+<li>最终标记 会stw</li>
+<li>拷贝存活 会stw</li>
+</ul>
+<p><strong>Young Collection 跨代引用</strong></p>
+<p>新生代youngcollection 的时候首先寻找跟对象，然后检查然后复制，那么如果寻找的过程中需要调用老年代的节点怎么办，会造成速度下降</p>
+<p>老年代中分为了还多的card，如果这个card中有引用新生代的对象，就会被标记为脏的card区</p>
+<p>新生代总有一个remberset中记录了脏card</p>
+<p>在引用变更通过写屏障+dirty card queue变更</p>
+<p><strong>并发标记阶段和重新标记阶段</strong></p>
+<p>只要对象的引用发生了变化，写屏障的指令就会被执行</p>
+<h3 id="3、垃圾回收调优"><a href="#3、垃圾回收调优" class="headerlink" title="3、垃圾回收调优"></a>3、垃圾回收调优</h3><p><strong>调优领域</strong></p>
+<ul>
+<li>内存</li>
+<li>锁竞争</li>
+<li>cpu占用</li>
+<li>io</li>
+</ul>
+<p><strong>调优的目标</strong></p>
+<ul>
+<li>低延迟还是高吞吐量，选择合适的回收器</li>
+<li>CMS，G1，ZGC</li>
+<li>ParallelGC</li>
+</ul>
+<h4 id="3-1-新生代调优"><a href="#3-1-新生代调优" class="headerlink" title="3.1 新生代调优"></a>3.1 新生代调优</h4><p>新生代的特点</p>
+<ul>
+<li>所有的new操作的内存分配非常廉价<ul>
+<li>TLAB thread-local allocation buffer</li>
+</ul>
+</li>
+<li>死亡对象的回收代价是0</li>
+<li>大部分对象用过即死</li>
+<li>Minor Gc的时间远低于Full GC</li>
+</ul>
+<p>新生代越大越好吗</p>
+<p>-Xmn</p>
+
+              
+            </div>
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" class="category-chain-item">学习笔记</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/jvm/">#jvm</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>JVM</div>
+      <div>http://ycdtbs.cn/2022/03/29/JVM/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>tang cheng</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年3月29日</div>
+        </div>
+      
+      
+      <div class="license-meta-item">
+        <div>许可协议</div>
+        <div>
+          
+            
+            
+              <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+              <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                <i class="iconfont icon-by"></i>
+              </span>
+              </a>
+            
+          
+        </div>
+      </div>
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/04/05/Zookeeper/" title="Zookeeper">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Zookeeper</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/03/15/AQS-%E5%8E%9F%E7%90%86/" title="AQS 原理">
+                        <span class="hidden-mobile">AQS 原理</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.0/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      headingSelector : CONFIG.toc.headingSelector || 'h1,h2,h3,h4,h5,h6',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      collapseDepth   : CONFIG.toc.collapseDepth || 0,
+      scrollSmooth    : true,
+      headingsOffset  : -boardTop
+    });
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+  });
+</script>
+
+
+  <script>
+  (function() {
+    var enableLang = CONFIG.code_language.enable && CONFIG.code_language.default;
+    var enableCopy = CONFIG.copy_btn;
+    if (!enableLang && !enableCopy) {
+      return;
+    }
+
+    function getBgClass(ele) {
+      return Fluid.utils.getBackgroundLightness(ele) >= 0 ? 'code-widget-light' : 'code-widget-dark';
+    }
+
+    var copyTmpl = '';
+    copyTmpl += '<div class="code-widget">';
+    copyTmpl += 'LANG';
+    copyTmpl += '</div>';
+    jQuery('.markdown-body pre').each(function() {
+      var $pre = jQuery(this);
+      if ($pre.find('code.mermaid').length > 0) {
+        return;
+      }
+      if ($pre.find('span.line').length > 0) {
+        return;
+      }
+
+      var lang = '';
+
+      if (enableLang) {
+        lang = CONFIG.code_language.default;
+        if ($pre[0].children.length > 0 && $pre[0].children[0].classList.length >= 2 && $pre.children().hasClass('hljs')) {
+          lang = $pre[0].children[0].classList[1];
+        } else if ($pre[0].getAttribute('data-language')) {
+          lang = $pre[0].getAttribute('data-language');
+        } else if ($pre.parent().hasClass('sourceCode') && $pre[0].children.length > 0 && $pre[0].children[0].classList.length >= 2) {
+          lang = $pre[0].children[0].classList[1];
+          $pre.parent().addClass('code-wrapper');
+        } else if ($pre.parent().hasClass('markdown-body') && $pre[0].classList.length === 0) {
+          $pre.wrap('<div class="code-wrapper"></div>');
+        }
+        lang = lang.toUpperCase().replace('NONE', CONFIG.code_language.default);
+      }
+      $pre.append(copyTmpl.replace('LANG', lang).replace('code-widget">',
+        getBgClass($pre[0]) + (enableCopy ? ' code-widget copy-btn" data-clipboard-snippet><i class="iconfont icon-copy"></i>' : ' code-widget">')));
+
+      if (enableCopy) {
+        Fluid.utils.createScript('https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js', function() {
+          var clipboard = new window.ClipboardJS('.copy-btn', {
+            target: function(trigger) {
+              var nodes = trigger.parentNode.childNodes;
+              for (var i = 0; i < nodes.length; i++) {
+                if (nodes[i].tagName === 'CODE') {
+                  return nodes[i];
+                }
+              }
+            }
+          });
+          clipboard.on('success', function(e) {
+            e.clearSelection();
+            e.trigger.innerHTML = e.trigger.innerHTML.replace('icon-copy', 'icon-success');
+            setTimeout(function() {
+              e.trigger.innerHTML = e.trigger.innerHTML.replace('icon-success', 'icon-copy');
+            }, 2000);
+          });
+        });
+      }
+    });
+  })();
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
